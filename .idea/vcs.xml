@@ -2,8 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/android-development-training/GDSCSohag" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/android-development-training/JetpackComposeSamples" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/tv-samples" vcs="Git" />
   </component>
 </project>
