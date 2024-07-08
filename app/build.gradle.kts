@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.gms.google.service)
 }
 
@@ -69,8 +71,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.core.splashscreen)
-
+    implementation(libs.kotlinx.serialization.json)
+    
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    //navigation
+    implementation(libs.androidx.navigation.compose)
+
 }
