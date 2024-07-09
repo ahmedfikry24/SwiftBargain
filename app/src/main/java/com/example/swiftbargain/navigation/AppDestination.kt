@@ -17,3 +17,17 @@ object User
 @Serializable
 object Home
 
+@Serializable
+object Explore
+
+@Serializable
+object Cart
+
+@Serializable
+object Offer
+
+@Serializable
+object Profile
+
+@Serializable
+object Search
