@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">SwiftBargain</string>
+    <string name="welcome_to_swift_bargain">Welcome to Swift Bargain</string>
+    <string name="sign_in_to_continue">Sign in to continue</string>
+    <string name="this_filed_required">this filed required</string>
+    <string name="example_gmail_com">example@gmail.com</string>
+    <string name="password">Password</string>
+    <string name="or">OR</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_with_facebook">Login with facebook</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="don_t_have_a_account">"Don’t have a account? "</string>
+    <string name="register">Register</string>
 </resources>
