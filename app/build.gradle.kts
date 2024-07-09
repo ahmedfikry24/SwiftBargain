@@ -72,12 +72,17 @@ dependencies {
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.serialization.json)
-    
+
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
     //navigation
     implementation(libs.androidx.navigation.compose)
+
+    // view_model
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 }
