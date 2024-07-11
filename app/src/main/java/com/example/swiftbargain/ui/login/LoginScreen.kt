@@ -2,6 +2,7 @@ package com.example.swiftbargain.ui.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.login.view_model.LoginInteractions
 import com.example.swiftbargain.ui.login.view_model.LoginUiState
@@ -69,10 +72,7 @@ private fun LoginContent(
         }
         item {
             Text(
-                modifier = Modifier.padding(
-                    top = MaterialTheme.spacing.space8,
-                    bottom = MaterialTheme.spacing.space16
-                ),
+                modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                 text = stringResource(R.string.welcome_to_swift_bargain),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colors.text
@@ -112,11 +112,20 @@ private fun LoginContent(
                 onChangeValue = interactions::onChangePassword
             )
         }
+
+        item {
+            PrimaryTextButton(
+                modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                text = stringResource(R.string.sign_in),
+                onClick = interactions::onClickSignIn
+            )
+        }
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.space12)
+                    .padding(top = MaterialTheme.spacing.space12),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 HorizontalDivider(
                     modifier = Modifier.weight(1f),
@@ -151,7 +160,9 @@ private fun LoginContent(
         }
         item {
             Text(
-                modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
+                modifier = Modifier
+                    .padding(top = MaterialTheme.spacing.space16)
+                    .clickable(onClick = interactions::onForgetPassword),
                 text = stringResource(R.string.forgot_password),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colors.primary
@@ -166,7 +177,9 @@ private fun LoginContent(
                     color = MaterialTheme.colors.textGrey
                 )
                 Text(
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
+                    modifier = Modifier
+                        .padding(top = MaterialTheme.spacing.space8)
+                        .clickable(onClick = interactions::onRegister),
                     text = stringResource(R.string.register),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colors.primary
@@ -186,12 +199,13 @@ private fun SocialLogin(
 ) {
     Button(
         modifier = modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.background),
         border = BorderStroke(1.dp, MaterialTheme.colors.textGrey),
         shape = RoundedCornerShape(MaterialTheme.spacing.space4),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
         onClick = onClick,
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Image(
                 imageVector = ImageVector.vectorResource(iconId),
                 contentDescription = null
