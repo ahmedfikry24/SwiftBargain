@@ -1,18 +1,18 @@
 package com.example.swiftbargain.data.repository
 
 import com.example.swiftbargain.data.local.DataStoreManager
-import com.example.swiftbargain.ui.base.InvalidAuthentication
+import com.example.swiftbargain.data.utils.InternetConnectivityChecker
+import com.example.swiftbargain.data.utils.wrapApiCall
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val dataStore: DataStoreManager,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val connectivityChecker: InternetConnectivityChecker
 ) : Repository {
 
     override suspend fun getIsLogin() = dataStore.isLogin
@@ -24,13 +24,9 @@ class RepositoryImpl @Inject constructor(
     override suspend fun setUserUid(uid: String) = dataStore.setUserUid(uid)
 
     override suspend fun login(email: String, password: String): String {
-        try {
-            val result = auth.signInWithEmailAndPassword(email, password).await()
-            return result.user?.uid ?: throw UserNotFound()
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            throw UserNotFound()
-        } catch (e: FirebaseAuthInvalidUserException) {
-            throw InvalidAuthentication()
+        val result = wrapApiCall(connectivityChecker) {
+            auth.signInWithEmailAndPassword(email, password).await()
         }
+        return result.user?.uid ?: throw UserNotFound()
     }
 }
