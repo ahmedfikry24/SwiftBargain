@@ -20,8 +20,7 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun login(email: String, password: String): String {
         try {
-            val result =
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
+            val result = auth.signInWithEmailAndPassword(email, password).await()
             return result.user?.uid ?: throw UserNotFound()
         } catch (e: FirebaseAuthInvalidCredentialsException) {
             throw UserNotFound()
