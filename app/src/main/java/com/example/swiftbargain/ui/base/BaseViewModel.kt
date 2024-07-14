@@ -17,10 +17,10 @@ abstract class BaseViewModel<U, E>(uiState: U) : ViewModel() {
     protected val _event = MutableSharedFlow<E>()
     val event = _event.asSharedFlow()
 
-    suspend fun <T> tryExecute(
+    fun <T> tryExecute(
         progress: suspend () -> T,
         onSuccess: (T) -> Unit,
-        onError: (BaseError) -> Unit,
+        onError: (error: BaseError) -> Unit,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) {
         viewModelScope.launch(dispatcher) {
@@ -28,8 +28,12 @@ abstract class BaseViewModel<U, E>(uiState: U) : ViewModel() {
                 val executable = progress()
                 onSuccess(executable)
             } catch (e: NoInternetConnection) {
-                onError(NoInternetConnection(e.message))
-            } finally {
+                onError(NoInternetConnection())
+            } catch (e: UserNotFound) {
+                onError(UserNotFound())
+            } catch (e: InvalidAuthentication) {
+                onError(InvalidAuthentication())
+            } catch (e: SomethingWentWrong) {
                 onError(SomethingWentWrong())
             }
         }
