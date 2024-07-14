@@ -12,12 +12,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.swiftbargain.ui.composable.PrimarySnackBar
 import com.example.swiftbargain.ui.theme.colors
 
 @Composable
 fun UserNavGraph(mainNavController: NavController) {
     val navController = rememberNavController()
-    Scaffold { innerPadding ->
+    Scaffold(
+        snackbarHost = { PrimarySnackBar() }
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
