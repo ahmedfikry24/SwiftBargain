@@ -31,8 +31,6 @@ abstract class BaseViewModel<U, E>(uiState: U) : ViewModel() {
                 onError(NoInternetConnection())
             } catch (e: UserNotFound) {
                 onError(UserNotFound())
-            } catch (e: InvalidAuthentication) {
-                onError(InvalidAuthentication())
             } catch (e: SomethingWentWrong) {
                 onError(SomethingWentWrong())
             }
