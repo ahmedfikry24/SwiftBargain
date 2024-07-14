@@ -6,6 +6,7 @@ import com.example.swiftbargain.ui.base.UserNotFound
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -17,6 +18,10 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getIsLogin() = dataStore.isLogin
 
     override suspend fun setIsLogin(value: Boolean) = dataStore.setIsLogin(value)
+
+    override suspend fun getUserUid(): Flow<String> = dataStore.userUid
+
+    override suspend fun setUserUid(uid: String) = dataStore.setUserUid(uid)
 
     override suspend fun login(email: String, password: String): String {
         try {
