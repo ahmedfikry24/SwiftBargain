@@ -2,6 +2,7 @@ package com.example.swiftbargain.di
 
 import android.content.Context
 import com.example.swiftbargain.utils.InternetConnectivityChecker
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +13,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideFireBaseAuth() = FirebaseAuth.getInstance()
 
     @Singleton
     @Provides
