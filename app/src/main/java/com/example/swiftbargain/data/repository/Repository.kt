@@ -6,6 +6,9 @@ interface Repository {
     // region data store
     suspend fun getIsLogin(): Flow<Boolean>
     suspend fun setIsLogin(value: Boolean)
-// endregion
+    // endregion
 
+    // region auth
+    suspend fun login(email: String, password: String): String
+    //endregion
 }
