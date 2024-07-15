@@ -23,8 +23,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField(
+            "String",
+            "clientId",
+            "\"931177986261-and0ce4rr6fllckn377bnv7nn0ljogan.apps.googleusercontent.com\""
+        )
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -34,6 +38,11 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
