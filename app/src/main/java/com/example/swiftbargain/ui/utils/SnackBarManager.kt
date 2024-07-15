@@ -1,14 +1,16 @@
 package com.example.swiftbargain.ui.utils
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.example.swiftbargain.ui.theme.colors
+import com.example.swiftbargain.ui.theme.green
+import com.example.swiftbargain.ui.theme.red
+import com.example.swiftbargain.ui.theme.yellow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class SnackBarVisual(
     override val message: String,
@@ -28,47 +30,45 @@ object SnackBarManager {
         return snackBar!!
     }
 
-    @Composable
-    fun SnackbarHostState.ShowSuccess(
+
+    fun SnackbarHostState.showSuccess(
         message: String,
+        scope: CoroutineScope,
         actionBefore: () -> Unit = {},
         actionAfter: () -> Unit = {},
     ) {
-        val color = MaterialTheme.colors.green
-        LaunchedEffect(UInt) {
+        scope.launch {
             actionBefore()
-            this@ShowSuccess.showSnackbar(SnackBarVisual(message, color))
+            this@showSuccess.showSnackbar(SnackBarVisual(message, green))
             actionAfter()
         }
     }
 
-    @Composable
-    fun SnackbarHostState.ShowWarning(
+
+    fun SnackbarHostState.showWarning(
         message: String,
+        scope: CoroutineScope,
         actionBefore: () -> Unit = {},
         actionAfter: () -> Unit = {},
     ) {
-        val color = MaterialTheme.colors.yellow
-        LaunchedEffect(UInt) {
+        scope.launch {
             actionBefore()
-            this@ShowWarning.showSnackbar(SnackBarVisual(message, color))
+            this@showWarning.showSnackbar(SnackBarVisual(message, yellow))
             actionAfter()
         }
     }
 
-    @Composable
-    fun SnackbarHostState.ShowError(
+    fun SnackbarHostState.showError(
         message: String,
+        scope: CoroutineScope,
         actionBefore: () -> Unit = {},
         actionAfter: () -> Unit = {},
     ) {
-        val color = MaterialTheme.colors.red
-        LaunchedEffect(UInt) {
+        scope.launch {
             actionBefore()
-            this@ShowError.showSnackbar(SnackBarVisual(message, color))
+            this@showError.showSnackbar(SnackBarVisual(message, red))
             actionAfter()
         }
     }
 }
-
 
