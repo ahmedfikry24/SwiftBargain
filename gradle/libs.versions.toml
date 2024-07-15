@@ -12,6 +12,7 @@ lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
 navigationCompose = "2.8.0-beta05"
+playServicesAuth = "21.2.0"
 splash = "1.0.1"
 firebaseBom = "33.1.2"
 googleService = "4.4.2"
@@ -40,10 +41,12 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt_android_compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
