@@ -26,7 +26,7 @@ android {
         buildConfigField(
             "String",
             "clientId",
-            "\"931177986261-and0ce4rr6fllckn377bnv7nn0ljogan.apps.googleusercontent.com\""
+            "\"931177986261-icudbred62fgn93ouuprf10lu93tg9k0.apps.googleusercontent.com\""
         )
     }
     buildTypes {
