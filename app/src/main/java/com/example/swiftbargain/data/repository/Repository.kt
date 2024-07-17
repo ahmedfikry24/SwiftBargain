@@ -1,5 +1,7 @@
 package com.example.swiftbargain.data.repository
 
+import android.content.Intent
+import com.example.swiftbargain.data.utils.SignInResult
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -12,5 +14,7 @@ interface Repository {
 
     // region auth
     suspend fun login(email: String, password: String): String
+    suspend fun signInWithGoogleIntent(intent: Intent): SignInResult
+    suspend fun signInWithGoogle(id: String): String
     //endregion
 }
