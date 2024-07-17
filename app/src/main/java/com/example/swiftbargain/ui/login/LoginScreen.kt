@@ -1,5 +1,11 @@
 package com.example.swiftbargain.ui.login
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,9 +24,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,14 +38,25 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.BuildConfig
+import com.example.swiftbargain.MainActivity
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
+import com.example.swiftbargain.ui.login.view_model.LoginEvents
 import com.example.swiftbargain.ui.login.view_model.LoginInteractions
 import com.example.swiftbargain.ui.login.view_model.LoginUiState
 import com.example.swiftbargain.ui.login.view_model.LoginViewModel
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
+import com.example.swiftbargain.ui.utils.SnackBarManager
+import com.example.swiftbargain.ui.utils.SnackBarManager.showError
+import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
+import com.example.swiftbargain.ui.utils.UiConstants
+import com.example.swiftbargain.ui.utils.eventHandler
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @Composable
 fun LoginScreen(
@@ -46,6 +65,32 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    val snackBar = SnackBarManager.init()
+    eventHandler(viewModel.event, scope) {
+        when (it) {
+            LoginEvents.InvalidEmailOrPassword -> snackBar.showError(
+                UiConstants.INVALID_AUTH,
+                scope
+            )
+
+            LoginEvents.LoginSuccess -> {}
+            LoginEvents.NoInternetConnection -> snackBar.showWarning(
+                UiConstants.NO_INTER_NET_CONNECTION,
+                scope
+            )
+
+            LoginEvents.SomeThingWentWrong -> snackBar.showError(
+                UiConstants.SOME_THING_WENT_WRONG,
+                scope
+            )
+
+            LoginEvents.CredentialFailed -> snackBar.showError(
+                UiConstants.INVALID_CREDENTIAL,
+                scope
+            )
+        }
+    }
     LoginContent(
         state = state,
         interactions = viewModel
@@ -57,6 +102,12 @@ private fun LoginContent(
     state: LoginUiState,
     interactions: LoginInteractions
 ) {
+    val googleSignInClient = rememberGoogleSignInClient()
+    val signInGoogleLauncher = rememberSignInGoogleLauncher {
+        interactions.getGoogleCredential(
+            it.data ?: return@rememberSignInGoogleLauncher
+        )
+    }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
@@ -92,7 +143,7 @@ private fun LoginContent(
                     .padding(top = MaterialTheme.spacing.space16),
                 value = state.email,
                 hint = stringResource(R.string.example_gmail_com),
-                isError = state.emailError != null,
+                isError = state.emailError,
                 leadingIconId = R.drawable.ic_email,
                 keyboardType = KeyboardType.Email,
                 onChangeValue = interactions::onChangeEmail
@@ -105,7 +156,7 @@ private fun LoginContent(
                     .padding(top = MaterialTheme.spacing.space8),
                 value = state.password,
                 hint = stringResource(R.string.password),
-                isError = state.passwordError != null,
+                isError = state.passwordError,
                 leadingIconId = R.drawable.ic_password,
                 keyboardType = KeyboardType.Password,
                 visualTransformation = PasswordVisualTransformation(),
@@ -148,7 +199,9 @@ private fun LoginContent(
                 modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                 text = stringResource(R.string.login_with_google),
                 iconId = R.drawable.ic_google,
-                onClick = interactions::loginWithGoogle
+                onClick = {
+                    signInGoogleLauncher.launch(googleSignInClient.signInIntent)
+                }
             )
         }
         item {
@@ -217,6 +270,26 @@ private fun SocialLogin(
                 color = MaterialTheme.colors.textGrey,
                 textAlign = TextAlign.Center
             )
+        }
+    }
+}
+
+@Composable
+private fun rememberGoogleSignInClient(): GoogleSignInClient {
+    val context = LocalContext.current as MainActivity
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken(BuildConfig.clientId)
+        .requestEmail()
+        .build()
+    return GoogleSignIn.getClient(context, gso)
+}
+
+@Composable
+private fun rememberSignInGoogleLauncher(onSuccess: (ActivityResult) -> Unit): ManagedActivityResultLauncher<Intent, ActivityResult> {
+    return rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult())
+    { result ->
+        if (result.resultCode == RESULT_OK) {
+            onSuccess(result)
         }
     }
 }
