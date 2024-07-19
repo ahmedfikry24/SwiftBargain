@@ -13,8 +13,9 @@ interface Repository {
     // endregion
 
     // region auth
-    suspend fun login(email: String, password: String): String
-    suspend fun signInWithGoogleIntent(intent: Intent): SignInResult
-    suspend fun signInWithGoogle(id: String): String
+    suspend fun loginEmailAndPassword(email: String, password: String): String
+    suspend fun loginWithGoogleIntent(intent: Intent): SignInResult
+    suspend fun loginWithGoogle(id: String): String
+    suspend fun signInWithFacebook(id: String): String
     //endregion
 }

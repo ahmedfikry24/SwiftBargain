@@ -7,6 +7,7 @@ import com.example.swiftbargain.data.utils.SignInResult
 import com.example.swiftbargain.data.utils.wrapApiCall
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.Flow
@@ -27,22 +28,14 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun setUserUid(uid: String) = dataStore.setUserUid(uid)
 
-    override suspend fun login(email: String, password: String): String {
-        val result = wrapApiCall(connectivityChecker) {
-            auth.signInWithEmailAndPassword(email, password).await()
-        }
-        return result.user?.uid ?: throw UserNotFound()
-    }
-
-    override suspend fun signInWithGoogle(id: String): String {
+    override suspend fun loginEmailAndPassword(email: String, password: String): String {
         return wrapApiCall(connectivityChecker) {
-            val credential = GoogleAuthProvider.getCredential(id, null)
-            val user = auth.signInWithCredential(credential).await()
-            user.user?.uid ?: throw UserNotFound()
+            val result = auth.signInWithEmailAndPassword(email, password).await()
+            result.user?.uid ?: throw UserNotFound()
         }
     }
 
-    override suspend fun signInWithGoogleIntent(intent: Intent): SignInResult {
+    override suspend fun loginWithGoogleIntent(intent: Intent): SignInResult {
         return wrapApiCall(connectivityChecker) {
             val account = GoogleSignIn.getSignedInAccountFromIntent(intent).await()
             SignInResult(
@@ -50,6 +43,22 @@ class RepositoryImpl @Inject constructor(
                 name = account.displayName,
                 photoUrl = account.photoUrl.toString()
             )
+        }
+    }
+
+    override suspend fun loginWithGoogle(id: String): String {
+        return wrapApiCall(connectivityChecker) {
+            val credential = GoogleAuthProvider.getCredential(id, null)
+            val user = auth.signInWithCredential(credential).await()
+            user.user?.uid ?: throw UserNotFound()
+        }
+    }
+
+    override suspend fun signInWithFacebook(id: String): String {
+        return wrapApiCall(connectivityChecker) {
+            val credential = FacebookAuthProvider.getCredential(id)
+            val result = auth.signInWithCredential(credential).await()
+            result.user?.uid ?: throw UserNotFound()
         }
     }
 }
