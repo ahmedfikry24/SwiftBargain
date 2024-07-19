@@ -31,7 +31,7 @@ class LoginViewModel @Inject constructor(
     override fun onClickSignIn() {
         if (validateFields()) {
             tryExecute(
-                { repository.login(state.value.email, state.value.password) },
+                { repository.loginEmailAndPassword(state.value.email, state.value.password) },
                 ::signInSuccess,
                 ::signInError
             )
@@ -70,7 +70,7 @@ class LoginViewModel @Inject constructor(
 
     override fun getGoogleCredential(intent: Intent) {
         tryExecute(
-            { repository.signInWithGoogleIntent(intent) },
+            { repository.loginWithGoogleIntent(intent) },
             ::googleCredentialSuccess,
             ::googleCredentialError
         )
@@ -90,7 +90,7 @@ class LoginViewModel @Inject constructor(
 
     private fun loginWithGoogleId(id: String) {
         tryExecute(
-            { repository.signInWithGoogle(id) },
+            { repository.loginWithGoogle(id) },
             ::googleAuthSuccess,
             ::googleAuthError
         )
@@ -114,8 +114,29 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun loginWithFaceBook() {
+    override fun loginWithFaceBook(id: String) {
+        tryExecute(
+            { repository.signInWithFacebook(id) },
+            ::facebookAuthSuccess,
+            ::facebookAuthError
+        )
+    }
 
+    private fun facebookAuthSuccess(id: String) {
+        val job = viewModelScope.launch {
+            repository.setUserUid(id)
+            repository.setIsLogin(true)
+        }
+        if (job.isCompleted)
+            sendEvent(LoginEvents.LoginSuccess)
+    }
+
+    private fun facebookAuthError(error: BaseError) {
+        when (error) {
+            is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
+            is UserNotFound -> sendEvent(LoginEvents.CredentialFailed)
+            else -> sendEvent(LoginEvents.SomeThingWentWrong)
+        }
     }
 
     override fun onForgetPassword() {

@@ -7,7 +7,7 @@ interface LoginInteractions {
     fun onChangePassword(password: String)
     fun onClickSignIn()
     fun getGoogleCredential(intent: Intent)
-    fun loginWithFaceBook()
+    fun loginWithFaceBook(id: String)
     fun onForgetPassword()
     fun onRegister()
 }
