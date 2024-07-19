@@ -43,6 +43,8 @@ import androidx.navigation.NavController
 import com.example.swiftbargain.BuildConfig
 import com.example.swiftbargain.MainActivity
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.composable.ContentLoading
+import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.login.view_model.LoginEvents
@@ -51,6 +53,7 @@ import com.example.swiftbargain.ui.login.view_model.LoginUiState
 import com.example.swiftbargain.ui.login.view_model.LoginViewModel
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
+import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.SnackBarManager
 import com.example.swiftbargain.ui.utils.SnackBarManager.showError
 import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
@@ -116,133 +119,136 @@ private fun LoginContent(
         )
     }
     val facebookLauncher = rememberSignInFacebookLauncher(interactions::loginWithFaceBook)
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space8),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        item {
-            Image(
-                modifier = Modifier.padding(top = MaterialTheme.spacing.space24 + MaterialTheme.spacing.space24),
-                imageVector = ImageVector.vectorResource(R.drawable.ic_logo),
-                contentDescription = null
-            )
-        }
-        item {
-            Text(
-                modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                text = stringResource(R.string.welcome_to_swift_bargain),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colors.text
-            )
-        }
-        item {
-            Text(
-                text = stringResource(R.string.sign_in_to_continue),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colors.textGrey
-            )
-        }
-        item {
-            PrimaryTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.space16),
-                value = state.email,
-                hint = stringResource(R.string.example_gmail_com),
-                isError = state.emailError,
-                leadingIconId = R.drawable.ic_email,
-                keyboardType = KeyboardType.Email,
-                onChangeValue = interactions::onChangeEmail
-            )
-        }
-        item {
-            PrimaryTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.space8),
-                value = state.password,
-                hint = stringResource(R.string.password),
-                isError = state.passwordError,
-                leadingIconId = R.drawable.ic_password,
-                keyboardType = KeyboardType.Password,
-                visualTransformation = PasswordVisualTransformation(),
-                onChangeValue = interactions::onChangePassword
-            )
-        }
-
-        item {
-            PrimaryTextButton(
-                modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                text = stringResource(R.string.sign_in),
-                onClick = interactions::onClickSignIn
-            )
-        }
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.space12),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colors.textGrey
+    ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
+    ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(MaterialTheme.spacing.space16),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space8),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Image(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space24 + MaterialTheme.spacing.space24),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_logo),
+                    contentDescription = null
                 )
+            }
+            item {
                 Text(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space4),
-                    text = stringResource(R.string.or),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colors.textGrey
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                    text = stringResource(R.string.welcome_to_swift_bargain),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colors.text
                 )
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
+            }
+            item {
+                Text(
+                    text = stringResource(R.string.sign_in_to_continue),
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colors.textGrey
                 )
             }
-        }
-        item {
-            SocialLogin(
-                modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
-                text = stringResource(R.string.login_with_google),
-                iconId = R.drawable.ic_google,
-                onClick = { signInGoogleLauncher.launch(googleSignInClient.signInIntent) }
-            )
-        }
-        item {
-            SocialLogin(
-                text = stringResource(R.string.login_with_facebook),
-                iconId = R.drawable.ic_facebook,
-                onClick = { facebookLauncher.launch(listOf("email", "public_profile")) }
-            )
-        }
-        item {
-            Text(
-                modifier = Modifier
-                    .padding(top = MaterialTheme.spacing.space16)
-                    .clickable(onClick = interactions::onForgetPassword),
-                text = stringResource(R.string.forgot_password),
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colors.primary
-            )
-        }
-        item {
-            Row(modifier = Modifier.padding(bottom = MaterialTheme.spacing.space16)) {
-                Text(
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
-                    text = stringResource(R.string.don_t_have_a_account),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colors.textGrey
+            item {
+                PrimaryTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = MaterialTheme.spacing.space16),
+                    value = state.email,
+                    hint = stringResource(R.string.example_gmail_com),
+                    isError = state.emailError,
+                    leadingIconId = R.drawable.ic_email,
+                    keyboardType = KeyboardType.Email,
+                    onChangeValue = interactions::onChangeEmail
                 )
+            }
+            item {
+                PrimaryTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = MaterialTheme.spacing.space8),
+                    value = state.password,
+                    hint = stringResource(R.string.password),
+                    isError = state.passwordError,
+                    leadingIconId = R.drawable.ic_password,
+                    keyboardType = KeyboardType.Password,
+                    visualTransformation = PasswordVisualTransformation(),
+                    onChangeValue = interactions::onChangePassword
+                )
+            }
+
+            item {
+                PrimaryTextButton(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                    text = stringResource(R.string.sign_in),
+                    onClick = interactions::loginWithEmailAndPassword
+                )
+            }
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = MaterialTheme.spacing.space12),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colors.textGrey
+                    )
+                    Text(
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space4),
+                        text = stringResource(R.string.or),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colors.textGrey
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colors.textGrey
+                    )
+                }
+            }
+            item {
+                SocialLoginButton(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
+                    text = stringResource(R.string.login_with_google),
+                    iconId = R.drawable.ic_google,
+                    onClick = { signInGoogleLauncher.launch(googleSignInClient.signInIntent) }
+                )
+            }
+            item {
+                SocialLoginButton(
+                    text = stringResource(R.string.login_with_facebook),
+                    iconId = R.drawable.ic_facebook,
+                    onClick = { facebookLauncher.launch(listOf("email", "public_profile")) }
+                )
+            }
+            item {
                 Text(
                     modifier = Modifier
-                        .padding(top = MaterialTheme.spacing.space8)
-                        .clickable(onClick = interactions::onRegister),
-                    text = stringResource(R.string.register),
+                        .padding(top = MaterialTheme.spacing.space16)
+                        .clickable(onClick = interactions::onForgetPassword),
+                    text = stringResource(R.string.forgot_password),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colors.primary
                 )
+            }
+            item {
+                Row(modifier = Modifier.padding(bottom = MaterialTheme.spacing.space16)) {
+                    Text(
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
+                        text = stringResource(R.string.don_t_have_a_account),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colors.textGrey
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(top = MaterialTheme.spacing.space8)
+                            .clickable(onClick = interactions::onRegister),
+                        text = stringResource(R.string.register),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colors.primary
+                    )
+                }
             }
         }
     }
@@ -250,7 +256,7 @@ private fun LoginContent(
 
 
 @Composable
-private fun SocialLogin(
+private fun SocialLoginButton(
     modifier: Modifier = Modifier,
     text: String,
     iconId: Int,

@@ -8,6 +8,7 @@ import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.base.NoInternetConnection
 import com.example.swiftbargain.ui.base.UserNotFound
+import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.validateEmail
 import com.example.swiftbargain.ui.utils.validateRequireFields
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,8 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(password = password) }
     }
 
-    override fun onClickSignIn() {
+    override fun loginWithEmailAndPassword() {
+        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         if (validateFields()) {
             tryExecute(
                 { repository.loginEmailAndPassword(state.value.email, state.value.password) },
@@ -48,6 +50,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun signInError(error: BaseError) {
+        _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
             is UserNotFound -> sendEvent(LoginEvents.InvalidEmailOrPassword)
@@ -69,6 +72,7 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun getGoogleCredential(intent: Intent) {
+        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
             { repository.loginWithGoogleIntent(intent) },
             ::googleCredentialSuccess,
@@ -81,6 +85,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun googleCredentialError(error: BaseError) {
+        _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
             is UserNotFound -> sendEvent(LoginEvents.CredentialFailed)
@@ -107,6 +112,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun googleAuthError(error: BaseError) {
+        _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
             is UserNotFound -> sendEvent(LoginEvents.CredentialFailed)
@@ -115,6 +121,7 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun loginWithFaceBook(id: String) {
+        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
             { repository.signInWithFacebook(id) },
             ::facebookAuthSuccess,
@@ -132,6 +139,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun facebookAuthError(error: BaseError) {
+        _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
             is UserNotFound -> sendEvent(LoginEvents.CredentialFailed)
