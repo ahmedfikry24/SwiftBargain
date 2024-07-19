@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SwiftBargain</string>
+    <string name="something_went_wrong_check_internet_connection_then_try_again">something went wrong, check internet connection then try again</string>
+    <string name="try_again">try again</string>
 </resources>
