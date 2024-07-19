@@ -1,7 +1,9 @@
 package com.example.swiftbargain.ui.login
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -54,6 +56,11 @@ import com.example.swiftbargain.ui.utils.SnackBarManager.showError
 import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
 import com.example.swiftbargain.ui.utils.UiConstants
 import com.example.swiftbargain.ui.utils.eventHandler
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -108,6 +115,7 @@ private fun LoginContent(
             it.data ?: return@rememberSignInGoogleLauncher
         )
     }
+    val facebookLauncher = rememberSignInFacebookLauncher(interactions::loginWithFaceBook)
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
@@ -199,16 +207,14 @@ private fun LoginContent(
                 modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                 text = stringResource(R.string.login_with_google),
                 iconId = R.drawable.ic_google,
-                onClick = {
-                    signInGoogleLauncher.launch(googleSignInClient.signInIntent)
-                }
+                onClick = { signInGoogleLauncher.launch(googleSignInClient.signInIntent) }
             )
         }
         item {
             SocialLogin(
                 text = stringResource(R.string.login_with_facebook),
                 iconId = R.drawable.ic_facebook,
-                onClick = interactions::loginWithFaceBook
+                onClick = { facebookLauncher.launch(listOf("email", "public_profile")) }
             )
         }
         item {
@@ -292,4 +298,32 @@ private fun rememberSignInGoogleLauncher(onSuccess: (ActivityResult) -> Unit): M
             onSuccess(result)
         }
     }
+}
+
+@Composable
+private fun rememberSignInFacebookLauncher(onSuccess: (String) -> Unit): ManagedActivityResultLauncher<Collection<String>, CallbackManager.ActivityResultParameters> {
+    val context = LocalContext.current
+    val loginManager = LoginManager.getInstance()
+    val callbackManager = CallbackManager.Factory.create()
+    loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        override fun onCancel() {}
+
+        override fun onError(error: FacebookException) {
+            showFaceBookLoginFailure(context)
+        }
+
+        override fun onSuccess(result: LoginResult) {
+            onSuccess(result.accessToken.token)
+        }
+    })
+    return rememberLauncherForActivityResult(
+        loginManager.createLogInActivityResultContract(
+            callbackManager,
+            null
+        )
+    ) {}
+}
+
+private fun showFaceBookLoginFailure(context: Context) {
+    Toast.makeText(context, "some thing went wrong with facebook login", Toast.LENGTH_SHORT).show()
 }
