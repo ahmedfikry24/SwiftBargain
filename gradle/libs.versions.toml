@@ -11,9 +11,10 @@ kotlinxSerializationJson = "1.6.3"
 lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
+lottie = "6.4.0"
 navigationCompose = "2.8.0-beta05"
 splash = "1.0.1"
-firebaseBom = "33.1.1"
+firebaseBom = "33.1.2"
 googleService = "4.4.2"
 hiltAndroid = "2.50"
 
@@ -43,6 +44,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt_android_compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
