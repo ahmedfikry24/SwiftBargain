@@ -74,6 +74,7 @@ dependencies {
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lottie)
 
     // firebase
     implementation(platform(libs.firebase.bom))
