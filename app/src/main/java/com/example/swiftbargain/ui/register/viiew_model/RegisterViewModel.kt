@@ -6,4 +6,36 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor() :
-    BaseViewModel<RegisterUiState, RegisterEvents>(RegisterUiState()), RegisterInteractions
+    BaseViewModel<RegisterUiState, RegisterEvents>(RegisterUiState()), RegisterInteractions {
+    override fun onChangeName(name: String) {
+
+    }
+
+    override fun onChangeEmail(email: String) {
+
+    }
+
+    override fun onChangePassword(password: String) {
+
+    }
+
+    override fun onChangePasswordAgain(password: String) {
+
+    }
+
+    override fun registerWithEmailAndPassword() {
+
+    }
+
+    override fun registerWithGoogle() {
+
+    }
+
+    override fun registerWithFacebook() {
+
+    }
+
+    override fun onSignIn() {
+
+    }
+}
