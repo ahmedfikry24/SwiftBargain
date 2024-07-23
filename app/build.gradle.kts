@@ -24,7 +24,6 @@ android {
             useSupportLibrary = true
         }
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -33,7 +32,22 @@ android {
                 "proguard-rules.pro"
             )
         }
+        forEach {
+            it.buildConfigField(
+                "String",
+                "clientId",
+                "\"931177986261-icudbred62fgn93ouuprf10lu93tg9k0.apps.googleusercontent.com\""
+
+            )
+            it.resValue("string", "FACEBOOK_APP_ID", "372582868869091")
+            it.resValue("string", "FACEBOOK_CLIENT_TOKEN", "105a87fb5058002c9f57101f570e2170")
+        }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -79,6 +93,11 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+
+    //facebook sdk
+    implementation(libs.facebook.login)
 
     //navigation
     implementation(libs.androidx.navigation.compose)

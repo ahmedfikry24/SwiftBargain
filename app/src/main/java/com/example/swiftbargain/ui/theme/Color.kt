@@ -6,6 +6,10 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
+val red = Color(0XFFFB7181)
+val yellow = Color(0XFFFFC833)
+val green = Color(0XFF53D1B6)
+
 @Immutable
 data class ColorPalette(
     val primary: Color = Color(0XFF40BFFF),

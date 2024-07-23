@@ -1,4 +1,4 @@
-package com.example.swiftbargain.utils
+package com.example.swiftbargain.data.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -8,7 +8,7 @@ class InternetConnectivityChecker(context: Context) {
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    fun isInternetAvailable(context: Context): Boolean {
+    operator fun invoke(): Boolean {
         val network = connectivityManager.activeNetwork ?: return false
         val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)

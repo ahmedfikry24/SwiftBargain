@@ -1,4 +1,4 @@
-package com.example.swiftbargain.ui
+package com.example.swiftbargain.ui.composable
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
