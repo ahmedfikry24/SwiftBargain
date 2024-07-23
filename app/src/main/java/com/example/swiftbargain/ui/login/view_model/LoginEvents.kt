@@ -6,4 +6,5 @@ sealed interface LoginEvents {
     data object CredentialFailed : LoginEvents
     data object SomeThingWentWrong : LoginEvents
     data object LoginSuccess : LoginEvents
+    data object NavToRegister : LoginEvents
 }

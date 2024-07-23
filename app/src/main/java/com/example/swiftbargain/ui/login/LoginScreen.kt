@@ -43,6 +43,9 @@ import androidx.navigation.NavController
 import com.example.swiftbargain.BuildConfig
 import com.example.swiftbargain.MainActivity
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.Authentication
+import com.example.swiftbargain.navigation.Register
+import com.example.swiftbargain.navigation.User
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
@@ -84,7 +87,12 @@ fun LoginScreen(
                 scope
             )
 
-            LoginEvents.LoginSuccess -> {}
+            LoginEvents.LoginSuccess -> mainVavController.navigate(User) {
+                popUpTo(Authentication) {
+                    inclusive = true
+                }
+            }
+
             LoginEvents.NoInternetConnection -> snackBar.showWarning(
                 UiConstants.NO_INTER_NET_CONNECTION,
                 scope
@@ -99,6 +107,8 @@ fun LoginScreen(
                 UiConstants.INVALID_CREDENTIAL,
                 scope
             )
+
+            LoginEvents.NavToRegister -> navController.navigate(Register)
         }
     }
     LoginContent(

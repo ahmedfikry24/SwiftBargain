@@ -152,7 +152,7 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onRegister() {
-
+        sendEvent(LoginEvents.NavToRegister)
     }
 
 }
