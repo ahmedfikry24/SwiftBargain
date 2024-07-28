@@ -2,6 +2,7 @@ package com.example.swiftbargain.data.repository
 
 import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
+import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
 import com.example.swiftbargain.data.utils.SignInResult
 import com.example.swiftbargain.data.utils.wrapApiCall
@@ -10,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val dataStore: DataStoreManager,
     private val auth: FirebaseAuth,
+    private val fireStore: FirebaseFirestore,
     private val connectivityChecker: InternetConnectivityChecker
 ) : Repository {
 
@@ -59,6 +62,24 @@ class RepositoryImpl @Inject constructor(
             val credential = FacebookAuthProvider.getCredential(id)
             val result = auth.signInWithCredential(credential).await()
             result.user?.uid ?: throw UserNotFound()
+        }
+    }
+
+    override suspend fun signUpWithEmailAndPassword(
+        name: String,
+        email: String,
+        password: String
+    ): String {
+        return wrapApiCall(connectivityChecker) {
+            val result = auth.createUserWithEmailAndPassword(email, password).await()
+            val uid = result.user?.uid ?: throw UserNotFound()
+            val userInfo = UserInfoDto(
+                id = uid,
+                name = name,
+                email = email
+            )
+            fireStore.collection("users").document(uid).set(userInfo).await()
+            uid
         }
     }
 }
