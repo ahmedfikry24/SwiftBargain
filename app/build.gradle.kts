@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.gms.google.service)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -95,6 +96,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+    implementation(libs.firebase.firestore)
 
     //facebook sdk
     implementation(libs.facebook.login)
