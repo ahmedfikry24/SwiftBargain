@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,13 +30,19 @@ import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.composable.SocialSignButton
+import com.example.swiftbargain.ui.register.viiew_model.RegisterEvents
 import com.example.swiftbargain.ui.register.viiew_model.RegisterInteractions
 import com.example.swiftbargain.ui.register.viiew_model.RegisterUiState
 import com.example.swiftbargain.ui.register.viiew_model.RegisterViewModel
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
-import com.example.swiftbargain.ui.utils.eventHandler
+import com.example.swiftbargain.ui.utils.EventHandler
+import com.example.swiftbargain.ui.utils.SnackBarManager
+import com.example.swiftbargain.ui.utils.SnackBarManager.showError
+import com.example.swiftbargain.ui.utils.SnackBarManager.showSuccess
+import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
+import com.example.swiftbargain.ui.utils.UiConstants
 
 @Composable
 fun RegisterScreen(
@@ -46,9 +51,34 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
-    eventHandler(event = viewModel.event, scope = scope) {
+    val snackBar = SnackBarManager.init()
+    EventHandler(viewModel.event) { events, scope ->
+        when (events) {
+            RegisterEvents.NavigateToLogin -> snackBar.showSuccess(
+                UiConstants.REGISTER_SUCCESS,
+                scope
+            ) { navController.popBackStack() }
 
+            RegisterEvents.NoInternetConnection -> snackBar.showWarning(
+                UiConstants.NO_INTER_NET_CONNECTION,
+                scope
+            )
+
+            RegisterEvents.RegistrationFailed -> snackBar.showError(
+                UiConstants.REGISTRATION_FAILED,
+                scope
+            )
+
+            RegisterEvents.SomeThingWentWrong -> snackBar.showError(
+                UiConstants.SOME_THING_WENT_WRONG,
+                scope
+            )
+
+            RegisterEvents.EmailIsAlreadyUsed -> snackBar.showError(
+                UiConstants.EMAIL_ALREADY_USED,
+                scope
+            )
+        }
     }
 
     RegisterContent(state = state, interactions = viewModel)
@@ -111,6 +141,7 @@ private fun RegisterContent(
                     value = state.email,
                     hint = stringResource(R.string.example_gmail_com),
                     isError = state.emailError,
+                    errorText = stringResource(R.string.invalid_email),
                     leadingIconId = R.drawable.ic_email,
                     keyboardType = KeyboardType.Email,
                     onChangeValue = interactions::onChangeEmail
@@ -124,6 +155,7 @@ private fun RegisterContent(
                     value = state.password,
                     hint = stringResource(R.string.password),
                     isError = state.passwordError,
+                    errorText = stringResource(R.string.password_must_be_more_than_6_characters),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
                     visualTransformation = PasswordVisualTransformation(),
@@ -138,6 +170,7 @@ private fun RegisterContent(
                     value = state.passwordAgain,
                     hint = stringResource(R.string.password_again),
                     isError = state.passwordAgainError,
+                    errorText = stringResource(R.string.password_mismatch),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
                     visualTransformation = PasswordVisualTransformation(),
