@@ -17,6 +17,6 @@ interface Repository {
     suspend fun loginWithGoogleIntent(intent: Intent): SignInResult
     suspend fun loginWithGoogle(id: String): String
     suspend fun signInWithFacebook(id: String): String
-    suspend fun signUpWithEmailAndPassword(name: String, email: String, password: String): String
+    suspend fun signUpWithEmailAndPassword(name: String, email: String, password: String)
     //endregion
 }

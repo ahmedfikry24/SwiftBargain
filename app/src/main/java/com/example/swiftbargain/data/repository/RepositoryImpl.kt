@@ -6,6 +6,7 @@ import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
 import com.example.swiftbargain.data.utils.SignInResult
 import com.example.swiftbargain.data.utils.wrapApiCall
+import com.example.swiftbargain.ui.base.RegistrationFailed
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
@@ -69,17 +70,17 @@ class RepositoryImpl @Inject constructor(
         name: String,
         email: String,
         password: String
-    ): String {
+    ) {
         return wrapApiCall(connectivityChecker) {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
-            val uid = result.user?.uid ?: throw UserNotFound()
+            val user = result.user ?: throw RegistrationFailed()
             val userInfo = UserInfoDto(
-                id = uid,
+                id = user.uid,
                 name = name,
                 email = email
             )
-            fireStore.collection("users").document(uid).set(userInfo).await()
-            uid
+            fireStore.collection("users").document(user.uid).set(userInfo).await()
+            user.sendEmailVerification().await()
         }
     }
 }
