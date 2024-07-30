@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -52,11 +51,11 @@ import com.example.swiftbargain.ui.login.view_model.LoginViewModel
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
+import com.example.swiftbargain.ui.utils.EventHandler
 import com.example.swiftbargain.ui.utils.SnackBarManager
 import com.example.swiftbargain.ui.utils.SnackBarManager.showError
 import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
 import com.example.swiftbargain.ui.utils.UiConstants
-import com.example.swiftbargain.ui.utils.eventHandler
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -73,10 +72,9 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
     val snackBar = SnackBarManager.init()
-    eventHandler(viewModel.event, scope) {
-        when (it) {
+    EventHandler(viewModel.event) { events, scope ->
+        when (events) {
             LoginEvents.InvalidEmailOrPassword -> snackBar.showError(
                 UiConstants.INVALID_AUTH,
                 scope
@@ -162,6 +160,7 @@ private fun LoginContent(
                     value = state.email,
                     hint = stringResource(R.string.example_gmail_com),
                     isError = state.emailError,
+
                     leadingIconId = R.drawable.ic_email,
                     keyboardType = KeyboardType.Email,
                     onChangeValue = interactions::onChangeEmail
@@ -175,6 +174,7 @@ private fun LoginContent(
                     value = state.password,
                     hint = stringResource(R.string.password),
                     isError = state.passwordError,
+                    errorText = stringResource(R.string.password_must_be_more_than_6_characters),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
                     visualTransformation = PasswordVisualTransformation(),

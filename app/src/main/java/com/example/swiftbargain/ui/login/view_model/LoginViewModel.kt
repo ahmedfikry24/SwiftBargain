@@ -10,7 +10,7 @@ import com.example.swiftbargain.ui.base.NoInternetConnection
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.validateEmail
-import com.example.swiftbargain.ui.utils.validateRequireFields
+import com.example.swiftbargain.ui.utils.validatePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -60,7 +60,7 @@ class LoginViewModel @Inject constructor(
 
     private fun validateFields(): Boolean {
         val validateEmail = state.value.email.validateEmail()
-        val validatePassword = state.value.password.validateRequireFields()
+        val validatePassword = state.value.password.validatePassword()
         val hasError = listOf(validateEmail, validatePassword).contains(false)
         _state.update {
             it.copy(
