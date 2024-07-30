@@ -22,4 +22,6 @@
     <string name="sign_up_with_google">Sign Up with google</string>
     <string name="sign_up_with_facebook">Sign Up with facebook</string>
     <string name="have_a_account">"have a account? "</string>
+    <string name="password_mismatch">password mismatch</string>
+    <string name="password_must_be_more_than_6_characters">password must be more than 6 characters</string>
 </resources>
