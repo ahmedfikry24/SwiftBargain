@@ -27,10 +27,14 @@ abstract class BaseViewModel<U, E>(uiState: U) : ViewModel() {
             try {
                 val executable = progress()
                 onSuccess(executable)
-            } catch (e: NoInternetConnection) {
-                onError(NoInternetConnection())
             } catch (e: UserNotFound) {
                 onError(UserNotFound())
+            } catch (e: RegistrationFailed) {
+                onError(RegistrationFailed())
+            } catch (e: EmailIsAlreadyUsed) {
+                onError(EmailIsAlreadyUsed())
+            } catch (e: NoInternetConnection) {
+                onError(NoInternetConnection())
             } catch (e: SomethingWentWrong) {
                 onError(SomethingWentWrong())
             }
