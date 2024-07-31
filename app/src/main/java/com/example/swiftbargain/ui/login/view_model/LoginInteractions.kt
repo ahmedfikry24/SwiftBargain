@@ -6,6 +6,7 @@ interface LoginInteractions {
     fun onChangeEmail(email: String)
     fun onChangePassword(password: String)
     fun loginWithEmailAndPassword()
+    fun controlUnVerifiedEmailDialogVisibility()
     fun getGoogleCredential(intent: Intent)
     fun loginWithFaceBook(id: String)
     fun onForgetPassword()

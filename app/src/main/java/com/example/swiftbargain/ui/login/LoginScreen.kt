@@ -41,6 +41,7 @@ import com.example.swiftbargain.navigation.Register
 import com.example.swiftbargain.navigation.User
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.PrimaryDialog
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.composable.SocialSignButton
@@ -86,6 +87,11 @@ fun LoginScreen(
                 }
             }
 
+            LoginEvents.CredentialFailed -> snackBar.showError(
+                UiConstants.INVALID_CREDENTIAL,
+                scope
+            )
+
             LoginEvents.NoInternetConnection -> snackBar.showWarning(
                 UiConstants.NO_INTER_NET_CONNECTION,
                 scope
@@ -93,11 +99,6 @@ fun LoginScreen(
 
             LoginEvents.SomeThingWentWrong -> snackBar.showError(
                 UiConstants.SOME_THING_WENT_WRONG,
-                scope
-            )
-
-            LoginEvents.CredentialFailed -> snackBar.showError(
-                UiConstants.INVALID_CREDENTIAL,
                 scope
             )
 
@@ -257,6 +258,13 @@ private fun LoginContent(
             }
         }
     }
+    if (state.unVerifiedEmailDialog)
+        PrimaryDialog(
+            title = stringResource(R.string.error),
+            text = stringResource(R.string.your_email_address_is_not_verified_check_your_email_and_verify_it_then_signin_again),
+            onConfirm = interactions::controlUnVerifiedEmailDialogVisibility,
+            onDismiss = interactions::controlUnVerifiedEmailDialogVisibility
+        )
 }
 
 @Composable

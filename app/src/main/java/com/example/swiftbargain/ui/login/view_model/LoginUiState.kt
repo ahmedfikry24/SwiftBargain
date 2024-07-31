@@ -7,5 +7,6 @@ data class LoginUiState(
     val email: String = "",
     val emailError: Boolean = false,
     val password: String = "",
-    val passwordError: Boolean = false
+    val passwordError: Boolean = false,
+    val unVerifiedEmailDialog: Boolean = false
 ) 
