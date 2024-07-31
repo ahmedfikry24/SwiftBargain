@@ -36,12 +36,7 @@ fun AuthenticationNavGraph(mainNavController: NavController) {
                         navController = navController
                     )
                 }
-                composable<Register> {
-                    RegisterScreen(
-                        maniNavController = mainNavController,
-                        navController = navController
-                    )
-                }
+                composable<Register> { RegisterScreen(navController = navController) }
             }
         }
     }
