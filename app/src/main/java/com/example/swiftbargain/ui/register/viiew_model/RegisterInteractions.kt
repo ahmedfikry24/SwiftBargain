@@ -6,7 +6,6 @@ interface RegisterInteractions {
     fun onChangePassword(password: String)
     fun onChangePasswordAgain(password: String)
     fun registerWithEmailAndPassword()
-    fun registerWithGoogle()
-    fun registerWithFacebook()
-    fun onSignIn()
+    fun navigateToLogin()
+    fun controlRegisterSuccessVisibility()
 }

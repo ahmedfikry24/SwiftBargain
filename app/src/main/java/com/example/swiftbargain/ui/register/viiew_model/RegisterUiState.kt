@@ -11,5 +11,6 @@ data class RegisterUiState(
     val password: String = "",
     val passwordError: Boolean = false,
     val passwordAgain: String = "",
-    val passwordAgainError: Boolean = false
+    val passwordAgainError: Boolean = false,
+    val registerSuccessDialog: Boolean = false
 ) 

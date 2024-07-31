@@ -17,8 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val repository: Repository
-) :
-    BaseViewModel<RegisterUiState, RegisterEvents>(RegisterUiState()), RegisterInteractions {
+) : BaseViewModel<RegisterUiState, RegisterEvents>(RegisterUiState()), RegisterInteractions {
     override fun onChangeName(name: String) {
         _state.update { it.copy(name = name) }
     }
@@ -41,7 +40,7 @@ class RegisterViewModel @Inject constructor(
             val values = state.value
             tryExecute(
                 {
-                    repository.signUpWithEmailAndPassword(
+                    repository.registerWithEmailAndPassword(
                         values.name,
                         values.email,
                         values.password
@@ -54,7 +53,8 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun registerWithEmailAndPasswordSuccess() {
-        sendEvent(RegisterEvents.NavigateToLogin)
+        _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
+        controlRegisterSuccessVisibility()
     }
 
     private fun registerWithEmailAndPasswordError(error: BaseError) {
@@ -86,16 +86,11 @@ class RegisterViewModel @Inject constructor(
         }
         return !hasError
     }
-
-    override fun registerWithGoogle() {
-
+    override fun controlRegisterSuccessVisibility() {
+        _state.update { it.copy(registerSuccessDialog = !it.registerSuccessDialog) }
     }
 
-    override fun registerWithFacebook() {
-
-    }
-
-    override fun onSignIn() {
-
+    override fun navigateToLogin() {
+        sendEvent(RegisterEvents.NavigateToLogin)
     }
 }
