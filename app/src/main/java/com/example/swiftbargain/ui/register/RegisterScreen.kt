@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,7 @@ import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
-import com.example.swiftbargain.ui.composable.SocialSignButton
+import com.example.swiftbargain.ui.composable.SuccessDialog
 import com.example.swiftbargain.ui.register.viiew_model.RegisterEvents
 import com.example.swiftbargain.ui.register.viiew_model.RegisterInteractions
 import com.example.swiftbargain.ui.register.viiew_model.RegisterUiState
@@ -40,13 +39,11 @@ import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
 import com.example.swiftbargain.ui.utils.SnackBarManager
 import com.example.swiftbargain.ui.utils.SnackBarManager.showError
-import com.example.swiftbargain.ui.utils.SnackBarManager.showSuccess
 import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
 import com.example.swiftbargain.ui.utils.UiConstants
 
 @Composable
 fun RegisterScreen(
-    maniNavController: NavController,
     navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
@@ -54,28 +51,25 @@ fun RegisterScreen(
     val snackBar = SnackBarManager.init()
     EventHandler(viewModel.event) { events, scope ->
         when (events) {
-            RegisterEvents.NavigateToLogin -> snackBar.showSuccess(
-                UiConstants.REGISTER_SUCCESS,
+            RegisterEvents.RegistrationFailed -> snackBar.showError(
+                UiConstants.REGISTRATION_FAILED,
                 scope
-            ) { navController.popBackStack() }
+            )
+
+            RegisterEvents.EmailIsAlreadyUsed -> snackBar.showError(
+                UiConstants.EMAIL_ALREADY_USED,
+                scope
+            )
+
+            RegisterEvents.NavigateToLogin -> navController.popBackStack()
 
             RegisterEvents.NoInternetConnection -> snackBar.showWarning(
                 UiConstants.NO_INTER_NET_CONNECTION,
                 scope
             )
 
-            RegisterEvents.RegistrationFailed -> snackBar.showError(
-                UiConstants.REGISTRATION_FAILED,
-                scope
-            )
-
             RegisterEvents.SomeThingWentWrong -> snackBar.showError(
                 UiConstants.SOME_THING_WENT_WRONG,
-                scope
-            )
-
-            RegisterEvents.EmailIsAlreadyUsed -> snackBar.showError(
-                UiConstants.EMAIL_ALREADY_USED,
                 scope
             )
         }
@@ -185,44 +179,6 @@ private fun RegisterContent(
                 )
             }
             item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = MaterialTheme.spacing.space12),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colors.textGrey
-                    )
-                    Text(
-                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space4),
-                        text = stringResource(R.string.or),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colors.textGrey
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colors.textGrey
-                    )
-                }
-            }
-            item {
-                SocialSignButton(
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
-                    text = stringResource(R.string.sign_up_with_google),
-                    iconId = R.drawable.ic_google,
-                    onClick = { }
-                )
-            }
-            item {
-                SocialSignButton(
-                    text = stringResource(R.string.sign_up_with_facebook),
-                    iconId = R.drawable.ic_facebook,
-                    onClick = { }
-                )
-            }
-            item {
                 Row(modifier = Modifier.padding(bottom = MaterialTheme.spacing.space16)) {
                     Text(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
@@ -233,7 +189,7 @@ private fun RegisterContent(
                     Text(
                         modifier = Modifier
                             .padding(top = MaterialTheme.spacing.space8)
-                            .clickable(onClick = interactions::onSignIn),
+                            .clickable(onClick = interactions::navigateToLogin),
                         text = stringResource(R.string.sign_in),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colors.primary
@@ -242,4 +198,15 @@ private fun RegisterContent(
             }
         }
     }
+
+    if (state.registerSuccessDialog)
+        SuccessDialog(
+            title = stringResource(R.string.register_success),
+            text = stringResource(R.string.success_registration_login_now),
+            onConfirm = {
+                interactions.controlRegisterSuccessVisibility()
+                interactions.navigateToLogin()
+            },
+            onDismiss = interactions::controlRegisterSuccessVisibility
+        )
 }
