@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class UserInfoDto(
     val id: String,
-    val name: String,
-    val email: String
+    val name: String?,
+    val email: String?
 ) : Parcelable
