@@ -9,21 +9,25 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 
 @Composable
-fun SuccessDialog(
+fun PrimaryDialog(
     modifier: Modifier = Modifier,
     title: String,
     text: String,
     onConfirm: () -> Unit,
+    onCancel: (() -> Unit)? = null,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         modifier = modifier,
         containerColor = MaterialTheme.colors.background,
+        shape = RoundedCornerShape(MaterialTheme.spacing.space8),
         onDismissRequest = onDismiss,
         title = {
             Text(
@@ -49,10 +53,26 @@ fun SuccessDialog(
                 onClick = onConfirm
             ) {
                 Text(
-                    text = text,
+                    text = stringResource(R.string.ok),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                 )
             }
+        },
+        dismissButton = {
+            if (onCancel != null)
+                TextButton(
+                    colors = ButtonDefaults.textButtonColors(
+                        containerColor = MaterialTheme.colors.background,
+                        contentColor = MaterialTheme.colors.text
+                    ),
+                    shape = RoundedCornerShape(MaterialTheme.spacing.space4),
+                    onClick = onCancel
+                ) {
+                    Text(
+                        text = stringResource(R.string.cancel),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+                    )
+                }
         }
     )
 }
