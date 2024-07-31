@@ -1,6 +1,7 @@
 package com.example.swiftbargain.data.utils
 
 import com.example.swiftbargain.ui.base.EmailIsAlreadyUsed
+import com.example.swiftbargain.ui.base.EmailIsNoVerified
 import com.example.swiftbargain.ui.base.NoInternetConnection
 import com.example.swiftbargain.ui.base.SomethingWentWrong
 import com.example.swiftbargain.ui.base.UserNotFound
@@ -17,6 +18,8 @@ suspend fun <T> wrapApiCall(
         } else throw NoInternetConnection()
     } catch (e: FirebaseAuthInvalidCredentialsException) {
         throw UserNotFound()
+    } catch (e: EmailIsNoVerified) {
+        throw EmailIsNoVerified()
     } catch (e: FirebaseAuthUserCollisionException) {
         throw EmailIsAlreadyUsed()
     } catch (e: NoInternetConnection) {
