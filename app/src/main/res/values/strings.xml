@@ -14,4 +14,17 @@
     <string name="sign_in">Sign In</string>
     <string name="something_went_wrong_check_internet_connection_then_try_again">something went wrong, check internet connection then try again</string>
     <string name="try_again">try again</string>
+    <string name="let_s_get_started">Let’s Get Started</string>
+    <string name="create_an_new_account">Create an new account</string>
+    <string name="full_name">full name</string>
+    <string name="password_again">Password again</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_with_google">Sign Up with google</string>
+    <string name="sign_up_with_facebook">Sign Up with facebook</string>
+    <string name="have_a_account">"have a account? "</string>
+    <string name="password_mismatch">password mismatch</string>
+    <string name="password_must_be_more_than_6_characters">password must be more than 6 characters</string>
+    <string name="invalid_email">invalid email</string>
+    <string name="register_success">Register Success</string>
+    <string name="success_registration_login_now">success registration, login now.</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.swiftbargain.ui.composable.PrimarySnackBar
 import com.example.swiftbargain.ui.login.LoginScreen
+import com.example.swiftbargain.ui.register.RegisterScreen
 import com.example.swiftbargain.ui.theme.colors
 
 @Composable
@@ -35,7 +36,7 @@ fun AuthenticationNavGraph(mainNavController: NavController) {
                         navController = navController
                     )
                 }
-                composable<Register> { }
+                composable<Register> { RegisterScreen(navController = navController) }
             }
         }
     }

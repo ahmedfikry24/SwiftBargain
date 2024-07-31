@@ -1,23 +1,35 @@
 package com.example.swiftbargain.ui.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
 
-private var job: Job? = null
-fun <T> eventHandler(
-    event: SharedFlow<T>,
-    scope: CoroutineScope,
-    body: (T) -> Unit
+
+@Composable
+fun <T> EventHandler(
+    effects: SharedFlow<T>,
+    handleEffect: (T, CoroutineScope) -> Unit
 ) {
-    job?.cancel()
-    job = scope.launch {
-        event.collectLatest {
-            delay(500)
-            body(it)
+    LaunchedEffect(key1 = Unit) {
+        effects.throttleFirst().collectLatest { effect ->
+            handleEffect(effect, this)
+        }
+    }
+}
+
+private fun <T> SharedFlow<T>.throttleFirst(): Flow<T> {
+    return flow {
+        var lastEmitted = 0L
+        collect { event ->
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastEmitted >= 500) {
+                lastEmitted = currentTime
+                emit(event)
+            }
         }
     }
 }

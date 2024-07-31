@@ -8,7 +8,6 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,15 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,8 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -50,6 +43,7 @@ import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
+import com.example.swiftbargain.ui.composable.SocialSignButton
 import com.example.swiftbargain.ui.login.view_model.LoginEvents
 import com.example.swiftbargain.ui.login.view_model.LoginInteractions
 import com.example.swiftbargain.ui.login.view_model.LoginUiState
@@ -57,11 +51,11 @@ import com.example.swiftbargain.ui.login.view_model.LoginViewModel
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
+import com.example.swiftbargain.ui.utils.EventHandler
 import com.example.swiftbargain.ui.utils.SnackBarManager
 import com.example.swiftbargain.ui.utils.SnackBarManager.showError
 import com.example.swiftbargain.ui.utils.SnackBarManager.showWarning
 import com.example.swiftbargain.ui.utils.UiConstants
-import com.example.swiftbargain.ui.utils.eventHandler
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -78,10 +72,9 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
     val snackBar = SnackBarManager.init()
-    eventHandler(viewModel.event, scope) {
-        when (it) {
+    EventHandler(viewModel.event) { events, scope ->
+        when (events) {
             LoginEvents.InvalidEmailOrPassword -> snackBar.showError(
                 UiConstants.INVALID_AUTH,
                 scope
@@ -167,6 +160,7 @@ private fun LoginContent(
                     value = state.email,
                     hint = stringResource(R.string.example_gmail_com),
                     isError = state.emailError,
+
                     leadingIconId = R.drawable.ic_email,
                     keyboardType = KeyboardType.Email,
                     onChangeValue = interactions::onChangeEmail
@@ -180,6 +174,7 @@ private fun LoginContent(
                     value = state.password,
                     hint = stringResource(R.string.password),
                     isError = state.passwordError,
+                    errorText = stringResource(R.string.password_must_be_more_than_6_characters),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
                     visualTransformation = PasswordVisualTransformation(),
@@ -218,7 +213,7 @@ private fun LoginContent(
                 }
             }
             item {
-                SocialLoginButton(
+                SocialSignButton(
                     modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                     text = stringResource(R.string.login_with_google),
                     iconId = R.drawable.ic_google,
@@ -226,7 +221,7 @@ private fun LoginContent(
                 )
             }
             item {
-                SocialLoginButton(
+                SocialSignButton(
                     text = stringResource(R.string.login_with_facebook),
                     iconId = R.drawable.ic_facebook,
                     onClick = { facebookLauncher.launch(listOf("email", "public_profile")) }
@@ -260,38 +255,6 @@ private fun LoginContent(
                     )
                 }
             }
-        }
-    }
-}
-
-
-@Composable
-private fun SocialLoginButton(
-    modifier: Modifier = Modifier,
-    text: String,
-    iconId: Int,
-    onClick: () -> Unit
-) {
-    Button(
-        modifier = modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.background),
-        border = BorderStroke(1.dp, MaterialTheme.colors.textGrey),
-        shape = RoundedCornerShape(MaterialTheme.spacing.space4),
-        contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-        onClick = onClick,
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                imageVector = ImageVector.vectorResource(iconId),
-                contentDescription = null
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colors.textGrey,
-                textAlign = TextAlign.Center
-            )
         }
     }
 }

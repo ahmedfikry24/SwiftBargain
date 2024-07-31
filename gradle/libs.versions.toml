@@ -8,12 +8,13 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinParcelizeRuntime = "2.0.20-Beta2"
 kotlinxSerializationJson = "1.6.3"
-lifecycleRuntimeKtx = "2.8.3"
-activityCompose = "1.9.0"
+lifecycleRuntimeKtx = "2.8.4"
+activityCompose = "1.9.1"
 composeBom = "2024.06.00"
 lottie = "6.4.0"
-navigationCompose = "2.8.0-beta05"
+navigationCompose = "2.8.0-beta06"
 splash = "1.0.1"
 firebaseBom = "33.1.2"
 googleService = "4.4.2"
@@ -44,6 +45,7 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
@@ -60,6 +62,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 gms-google-service = { id = "com.google.gms.google-services", version.ref = "googleService" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinParcelizeRuntime" }
 
 
 

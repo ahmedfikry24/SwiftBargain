@@ -3,14 +3,13 @@ package com.example.swiftbargain.ui.login.view_model
 import android.content.Intent
 import androidx.lifecycle.viewModelScope
 import com.example.swiftbargain.data.repository.Repository
-import com.example.swiftbargain.data.utils.SignInResult
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.base.NoInternetConnection
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.validateEmail
-import com.example.swiftbargain.ui.utils.validateRequireFields
+import com.example.swiftbargain.ui.utils.validatePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         if (validateFields()) {
             tryExecute(
-                { repository.loginEmailAndPassword(state.value.email, state.value.password) },
+                { repository.loginWithEmailAndPassword(state.value.email, state.value.password) },
                 ::signInSuccess,
                 ::signInError
             )
@@ -53,14 +52,13 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
-            is UserNotFound -> sendEvent(LoginEvents.InvalidEmailOrPassword)
             else -> sendEvent(LoginEvents.SomeThingWentWrong)
         }
     }
 
     private fun validateFields(): Boolean {
         val validateEmail = state.value.email.validateEmail()
-        val validatePassword = state.value.password.validateRequireFields()
+        val validatePassword = state.value.password.validatePassword()
         val hasError = listOf(validateEmail, validatePassword).contains(false)
         _state.update {
             it.copy(
@@ -74,14 +72,14 @@ class LoginViewModel @Inject constructor(
     override fun getGoogleCredential(intent: Intent) {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
-            { repository.loginWithGoogleIntent(intent) },
+            { repository.signWithGoogleIntent(intent) },
             ::googleCredentialSuccess,
             ::googleCredentialError
         )
     }
 
-    private fun googleCredentialSuccess(success: SignInResult) {
-        loginWithGoogleId(success.id)
+    private fun googleCredentialSuccess(token: String) {
+        loginWithGoogleId(token)
     }
 
     private fun googleCredentialError(error: BaseError) {
@@ -123,7 +121,7 @@ class LoginViewModel @Inject constructor(
     override fun loginWithFaceBook(id: String) {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
-            { repository.signInWithFacebook(id) },
+            { repository.loginWithFacebook(id) },
             ::facebookAuthSuccess,
             ::facebookAuthError
         )
