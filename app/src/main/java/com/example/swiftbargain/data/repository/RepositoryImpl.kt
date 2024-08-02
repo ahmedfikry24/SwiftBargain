@@ -81,6 +81,12 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun resetPassword(email: String) {
+        return wrapApiCall(connectivityChecker) {
+            auth.sendPasswordResetEmail(email).await()
+        }
+    }
+
     override suspend fun registerWithEmailAndPassword(
         name: String,
         email: String,
