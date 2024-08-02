@@ -9,6 +9,8 @@ interface LoginInteractions {
     fun controlUnVerifiedEmailDialogVisibility()
     fun getGoogleCredential(intent: Intent)
     fun loginWithFaceBook(id: String)
-    fun onForgetPassword()
+    fun onChangeForgetPasswordEmail(email: String)
+    fun onSendResetPasswordEmail()
+    fun controlResetPasswordDialogVisibility()
     fun onRegister()
 }
