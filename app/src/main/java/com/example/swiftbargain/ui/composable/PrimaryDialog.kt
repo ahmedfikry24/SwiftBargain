@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
@@ -20,6 +22,8 @@ fun PrimaryDialog(
     modifier: Modifier = Modifier,
     title: String,
     text: String,
+    confirmText: String = stringResource(R.string.ok),
+    cancelText: String = stringResource(R.string.cancel),
     onConfirm: () -> Unit,
     onCancel: (() -> Unit)? = null,
     onDismiss: () -> Unit,
@@ -32,14 +36,15 @@ fun PrimaryDialog(
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Normal),
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colors.text
             )
         },
         text = {
             Text(
                 text = text,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Normal),
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
                 color = Color.Black
             )
         },
@@ -53,8 +58,8 @@ fun PrimaryDialog(
                 onClick = onConfirm
             ) {
                 Text(
-                    text = stringResource(R.string.ok),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+                    text = confirmText,
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
         },
@@ -69,8 +74,8 @@ fun PrimaryDialog(
                     onClick = onCancel
                 ) {
                     Text(
-                        text = stringResource(R.string.cancel),
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+                        text = cancelText,
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
         }
