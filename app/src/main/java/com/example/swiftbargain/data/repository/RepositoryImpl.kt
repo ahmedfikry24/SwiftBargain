@@ -83,7 +83,11 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun resetPassword(email: String) {
         return wrapApiCall(connectivityChecker) {
-            auth.sendPasswordResetEmail(email).await()
+            val documents = fireStore.collection("users").get().await()
+            val isFound = documents.documents.any { document ->
+                document.data?.let { data -> data["email"] == email } == true
+            }
+            if (isFound) auth.sendPasswordResetEmail(email).await() else throw UserNotFound()
         }
     }
 
