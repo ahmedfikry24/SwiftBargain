@@ -151,6 +151,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    override fun controlResetPasswordBottomSheetVisibility() {
+        _state.update { it.copy(resetPasswordBottomSheet = !it.resetPasswordBottomSheet) }
+    }
+
     override fun onChangeForgetPasswordEmail(email: String) {
         _state.update { it.copy(forgetPasswordEmail = email) }
     }
@@ -173,6 +177,11 @@ class LoginViewModel @Inject constructor(
 
     private fun resetPasswordError(error: BaseError) {
         when (error) {
+            is UserNotFound -> {
+                controlResetPasswordBottomSheetVisibility()
+                sendEvent(LoginEvents.EmailNotRegister)
+            }
+
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
             is SomethingWentWrong -> sendEvent(LoginEvents.SomeThingWentWrong)
         }

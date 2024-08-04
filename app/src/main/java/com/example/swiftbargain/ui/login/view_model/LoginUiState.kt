@@ -12,4 +12,5 @@ data class LoginUiState(
     val forgetPasswordEmail: String = "",
     val forgetPasswordEmailError: Boolean = false,
     val resetPasswordDialog: Boolean = false,
+    val resetPasswordBottomSheet: Boolean = false,
 )

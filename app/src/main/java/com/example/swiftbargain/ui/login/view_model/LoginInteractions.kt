@@ -12,5 +12,6 @@ interface LoginInteractions {
     fun onChangeForgetPasswordEmail(email: String)
     fun onSendResetPasswordEmail()
     fun controlResetPasswordDialogVisibility()
+    fun controlResetPasswordBottomSheetVisibility()
     fun onRegister()
 }
