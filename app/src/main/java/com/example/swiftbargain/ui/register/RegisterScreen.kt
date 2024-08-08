@@ -26,9 +26,9 @@ import androidx.navigation.NavController
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.PrimaryDialog
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
-import com.example.swiftbargain.ui.composable.SuccessDialog
 import com.example.swiftbargain.ui.register.viiew_model.RegisterEvents
 import com.example.swiftbargain.ui.register.viiew_model.RegisterInteractions
 import com.example.swiftbargain.ui.register.viiew_model.RegisterUiState
@@ -200,7 +200,7 @@ private fun RegisterContent(
     }
 
     if (state.registerSuccessDialog)
-        SuccessDialog(
+        PrimaryDialog(
             title = stringResource(R.string.register_success),
             text = stringResource(R.string.success_registration_login_now),
             onConfirm = {

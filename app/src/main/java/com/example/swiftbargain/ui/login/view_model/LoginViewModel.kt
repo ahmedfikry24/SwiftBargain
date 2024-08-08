@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
+import com.example.swiftbargain.ui.base.EmailIsNoVerified
 import com.example.swiftbargain.ui.base.NoInternetConnection
+import com.example.swiftbargain.ui.base.SomethingWentWrong
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.validateEmail
@@ -40,17 +42,19 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun signInSuccess(success: String) {
-        val job = viewModelScope.launch {
+        viewModelScope.launch {
             repository.setUserUid(success)
             repository.setIsLogin(true)
         }
-        if (job.isCompleted)
-            sendEvent(LoginEvents.LoginSuccess)
+
+        sendEvent(LoginEvents.LoginSuccess)
     }
 
     private fun signInError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
+            is UserNotFound -> sendEvent(LoginEvents.InvalidEmailOrPassword)
+            is EmailIsNoVerified -> controlUnVerifiedEmailDialogVisibility()
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
             else -> sendEvent(LoginEvents.SomeThingWentWrong)
         }
@@ -67,6 +71,10 @@ class LoginViewModel @Inject constructor(
             )
         }
         return !hasError
+    }
+
+    override fun controlUnVerifiedEmailDialogVisibility() {
+        _state.update { it.copy(unVerifiedEmailDialog = !it.unVerifiedEmailDialog) }
     }
 
     override fun getGoogleCredential(intent: Intent) {
@@ -101,12 +109,11 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun googleAuthSuccess(id: String) {
-        val job = viewModelScope.launch {
+        viewModelScope.launch {
             repository.setUserUid(id)
             repository.setIsLogin(true)
-        }
-        if (job.isCompleted)
             sendEvent(LoginEvents.LoginSuccess)
+        }
     }
 
     private fun googleAuthError(error: BaseError) {
@@ -128,12 +135,11 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun facebookAuthSuccess(id: String) {
-        val job = viewModelScope.launch {
+        viewModelScope.launch {
             repository.setUserUid(id)
             repository.setIsLogin(true)
-        }
-        if (job.isCompleted)
             sendEvent(LoginEvents.LoginSuccess)
+        }
     }
 
     private fun facebookAuthError(error: BaseError) {
@@ -145,8 +151,44 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun onForgetPassword() {
+    override fun controlResetPasswordBottomSheetVisibility() {
+        _state.update { it.copy(resetPasswordBottomSheet = !it.resetPasswordBottomSheet) }
+    }
 
+    override fun onChangeForgetPasswordEmail(email: String) {
+        _state.update { it.copy(forgetPasswordEmail = email) }
+    }
+
+    override fun onSendResetPasswordEmail() {
+        val isEmailValid = state.value.forgetPasswordEmail.validateEmail()
+        _state.update { it.copy(forgetPasswordEmailError = !isEmailValid) }
+        if (isEmailValid) {
+            tryExecute(
+                { repository.resetPassword(state.value.forgetPasswordEmail) },
+                { resetPasswordSuccess() },
+                ::resetPasswordError
+            )
+        }
+    }
+
+    private fun resetPasswordSuccess() {
+        controlResetPasswordDialogVisibility()
+    }
+
+    private fun resetPasswordError(error: BaseError) {
+        when (error) {
+            is UserNotFound -> {
+                controlResetPasswordBottomSheetVisibility()
+                sendEvent(LoginEvents.EmailNotRegister)
+            }
+
+            is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
+            is SomethingWentWrong -> sendEvent(LoginEvents.SomeThingWentWrong)
+        }
+    }
+
+    override fun controlResetPasswordDialogVisibility() {
+        _state.update { it.copy(resetPasswordDialog = !it.resetPasswordDialog) }
     }
 
     override fun onRegister() {

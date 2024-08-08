@@ -41,9 +41,11 @@ import com.example.swiftbargain.navigation.Register
 import com.example.swiftbargain.navigation.User
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.PrimaryDialog
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.composable.SocialSignButton
+import com.example.swiftbargain.ui.login.composable.ForgetPasswordBottomSheet
 import com.example.swiftbargain.ui.login.view_model.LoginEvents
 import com.example.swiftbargain.ui.login.view_model.LoginInteractions
 import com.example.swiftbargain.ui.login.view_model.LoginUiState
@@ -80,11 +82,15 @@ fun LoginScreen(
                 scope
             )
 
-            LoginEvents.LoginSuccess -> mainVavController.navigate(User) {
-                popUpTo(Authentication) {
-                    inclusive = true
-                }
-            }
+            LoginEvents.CredentialFailed -> snackBar.showError(
+                UiConstants.INVALID_CREDENTIAL,
+                scope
+            )
+
+            LoginEvents.EmailNotRegister -> snackBar.showError(
+                UiConstants.EMAIL_NOT_REGISTER,
+                scope
+            )
 
             LoginEvents.NoInternetConnection -> snackBar.showWarning(
                 UiConstants.NO_INTER_NET_CONNECTION,
@@ -96,12 +102,14 @@ fun LoginScreen(
                 scope
             )
 
-            LoginEvents.CredentialFailed -> snackBar.showError(
-                UiConstants.INVALID_CREDENTIAL,
-                scope
-            )
-
             LoginEvents.NavToRegister -> navController.navigate(Register)
+
+            LoginEvents.LoginSuccess -> mainVavController.navigate(User) {
+                popUpTo(Authentication) {
+                    inclusive = true
+                }
+            }
+
         }
     }
     LoginContent(
@@ -231,7 +239,7 @@ private fun LoginContent(
                 Text(
                     modifier = Modifier
                         .padding(top = MaterialTheme.spacing.space16)
-                        .clickable(onClick = interactions::onForgetPassword),
+                        .clickable(onClick = interactions::controlResetPasswordBottomSheetVisibility),
                     text = stringResource(R.string.forgot_password),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colors.primary
@@ -257,6 +265,31 @@ private fun LoginContent(
             }
         }
     }
+    if (state.unVerifiedEmailDialog)
+        PrimaryDialog(
+            title = stringResource(R.string.error),
+            text = stringResource(R.string.your_email_address_is_not_verified_check_your_email_and_verify_it_then_signin_again),
+            onConfirm = interactions::controlUnVerifiedEmailDialogVisibility,
+            onDismiss = interactions::controlUnVerifiedEmailDialogVisibility
+        )
+    if (state.resetPasswordBottomSheet)
+        ForgetPasswordBottomSheet(
+            value = state.forgetPasswordEmail,
+            isError = state.forgetPasswordEmailError,
+            onChangeValue = interactions::onChangeForgetPasswordEmail,
+            onSend = interactions::onSendResetPasswordEmail,
+            onDismiss = interactions::controlResetPasswordBottomSheetVisibility
+        )
+    if (state.resetPasswordDialog)
+        PrimaryDialog(
+            title = stringResource(R.string.success),
+            text = stringResource(R.string.we_sent_a_reset_password_email_check_you_email),
+            onConfirm = {
+                interactions.controlResetPasswordBottomSheetVisibility()
+                interactions.controlResetPasswordDialogVisibility()
+            },
+            onDismiss = interactions::controlResetPasswordDialogVisibility
+        )
 }
 
 @Composable
