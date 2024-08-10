@@ -24,10 +24,6 @@ class RepositoryImpl @Inject constructor(
     private val connectivityChecker: InternetConnectivityChecker
 ) : Repository {
 
-    override suspend fun getIsLogin() = dataStore.isLogin
-
-    override suspend fun setIsLogin(value: Boolean) = dataStore.setIsLogin(value)
-
     override suspend fun getUserUid(): Flow<String> = dataStore.userUid
 
     override suspend fun setUserUid(uid: String) = dataStore.setUserUid(uid)
