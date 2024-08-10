@@ -44,9 +44,7 @@ class LoginViewModel @Inject constructor(
     private fun signInSuccess(success: String) {
         viewModelScope.launch {
             repository.setUserUid(success)
-            repository.setIsLogin(true)
         }
-
         sendEvent(LoginEvents.LoginSuccess)
     }
 
@@ -111,9 +109,8 @@ class LoginViewModel @Inject constructor(
     private fun googleAuthSuccess(id: String) {
         viewModelScope.launch {
             repository.setUserUid(id)
-            repository.setIsLogin(true)
-            sendEvent(LoginEvents.LoginSuccess)
         }
+        sendEvent(LoginEvents.LoginSuccess)
     }
 
     private fun googleAuthError(error: BaseError) {
@@ -137,9 +134,8 @@ class LoginViewModel @Inject constructor(
     private fun facebookAuthSuccess(id: String) {
         viewModelScope.launch {
             repository.setUserUid(id)
-            repository.setIsLogin(true)
-            sendEvent(LoginEvents.LoginSuccess)
         }
+        sendEvent(LoginEvents.LoginSuccess)
     }
 
     private fun facebookAuthError(error: BaseError) {

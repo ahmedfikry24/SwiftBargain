@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.swiftbargain.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,25 +13,16 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
+    var userUid = ""
+    val scope = CoroutineScope(Dispatchers.Default)
 
-    private val _state = MutableStateFlow(MainUiState())
-    val state = _state.asStateFlow()
-
-    init {
-        getLoginStatus()
-    }
-
-    private fun getLoginStatus() {
+    fun getLoginStatus() {
         viewModelScope.launch {
-            repository.getIsLogin().collect { isLogin ->
-                _state.update { it.copy(isLoading = false, isLogin = isLogin) }
+            scope.launch {
+                repository.getUserUid().collect { uid ->
+                    userUid = uid
+                }
             }
         }
     }
-
-    data class MainUiState(
-        val isLoading: Boolean = true,
-        val isLogin: Boolean = false
-    )
-
 }
