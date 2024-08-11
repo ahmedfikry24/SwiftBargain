@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -168,9 +169,9 @@ private fun LoginContent(
                     value = state.email,
                     hint = stringResource(R.string.example_gmail_com),
                     isError = state.emailError,
-
                     leadingIconId = R.drawable.ic_email,
                     keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
                     onChangeValue = interactions::onChangeEmail
                 )
             }
@@ -185,6 +186,7 @@ private fun LoginContent(
                     errorText = stringResource(R.string.password_must_be_more_than_6_characters),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
                     visualTransformation = PasswordVisualTransformation(),
                     onChangeValue = interactions::onChangePassword
                 )
