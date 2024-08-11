@@ -13,13 +13,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.swiftbargain.ui.composable.PrimarySnackBar
+import com.example.swiftbargain.ui.composable.UserBottomNavigation
+import com.example.swiftbargain.ui.home.HomeScreen
 import com.example.swiftbargain.ui.theme.colors
 
 @Composable
 fun UserNavGraph(mainNavController: NavController) {
     val navController = rememberNavController()
     Scaffold(
-        snackbarHost = { PrimarySnackBar() }
+        snackbarHost = { PrimarySnackBar() }, bottomBar = { UserBottomNavigation(navController) }
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -28,7 +30,11 @@ fun UserNavGraph(mainNavController: NavController) {
                 .padding(innerPadding)
         ) {
             NavHost(navController = navController, startDestination = Home) {
-                composable<Home> { }
+                composable<Home> { HomeScreen(navController) }
+                composable<Explore> {}
+                composable<Cart> {}
+                composable<Offer> {}
+                composable<Account> {}
             }
         }
     }

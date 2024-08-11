@@ -27,7 +27,7 @@ object Cart
 object Offer
 
 @Serializable
-object Profile
+object Account
 
 @Serializable
 object Search
