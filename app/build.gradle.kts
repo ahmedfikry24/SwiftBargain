@@ -90,6 +90,8 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lottie)
+    implementation(libs.coil.compose)
+
 
     // firebase
     implementation(platform(libs.firebase.bom))
