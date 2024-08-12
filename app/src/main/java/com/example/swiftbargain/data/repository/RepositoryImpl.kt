@@ -110,16 +110,14 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getAllCategories(): List<CategoryDto> {
         return wrapApiCall(connectivityChecker) {
             val result = fireStore.collection(CATEGORIES).get().await()
-            result.documents
-                .map { it.toObject(CategoryDto::class.java) ?: CategoryDto("", "", "") }
-                .shuffled()
+            result.toObjects(CategoryDto::class.java).shuffled()
         }
     }
 
     override suspend fun getSaleAds(): List<SaleAdDto> {
         return wrapApiCall(connectivityChecker) {
             val result = fireStore.collection(SALE_AD).get().await()
-            result.documents.map { it.toObject(SaleAdDto::class.java) ?: SaleAdDto("", "", "") }
+            result.toObjects(SaleAdDto::class.java)
         }
     }
 
