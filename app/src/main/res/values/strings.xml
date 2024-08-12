@@ -37,4 +37,5 @@
     <string name="success">Success</string>
     <string name="we_sent_a_reset_password_email_check_you_email">we sent a reset password email check you email.</string>
     <string name="search_product">search product</string>
+    <string name="category">Category</string>
 </resources>
