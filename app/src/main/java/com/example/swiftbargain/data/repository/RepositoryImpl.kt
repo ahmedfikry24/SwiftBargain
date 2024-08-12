@@ -2,6 +2,8 @@ package com.example.swiftbargain.data.repository
 
 import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
+import com.example.swiftbargain.data.models.CategoryDto
+import com.example.swiftbargain.data.models.SaleAdDto
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
 import com.example.swiftbargain.data.utils.wrapApiCall
@@ -32,7 +34,7 @@ class RepositoryImpl @Inject constructor(
         return wrapApiCall(connectivityChecker) {
             val result = auth.signInWithEmailAndPassword(email, password).await()
             val user = result.user ?: throw UserNotFound()
-            val info = fireStore.collection("users").document(user.uid).get().await()
+            val info = fireStore.collection(USERS).document(user.uid).get().await()
             info.data ?: throw UserNotFound()
             if (!user.isEmailVerified)
                 throw EmailIsNoVerified()
@@ -57,7 +59,7 @@ class RepositoryImpl @Inject constructor(
                 name = user.displayName,
                 email = user.email
             )
-            fireStore.collection("users").document(user.uid).set(userInfo).await()
+            fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.uid
         }
     }
@@ -72,14 +74,14 @@ class RepositoryImpl @Inject constructor(
                 name = user.displayName,
                 email = user.email
             )
-            fireStore.collection("users").document(user.uid).set(userInfo).await()
+            fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.uid
         }
     }
 
     override suspend fun resetPassword(email: String) {
         return wrapApiCall(connectivityChecker) {
-            val documents = fireStore.collection("users").get().await()
+            val documents = fireStore.collection(USERS).get().await()
             val isFound = documents.documents.any { document ->
                 document.data?.let { data -> data["email"] == email } == true
             }
@@ -100,8 +102,30 @@ class RepositoryImpl @Inject constructor(
                 name = name,
                 email = email
             )
-            fireStore.collection("users").document(user.uid).set(userInfo).await()
+            fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.sendEmailVerification().await()
         }
+    }
+
+    override suspend fun getAllCategories(): List<CategoryDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(CATEGORIES).get().await()
+            result.documents
+                .map { it.toObject(CategoryDto::class.java) ?: CategoryDto("", "", "") }
+                .shuffled()
+        }
+    }
+
+    override suspend fun getSaleAds(): List<SaleAdDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(SALE_AD).get().await()
+            result.documents.map { it.toObject(SaleAdDto::class.java) ?: SaleAdDto("", "", "") }
+        }
+    }
+
+    companion object {
+        private const val USERS = "users"
+        private const val CATEGORIES = "categories"
+        private const val SALE_AD = "sale_ad"
     }
 }

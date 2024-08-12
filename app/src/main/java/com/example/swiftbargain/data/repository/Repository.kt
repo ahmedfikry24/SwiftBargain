@@ -1,6 +1,8 @@
 package com.example.swiftbargain.data.repository
 
 import android.content.Intent
+import com.example.swiftbargain.data.models.CategoryDto
+import com.example.swiftbargain.data.models.SaleAdDto
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -16,5 +18,10 @@ interface Repository {
     suspend fun loginWithFacebook(id: String): String
     suspend fun resetPassword(email: String)
     suspend fun registerWithEmailAndPassword(name: String, email: String, password: String)
+    //endregion
+
+    // region user
+    suspend fun getAllCategories(): List<CategoryDto>
+    suspend fun getSaleAds(): List<SaleAdDto>
     //endregion
 }
