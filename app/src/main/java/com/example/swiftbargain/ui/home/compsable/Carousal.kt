@@ -24,15 +24,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.swiftbargain.ui.home.view_model.HomeUiState.CarousalItemInfo
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
+import com.example.swiftbargain.ui.utils.shared_ui_state.SaleAdUiState
 import kotlinx.coroutines.delay
 
 @Composable
 fun Carousal(
     modifier: Modifier = Modifier,
-    items: List<CarousalItemInfo>
+    items: List<SaleAdUiState>
 ) {
     val pagerState = rememberPagerState { items.size }
     Column(
