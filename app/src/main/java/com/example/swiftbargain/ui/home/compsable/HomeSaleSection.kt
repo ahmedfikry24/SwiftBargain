@@ -1,5 +1,6 @@
 package com.example.swiftbargain.ui.home.compsable
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +23,9 @@ import com.example.swiftbargain.ui.utils.shared_ui_state.ProductUiState
 fun HomeSaleSection(
     modifier: Modifier = Modifier,
     sectionName: String,
-    items: List<ProductUiState>
+    items: List<ProductUiState>,
+    onCLickMore: () -> Unit,
+    onClickItem: (String) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -40,6 +43,7 @@ fun HomeSaleSection(
             )
 
             Text(
+                modifier = Modifier.clickable { onCLickMore() },
                 text = stringResource(R.string.see_more),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colors.primary
@@ -52,7 +56,11 @@ fun HomeSaleSection(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
         ) {
             items(items) { product ->
-                ProductItem(item = product, isRateVisible = false)
+                ProductItem(
+                    item = product,
+                    isRateVisible = false,
+                    onClick = onClickItem
+                )
             }
         }
     }

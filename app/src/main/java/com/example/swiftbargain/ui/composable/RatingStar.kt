@@ -20,7 +20,7 @@ import kotlin.math.sin
 @Composable
 fun RatingStar(
     modifier: Modifier = Modifier,
-    isOutLineVisible: Boolean = false,
+    isOutLineVisible: Boolean = true,
     fillFraction: Float,
     spikes: Int = 5,
     outerRadiusFraction: Float = 0.5f,

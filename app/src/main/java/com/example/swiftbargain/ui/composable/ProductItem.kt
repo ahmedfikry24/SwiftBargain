@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.composable
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,14 +32,17 @@ import com.example.swiftbargain.ui.utils.shared_ui_state.ProductUiState
 fun ProductItem(
     modifier: Modifier = Modifier,
     item: ProductUiState,
-    isRateVisible: Boolean = true
+    isRateVisible: Boolean = true,
+    onClick: (String) -> Unit
 ) {
     Box(
-        modifier = modifier.border(
-            1.dp,
-            MaterialTheme.colors.textLight,
-            RoundedCornerShape(MaterialTheme.spacing.space4)
-        ),
+        modifier = modifier
+            .border(
+                1.dp,
+                MaterialTheme.colors.textLight,
+                RoundedCornerShape(MaterialTheme.spacing.space4)
+            )
+            .clickable { onClick(item.id) },
         contentAlignment = Alignment.Center
     ) {
         Column(

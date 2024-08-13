@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.composable
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +24,11 @@ import com.example.swiftbargain.ui.utils.shared_ui_state.CategoryUiSate
 @Composable
 fun CategoryItem(
     modifier: Modifier = Modifier,
-    categoryItem: CategoryUiSate
+    categoryItem: CategoryUiSate,
+    onCLick: (String) -> Unit
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.clickable { onCLick(categoryItem.id) },
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space8),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

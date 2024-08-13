@@ -20,7 +20,8 @@ import com.example.swiftbargain.ui.utils.shared_ui_state.CategoryUiSate
 @Composable
 fun HomeCategories(
     modifier: Modifier = Modifier,
-    categories: List<CategoryUiSate>
+    categories: List<CategoryUiSate>,
+    onCLick: (String) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -37,7 +38,7 @@ fun HomeCategories(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
         ) {
             items(categories) { category ->
-                CategoryItem(categoryItem = category)
+                CategoryItem(categoryItem = category, onCLick = onCLick)
             }
         }
     }
