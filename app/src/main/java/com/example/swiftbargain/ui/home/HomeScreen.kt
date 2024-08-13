@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,8 +17,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.composable.Banner
+import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.ProductItem
 import com.example.swiftbargain.ui.composable.SearchBar
 import com.example.swiftbargain.ui.home.compsable.Carousal
 import com.example.swiftbargain.ui.home.compsable.HomeCategories
@@ -49,46 +55,71 @@ private fun HomeContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-        LazyColumn(
+        LazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
         ) {
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 SearchBar(
                     value = state.search,
-                    onClickKeyboardDone = { },
+                    onClickKeyboardDone = {},
                     onChangeValue = {},
-                    onClickFavourite = { },
+                    onClickFavourite = {},
                     onClickNotification = {}
                 )
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 Carousal(items = state.saleAds)
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 if (state.categories.isNotEmpty())
                     HomeCategories(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
-                        categories = state.categories
+                        categories = state.categories,
+                        onCLick = {}
                     )
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 if (state.flashSale.isNotEmpty())
                     HomeSaleSection(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                         sectionName = stringResource(R.string.flash_sale),
-                        items = state.flashSale
+                        items = state.flashSale,
+                        onCLickMore = {},
+                        onClickItem = {}
                     )
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 if (state.megaSale.isNotEmpty())
                     HomeSaleSection(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                         sectionName = stringResource(R.string.mega_sale),
-                        items = state.megaSale
+                        items = state.megaSale,
+                        onCLickMore = {},
+                        onClickItem = {}
                     )
+            }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Banner(
+                    url = state.saleAds.last().url,
+                    title = stringResource(R.string.recommended_product)
+                )
+            }
+            items(state.recommendedProducts) { product ->
+                ProductItem(
+                    item = product,
+                    isRateVisible = true,
+                    onClick = {}
+                )
             }
         }
     }
+
+    ContentError(
+        isVisible = state.contentStatus == ContentStatus.FAILURE,
+        onTryAgain = interactions::getData
+    )
 }
