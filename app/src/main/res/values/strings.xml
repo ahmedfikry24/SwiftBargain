@@ -38,4 +38,7 @@
     <string name="we_sent_a_reset_password_email_check_you_email">we sent a reset password email check you email.</string>
     <string name="search_product">search product</string>
     <string name="category">Category</string>
+    <string name="see_more">See More</string>
+    <string name="flash_sale">Flash Sale</string>
+    <string name="mega_sale">Mega Sale</string>
 </resources>
