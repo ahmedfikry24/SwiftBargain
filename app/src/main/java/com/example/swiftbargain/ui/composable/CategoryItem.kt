@@ -6,13 +6,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.shared_ui_state.CategoryUiSate
@@ -34,11 +37,18 @@ fun CategoryItem(
                 .border(1.dp, MaterialTheme.colors.textLight, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 modifier = Modifier.size(24.dp),
                 model = categoryItem.url,
-                contentDescription = null
-            )
+                contentDescription = null,
+            ) {
+                if (painter.state is AsyncImagePainter.State.Loading)
+                    CircularProgressIndicator(
+                        strokeWidth = 1.dp,
+                        color = MaterialTheme.colors.primary
+                    )
+                else SubcomposeAsyncImageContent()
+            }
         }
         Text(
             text = categoryItem.label,
