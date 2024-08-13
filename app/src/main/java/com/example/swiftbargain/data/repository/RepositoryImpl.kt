@@ -3,6 +3,7 @@ package com.example.swiftbargain.data.repository
 import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.models.CategoryDto
+import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.SaleAdDto
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
@@ -121,9 +122,18 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllProducts(): List<ProductDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(PRODUCTS).get().await()
+            result.toObjects(ProductDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
         private const val SALE_AD = "sale_ad"
+        private const val PRODUCTS = "products"
+        private const val REVIEWS = "reviews"
     }
 }
