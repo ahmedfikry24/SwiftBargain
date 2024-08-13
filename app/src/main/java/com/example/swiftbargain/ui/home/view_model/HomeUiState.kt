@@ -12,4 +12,5 @@ data class HomeUiState(
     val categories: List<CategoryUiSate> = listOf(),
     val flashSale: List<ProductUiState> = listOf(),
     val megaSale: List<ProductUiState> = listOf(),
+    val recommendedProducts: List<ProductUiState> = listOf()
 )
