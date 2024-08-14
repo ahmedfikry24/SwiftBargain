@@ -30,4 +30,7 @@ object Offer
 object Account
 
 @Serializable
+data class Sale(val saleId: String, val title: String)
+
+@Serializable
 object Search
