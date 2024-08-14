@@ -12,7 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +21,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.Category
+import com.example.swiftbargain.navigation.ProductDetails
+import com.example.swiftbargain.navigation.Sale
 import com.example.swiftbargain.ui.composable.Banner
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
@@ -31,6 +34,7 @@ import com.example.swiftbargain.ui.composable.SearchBar
 import com.example.swiftbargain.ui.home.compsable.Carousal
 import com.example.swiftbargain.ui.home.compsable.HomeCategories
 import com.example.swiftbargain.ui.home.compsable.HomeSaleSection
+import com.example.swiftbargain.ui.home.view_model.HomeEvents
 import com.example.swiftbargain.ui.home.view_model.HomeInteractions
 import com.example.swiftbargain.ui.home.view_model.HomeUiState
 import com.example.swiftbargain.ui.home.view_model.HomeViewModel
@@ -44,17 +48,18 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var isDataArrive by remember { mutableStateOf(false) }
+    var isDataArrive by rememberSaveable { mutableStateOf(false) }
     LifeCycleTracker { event ->
         if (event == Lifecycle.Event.ON_CREATE && !isDataArrive) {
             viewModel.getData()
             isDataArrive = true
         }
     }
-    EventHandler(effects = viewModel.event) { event, scope ->
+    EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
-
-            else -> Unit
+            is HomeEvents.GoToSale -> navController.navigate(Sale(event.id, event.title))
+            is HomeEvents.GoToCategory -> navController.navigate(Category(event.id))
+            is HomeEvents.GoToProductDetails -> navController.navigate(ProductDetails(event.id))
         }
     }
     HomeContent(state = state, interactions = viewModel)
@@ -84,14 +89,14 @@ private fun HomeContent(
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Carousal(items = state.saleAds)
+                Carousal(items = state.saleAds, onClick = interactions::onClickSale)
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 if (state.categories.isNotEmpty())
                     HomeCategories(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                         categories = state.categories,
-                        onCLick = {}
+                        onCLick = interactions::onClickCategory
                     )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -100,8 +105,11 @@ private fun HomeContent(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                         sectionName = stringResource(R.string.flash_sale),
                         items = state.flashSale,
-                        onCLickMore = {},
-                        onClickItem = {}
+                        onCLickMore = {
+                            val flashItem = state.saleAds.find { it.title.contains("Flash") }
+                            interactions.onClickSale(flashItem?.id ?: "", "Flash Sale")
+                        },
+                        onClickItem = interactions::onClickProduct
                     )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -110,21 +118,25 @@ private fun HomeContent(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                         sectionName = stringResource(R.string.mega_sale),
                         items = state.megaSale,
-                        onCLickMore = {},
-                        onClickItem = {}
+                        onCLickMore = {
+                            val megaItem = state.saleAds.find { it.title.contains("Mega") }
+                            interactions.onClickSale(megaItem?.id ?: "", "Mega Sale")
+                        },
+                        onClickItem = interactions::onClickProduct
                     )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Banner(
-                    url = state.saleAds.last().url,
-                    title = stringResource(R.string.recommended_product)
-                )
+                if (state.saleAds.isNotEmpty())
+                    Banner(
+                        url = state.saleAds.last().url,
+                        title = stringResource(R.string.recommended_product)
+                    )
             }
             items(state.recommendedProducts) { product ->
                 ProductItem(
                     item = product,
                     isRateVisible = true,
-                    onClick = {}
+                    onClick = interactions::onClickProduct
                 )
             }
         }

@@ -63,6 +63,18 @@ class HomeViewModel @Inject constructor(
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
 
+    override fun onClickSale(id: String, title: String) {
+        sendEvent(HomeEvents.GoToSale(id, title))
+    }
+
+    override fun onClickCategory(id: String) {
+        sendEvent(HomeEvents.GoToCategory(id))
+    }
+
+    override fun onClickProduct(id: String) {
+        sendEvent(HomeEvents.GoToProductDetails(id))
+    }
+
     companion object {
         const val SALE_ADS = "saleAd"
         const val CATEGORIES = "categories"
