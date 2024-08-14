@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.home.compsable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +27,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun Carousal(
     modifier: Modifier = Modifier,
-    items: List<SaleAdUiState>
+    items: List<SaleAdUiState>,
+    onClick: (String, String) -> Unit
 ) {
     val pagerState = rememberPagerState { items.size }
     Column(
@@ -40,6 +42,7 @@ fun Carousal(
             reverseLayout = true
         ) { page ->
             Banner(
+                modifier = Modifier.clickable { onClick(items[page].id, items[page].title) },
                 url = items[page].url,
                 title = items[page].title
             )
