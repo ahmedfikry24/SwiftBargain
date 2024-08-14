@@ -11,9 +11,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
@@ -21,6 +25,7 @@ import com.example.swiftbargain.ui.composable.Banner
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.ProductItem
 import com.example.swiftbargain.ui.composable.SearchBar
 import com.example.swiftbargain.ui.home.compsable.Carousal
@@ -39,6 +44,13 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    var isDataArrive by remember { mutableStateOf(false) }
+    LifeCycleTracker { event ->
+        if (event == Lifecycle.Event.ON_CREATE && !isDataArrive) {
+            viewModel.getData()
+            isDataArrive = true
+        }
+    }
     EventHandler(effects = viewModel.event) { event, scope ->
         when (event) {
 

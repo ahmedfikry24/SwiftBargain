@@ -17,11 +17,6 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository
 ) : BaseViewModel<HomeUiState, HomeEvents>(HomeUiState()), HomeInteractions {
 
-
-    init {
-        getData()
-    }
-
     override fun getData() {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
