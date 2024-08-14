@@ -41,37 +41,40 @@ fun UserBottomNavigation(navController: NavController) {
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
-    NavigationBar(
-        modifier = Modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colors.background
-    ) {
-        screens.forEach { screen ->
-            this.NavigationBarItem(
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colors.primary,
-                    selectedTextColor = MaterialTheme.colors.primary,
-                ),
-                selected = currentDestination.checkCurrentDestination(screen.route),
-                label = {
-                    Text(
-                        text = screen.label,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colors.textGrey
-                    )
-                },
-                onClick = {
-                    if (!currentDestination.checkCurrentDestination(screen.route))
-                        navController.navigate(screen.route)
-                },
-                icon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(screen.iconId),
-                        contentDescription = null
-                    )
-                }
-            )
+    val isNavBarVisible = screens.any { currentDestination.checkCurrentDestination(it.route) }
+
+    if (isNavBarVisible)
+        NavigationBar(
+            modifier = Modifier.fillMaxWidth(),
+            containerColor = MaterialTheme.colors.background
+        ) {
+            screens.forEach { screen ->
+                this.NavigationBarItem(
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colors.primary,
+                        selectedTextColor = MaterialTheme.colors.primary,
+                    ),
+                    selected = currentDestination.checkCurrentDestination(screen.route),
+                    label = {
+                        Text(
+                            text = screen.label,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colors.textGrey
+                        )
+                    },
+                    onClick = {
+                        if (!currentDestination.checkCurrentDestination(screen.route))
+                            navController.navigate(screen.route)
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(screen.iconId),
+                            contentDescription = null
+                        )
+                    }
+                )
+            }
         }
-    }
 }
 
 private fun NavDestination?.checkCurrentDestination(route: Any): Boolean {
