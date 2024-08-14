@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -123,7 +124,8 @@ private fun RegisterContent(
                     hint = stringResource(R.string.full_name),
                     isError = state.emailError,
                     leadingIconId = R.drawable.ic_profile,
-                    keyboardType = KeyboardType.Email,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
                     onChangeValue = interactions::onChangeName
                 )
             }
@@ -138,6 +140,7 @@ private fun RegisterContent(
                     errorText = stringResource(R.string.invalid_email),
                     leadingIconId = R.drawable.ic_email,
                     keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
                     onChangeValue = interactions::onChangeEmail
                 )
             }
@@ -152,6 +155,7 @@ private fun RegisterContent(
                     errorText = stringResource(R.string.password_must_be_more_than_6_characters),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next,
                     visualTransformation = PasswordVisualTransformation(),
                     onChangeValue = interactions::onChangePassword
                 )
@@ -167,6 +171,7 @@ private fun RegisterContent(
                     errorText = stringResource(R.string.password_mismatch),
                     leadingIconId = R.drawable.ic_password,
                     keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
                     visualTransformation = PasswordVisualTransformation(),
                     onChangeValue = interactions::onChangePasswordAgain
                 )

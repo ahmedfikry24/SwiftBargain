@@ -27,7 +27,16 @@ object Cart
 object Offer
 
 @Serializable
-object Profile
+object Account
+
+@Serializable
+data class Sale(val id: String, val title: String)
+
+@Serializable
+data class Category(val id: String)
+
+@Serializable
+data class ProductDetails(val id: String)
 
 @Serializable
 object Search
