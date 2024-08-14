@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
 
                 recommendedProducts = (data[PRODUCTS] as List<ProductDto>)
                     .filterNot { it.recommended }
-                    .map { it.toUiState() }
+                    .map { it.toUiState() }.take(8)
             )
         }
     }

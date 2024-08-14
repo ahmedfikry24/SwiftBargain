@@ -6,7 +6,7 @@ import com.example.swiftbargain.ui.utils.shared_ui_state.ProductUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.SaleAdUiState
 
 data class HomeUiState(
-    val contentStatus: ContentStatus = ContentStatus.VISIBLE,
+    val contentStatus: ContentStatus = ContentStatus.LOADING,
     val search: String = "",
     val saleAds: List<SaleAdUiState> = listOf(),
     val categories: List<CategoryUiSate> = listOf(),
