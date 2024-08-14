@@ -14,11 +14,11 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
 fun LifeCycleTracker(
+    event: Lifecycle.Event = rememberLifeCycleObserver(),
     tracker: (Lifecycle.Event) -> Unit
 ) {
-    val lifeCycleEvent = rememberLifeCycleObserver()
-    LaunchedEffect(lifeCycleEvent) {
-        tracker(lifeCycleEvent)
+    LaunchedEffect(event) {
+        tracker(event)
     }
 }
 
