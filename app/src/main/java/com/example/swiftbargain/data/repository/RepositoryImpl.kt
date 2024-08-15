@@ -129,11 +129,28 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getSaleProducts(saleId: String, lastItemId: String?): List<ProductDto> {
+        return wrapApiCall(connectivityChecker) {
+            var result = fireStore.collection(PRODUCTS)
+                .whereEqualTo(SALE_ID, saleId)
+                .orderBy(ID)
+
+            if (lastItemId != null) {
+                result = result.startAfter(lastItemId)
+            }
+
+            result.limit(10L).get().await().toObjects(ProductDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
         private const val SALE_AD = "sale_ad"
         private const val PRODUCTS = "products"
         private const val REVIEWS = "reviews"
+
+        private const val SALE_ID = "sale_id"
+        private const val ID = "id"
     }
 }
