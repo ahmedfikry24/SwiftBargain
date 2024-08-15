@@ -57,7 +57,7 @@ fun HomeScreen(
     }
     EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
-            is HomeEvents.GoToSale -> navController.navigate(Sale(event.id, event.title))
+            is HomeEvents.GoToSale -> navController.navigate(Sale(event.id, event.title, event.url))
             is HomeEvents.GoToCategory -> navController.navigate(Category(event.id))
             is HomeEvents.GoToProductDetails -> navController.navigate(ProductDetails(event.id))
         }
@@ -106,8 +106,12 @@ private fun HomeContent(
                         sectionName = stringResource(R.string.flash_sale),
                         items = state.flashSale,
                         onCLickMore = {
-                            val flashItem = state.saleAds.find { it.title.contains("Flash") }
-                            interactions.onClickSale(flashItem?.id ?: "", "Flash Sale")
+                            val firstItem = state.saleAds.find { it.title.contains("Flash") }
+                            interactions.onClickSale(
+                                firstItem?.id ?: "",
+                                firstItem?.type ?: "",
+                                firstItem?.url ?: ""
+                            )
                         },
                         onClickItem = interactions::onClickProduct
                     )
@@ -119,8 +123,12 @@ private fun HomeContent(
                         sectionName = stringResource(R.string.mega_sale),
                         items = state.megaSale,
                         onCLickMore = {
-                            val megaItem = state.saleAds.find { it.title.contains("Mega") }
-                            interactions.onClickSale(megaItem?.id ?: "", "Mega Sale")
+                            val firstItem = state.saleAds.find { it.title.contains("Mega") }
+                            interactions.onClickSale(
+                                firstItem?.id ?: "",
+                                firstItem?.type ?: "",
+                                firstItem?.url ?: ""
+                            )
                         },
                         onClickItem = interactions::onClickProduct
                     )

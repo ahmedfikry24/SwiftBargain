@@ -28,7 +28,7 @@ import kotlinx.coroutines.delay
 fun Carousal(
     modifier: Modifier = Modifier,
     items: List<SaleAdUiState>,
-    onClick: (String, String) -> Unit
+    onClick: (String, String, String) -> Unit
 ) {
     val pagerState = rememberPagerState { items.size }
     Column(
@@ -42,7 +42,13 @@ fun Carousal(
             reverseLayout = true
         ) { page ->
             Banner(
-                modifier = Modifier.clickable { onClick(items[page].id, items[page].title) },
+                modifier = Modifier.clickable {
+                    onClick(
+                        items[page].id,
+                        items[page].type,
+                        items[page].url
+                    )
+                },
                 url = items[page].url,
                 title = items[page].title
             )
