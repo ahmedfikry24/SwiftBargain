@@ -2,11 +2,14 @@ package com.example.swiftbargain.ui.sale
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.composable.Banner
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
@@ -25,9 +29,11 @@ import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.ProductItem
 import com.example.swiftbargain.ui.sale.composable.SaleAppBar
+import com.example.swiftbargain.ui.sale.view_model.SaleEvents
 import com.example.swiftbargain.ui.sale.view_model.SaleInteractions
 import com.example.swiftbargain.ui.sale.view_model.SaleUiState
 import com.example.swiftbargain.ui.sale.view_model.SaleViewModel
+import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
@@ -41,13 +47,16 @@ fun SaleScreen(
     var isDataArrive by rememberSaveable { mutableStateOf(false) }
     LifeCycleTracker { event ->
         if (event == Lifecycle.Event.ON_CREATE && !isDataArrive) {
-
             viewModel.getProducts()
             isDataArrive = true
         }
     }
     EventHandler(effects = viewModel.event) { event, _ ->
-
+        when (event) {
+            SaleEvents.GoBack -> navController.popBackStack()
+            SaleEvents.GoToSearch -> Unit
+            is SaleEvents.GoToProduct -> navController.navigate(ProductDetails(event.id))
+        }
     }
     SaleContent(state = state, interactions = viewModel)
 }
@@ -70,8 +79,8 @@ private fun SaleContent(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 SaleAppBar(
                     title = state.title,
-                    onClickBack = {},
-                    onClickSearch = {}
+                    onClickBack = interactions::onClickBack,
+                    onClickSearch = interactions::onClickSearch
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -84,7 +93,7 @@ private fun SaleContent(
                 }
                 ProductItem(
                     item = product,
-                    onClick = {}
+                    onClick = interactions::onClickProduct
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {

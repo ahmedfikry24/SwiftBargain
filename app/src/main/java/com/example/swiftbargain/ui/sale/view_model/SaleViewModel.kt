@@ -67,4 +67,16 @@ class SaleViewModel @Inject constructor(
     private fun productsError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
+
+    override fun onClickBack() {
+        sendEvent(SaleEvents.GoBack)
+    }
+
+    override fun onClickSearch() {
+        sendEvent(SaleEvents.GoToSearch)
+    }
+
+    override fun onClickProduct(id: String) {
+        sendEvent(SaleEvents.GoToProduct(id))
+    }
 }
