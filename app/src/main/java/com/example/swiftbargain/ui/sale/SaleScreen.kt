@@ -1,5 +1,12 @@
 package com.example.swiftbargain.ui.sale
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -87,26 +95,40 @@ private fun SaleContent(
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Banner(url = state.bannerUrl, title = state.bannerTitle)
-            }
-
-            itemsIndexed(state.products) { index, product ->
-                if (index + 1 == state.pageNumber * 10) {
-                    interactions.getMoreProducts(product.id)
+                ControlSaleContentBody(isVisible = !state.isSearchVisible) {
+                    Banner(url = state.bannerUrl, title = state.bannerTitle)
                 }
-                ProductItem(
-                    item = product,
-                    onClick = interactions::onClickProduct
-                )
+            }
+            itemsIndexed(state.products) { index, product ->
+                ControlSaleContentBody(isVisible = !state.isSearchVisible) {
+                    if (index + 1 == state.pageNumber * 10) {
+                        interactions.getMoreProducts(product.id)
+                    }
+                    ProductItem(
+                        item = product,
+                        onClick = interactions::onClickProduct
+                    )
+                }
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                if (state.isLoadMoreProducts)
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(color = MaterialTheme.colors.primary)
-                    }
+                ControlSaleContentBody(isVisible = !state.isSearchVisible) {
+                    if (state.isLoadMoreProducts)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator(color = MaterialTheme.colors.primary)
+                        }
+                }
+            }
+
+            items(state.searchProducts) { product ->
+                ControlSaleContentBody(isVisible = state.isSearchVisible) {
+                    ProductItem(
+                        item = product,
+                        onClick = interactions::onClickProduct
+                    )
+                }
             }
         }
 
@@ -114,5 +136,22 @@ private fun SaleContent(
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
         onTryAgain = interactions::getProducts
+    )
+}
+
+
+@Composable
+fun ControlSaleContentBody(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    content: @Composable() (AnimatedVisibilityScope.() -> Unit)
+
+) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = isVisible,
+        enter = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
+        exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500)),
+        content = content
     )
 }

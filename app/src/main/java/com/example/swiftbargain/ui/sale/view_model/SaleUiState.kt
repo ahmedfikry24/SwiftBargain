@@ -14,4 +14,5 @@ data class SaleUiState(
     val isSearchVisible: Boolean = false,
     val search: String = "",
     val isSearchError: Boolean = false,
+    val searchProducts: List<ProductUiState> = listOf()
 )

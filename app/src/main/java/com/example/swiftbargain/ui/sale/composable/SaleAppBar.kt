@@ -68,7 +68,6 @@ fun SaleAppBar(
                     hint = stringResource(R.string.find_product),
                     isError = isSearchError,
                     imeAction = ImeAction.Search,
-                    onClickKeyboardDone = onClickSearch,
                     onChangeValue = onChangeSearch
                 )
             }
