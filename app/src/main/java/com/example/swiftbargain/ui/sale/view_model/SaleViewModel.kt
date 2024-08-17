@@ -72,8 +72,12 @@ class SaleViewModel @Inject constructor(
         sendEvent(SaleEvents.GoBack)
     }
 
-    override fun onClickSearch() {
-        sendEvent(SaleEvents.GoToSearch)
+    override fun controlSearchVisibility() {
+        _state.update { it.copy(isSearchVisible = !it.isSearchVisible) }
+    }
+
+    override fun onChangeSearch(search: String) {
+        _state.update { it.copy(search = search) }
     }
 
     override fun onClickProduct(id: String) {

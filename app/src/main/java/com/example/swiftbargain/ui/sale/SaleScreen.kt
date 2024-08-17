@@ -54,7 +54,6 @@ fun SaleScreen(
     EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
             SaleEvents.GoBack -> navController.popBackStack()
-            SaleEvents.GoToSearch -> Unit
             is SaleEvents.GoToProduct -> navController.navigate(ProductDetails(event.id))
         }
     }
@@ -79,8 +78,12 @@ private fun SaleContent(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 SaleAppBar(
                     title = state.title,
+                    searchText = state.search,
+                    isSearchError = state.isSearchError,
                     onClickBack = interactions::onClickBack,
-                    onClickSearch = interactions::onClickSearch
+                    onClickSearch = interactions::controlSearchVisibility,
+                    onChangeSearch = interactions::onChangeSearch,
+                    isSearchVisible = state.isSearchVisible
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {

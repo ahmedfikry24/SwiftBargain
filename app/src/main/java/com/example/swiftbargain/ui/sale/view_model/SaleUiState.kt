@@ -10,5 +10,8 @@ data class SaleUiState(
     val bannerTitle: String = "",
     val products: List<ProductUiState> = listOf(),
     val pageNumber: Int = 1,
-    val isLoadMoreProducts: Boolean = false
-) 
+    val isLoadMoreProducts: Boolean = false,
+    val isSearchVisible: Boolean = false,
+    val search: String = "",
+    val isSearchError: Boolean = false,
+)

@@ -4,6 +4,7 @@ interface SaleInteractions {
     fun getProducts()
     fun getMoreProducts(lastItemId: String? = null)
     fun onClickBack()
-    fun onClickSearch()
+    fun controlSearchVisibility()
+    fun onChangeSearch(search: String)
     fun onClickProduct(id: String)
 }
