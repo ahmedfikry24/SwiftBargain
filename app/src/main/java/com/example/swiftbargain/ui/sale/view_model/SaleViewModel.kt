@@ -21,7 +21,7 @@ class SaleViewModel @Inject constructor(
 
     private val args = savedStateHandle.toRoute<Sale>()
 
-    fun getProducts() {
+    override fun getProducts() {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
             { repository.getSaleProducts(args.id, null) },
@@ -44,6 +44,7 @@ class SaleViewModel @Inject constructor(
 
 
     override fun getMoreProducts(lastItemId: String?) {
+        _state.update { it.copy(isLoadMoreProducts = true) }
         tryExecute(
             { repository.getSaleProducts(args.id, lastItemId) },
             ::moreProductsSuccess,
@@ -54,10 +55,11 @@ class SaleViewModel @Inject constructor(
     private fun moreProductsSuccess(items: List<ProductDto>) {
         _state.update { value ->
             value.copy(
+                isLoadMoreProducts = false,
                 products = value.products.toMutableList().apply {
                     addAll(items.map { it.toUiState() })
                 },
-                pageNumber = value.pageNumber.inc()
+                pageNumber = value.pageNumber.inc(),
             )
         }
     }

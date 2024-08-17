@@ -9,5 +9,6 @@ data class SaleUiState(
     val bannerUrl: String = "",
     val bannerTitle: String = "",
     val products: List<ProductUiState> = listOf(),
-    val pageNumber: Int = 1
+    val pageNumber: Int = 1,
+    val isLoadMoreProducts: Boolean = false
 ) 

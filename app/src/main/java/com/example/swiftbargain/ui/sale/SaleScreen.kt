@@ -87,11 +87,20 @@ private fun SaleContent(
                     onClick = {}
                 )
             }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                if (state.isLoadMoreProducts)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator(color = MaterialTheme.colors.primary)
+                    }
+            }
         }
 
     }
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
-        onTryAgain = interactions::getMoreProducts
+        onTryAgain = interactions::getProducts
     )
 }
