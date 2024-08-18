@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -56,6 +57,7 @@ fun SaleScreen(
     LifeCycleTracker { event ->
         if (event == Lifecycle.Event.ON_CREATE && !isDataArrive) {
             viewModel.getProducts()
+            viewModel.observeSearch()
             isDataArrive = true
         }
     }
@@ -80,14 +82,14 @@ private fun SaleContent(
             modifier = Modifier.fillMaxSize(),
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 SaleAppBar(
+                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.space8),
                     title = state.title,
                     searchText = state.search,
-                    isSearchError = state.isSearchError,
+                    isSearchError = false,
                     onClickBack = interactions::onClickBack,
                     onClickSearch = interactions::controlSearchVisibility,
                     onChangeSearch = interactions::onChangeSearch,
@@ -95,12 +97,18 @@ private fun SaleContent(
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ControlSaleContentBody(isVisible = !state.isSearchVisible) {
+                ControlSaleContentBody(
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                    isVisible = !state.isSearchVisible
+                ) {
                     Banner(url = state.bannerUrl, title = state.bannerTitle)
                 }
             }
             itemsIndexed(state.products) { index, product ->
-                ControlSaleContentBody(isVisible = !state.isSearchVisible) {
+                ControlSaleContentBody(
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                    isVisible = !state.isSearchVisible
+                ) {
                     if (index + 1 == state.pageNumber * 10) {
                         interactions.getMoreProducts(product.id)
                     }
@@ -111,7 +119,10 @@ private fun SaleContent(
                 }
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ControlSaleContentBody(isVisible = !state.isSearchVisible) {
+                ControlSaleContentBody(
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                    isVisible = !state.isSearchVisible
+                ) {
                     if (state.isLoadMoreProducts)
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -121,13 +132,32 @@ private fun SaleContent(
                         }
                 }
             }
-
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                ControlSaleContentBody(
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                    isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.LOADING
+                ) {
+                    ContentLoading(isVisible = true)
+                }
+            }
             items(state.searchProducts) { product ->
-                ControlSaleContentBody(isVisible = state.isSearchVisible) {
+                ControlSaleContentBody(
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                    isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.VISIBLE
+                ) {
                     ProductItem(
                         item = product,
                         onClick = interactions::onClickProduct
                     )
+                }
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                ControlSaleContentBody(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
+                    isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.FAILURE
+                ) {
+                    ContentError(isVisible = true, onTryAgain = interactions::searchForProduct)
                 }
             }
         }
@@ -139,12 +169,11 @@ private fun SaleContent(
     )
 }
 
-
 @Composable
 fun ControlSaleContentBody(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
-    content: @Composable() (AnimatedVisibilityScope.() -> Unit)
+    content: @Composable (AnimatedVisibilityScope.() -> Unit)
 
 ) {
     AnimatedVisibility(
