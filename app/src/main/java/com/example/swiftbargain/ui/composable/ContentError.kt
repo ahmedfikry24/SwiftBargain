@@ -45,7 +45,7 @@ fun ContentError(isVisible: Boolean, onTryAgain: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space8)
+            verticalArrangement = Arrangement.Center,
         ) {
             LottieAnimation(
                 modifier = Modifier.size(size),
@@ -53,6 +53,7 @@ fun ContentError(isVisible: Boolean, onTryAgain: () -> Unit) {
                 iterations = LottieConstants.IterateForever
             )
             Text(
+                modifier = Modifier.padding(MaterialTheme.spacing.space16),
                 text = stringResource(R.string.something_went_wrong_check_internet_connection_then_try_again),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colors.textGrey

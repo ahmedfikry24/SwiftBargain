@@ -10,6 +10,7 @@ data class ProductUiState(
     val price: String,
     val priceAfterDiscount: String,
     val discountPercentage: String,
+    val saleId: String,
     val rate: String,
     val url: List<String>
 )
@@ -26,6 +27,7 @@ fun ProductDto.toUiState(): ProductUiState {
             this.discountPercentage.toDouble()
         ).toString(),
         discountPercentage = this.discountPercentage,
+        saleId = this.saleId,
         rate = this.rate,
         url = this.url
     )
