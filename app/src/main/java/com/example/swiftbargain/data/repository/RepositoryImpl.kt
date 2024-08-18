@@ -143,6 +143,18 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun searchSaleProducts(saleId: String, itemName: String): List<ProductDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(PRODUCTS)
+                .whereEqualTo(SALE_ID, saleId)
+                .orderBy(TITLE)
+                .startAt(itemName)
+                .endAt(itemName + "\uf8ff")
+                .get().await()
+            result.toObjects(ProductDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
@@ -152,5 +164,6 @@ class RepositoryImpl @Inject constructor(
 
         private const val SALE_ID = "sale_id"
         private const val ID = "id"
+        private const val TITLE = "title"
     }
 }

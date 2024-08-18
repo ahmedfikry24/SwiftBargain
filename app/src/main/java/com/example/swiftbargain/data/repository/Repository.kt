@@ -26,5 +26,6 @@ interface Repository {
     suspend fun getSaleAds(): List<SaleAdDto>
     suspend fun getAllProducts(): List<ProductDto>
     suspend fun getSaleProducts(saleId: String, lastItemId: String?): List<ProductDto>
+    suspend fun searchSaleProducts(saleId: String, itemName: String): List<ProductDto>
     //endregion
 }
