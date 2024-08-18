@@ -6,5 +6,6 @@ interface SaleInteractions {
     fun onClickBack()
     fun controlSearchVisibility()
     fun onChangeSearch(search: String)
+    fun searchForProduct()
     fun onClickProduct(id: String)
 }

@@ -12,7 +12,7 @@ data class SaleUiState(
     val pageNumber: Int = 1,
     val isLoadMoreProducts: Boolean = false,
     val isSearchVisible: Boolean = false,
+    val searchContentStatus: ContentStatus = ContentStatus.VISIBLE,
     val search: String = "",
-    val isSearchError: Boolean = false,
     val searchProducts: List<ProductUiState> = listOf()
 )
