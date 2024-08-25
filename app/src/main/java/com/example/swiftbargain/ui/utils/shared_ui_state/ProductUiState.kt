@@ -3,16 +3,18 @@ package com.example.swiftbargain.ui.utils.shared_ui_state
 import com.example.swiftbargain.data.models.ProductDto
 
 data class ProductUiState(
-    val id: String,
-    val categoryId: String,
-    val title: String,
-    val description: String,
-    val price: String,
-    val priceAfterDiscount: String,
-    val discountPercentage: String,
-    val saleId: String,
-    val rate: String,
-    val url: List<String>
+    val id: String = "",
+    val categoryId: String = "",
+    val title: String = "",
+    val description: String = "",
+    val price: String = "",
+    val priceAfterDiscount: String = "",
+    val discountPercentage: String = "",
+    val saleId: String = "",
+    val rate: String = "",
+    val url: List<String> = listOf(),
+    val sizes: List<String> = listOf(),
+    val colors: List<Long> = listOf()
 )
 
 fun ProductDto.toUiState(): ProductUiState {
@@ -29,7 +31,9 @@ fun ProductDto.toUiState(): ProductUiState {
         discountPercentage = this.discountPercentage,
         saleId = this.saleId,
         rate = this.rate,
-        url = this.url
+        url = this.url,
+        sizes = this.sizes,
+        colors = this.colors
     )
 }
 

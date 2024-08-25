@@ -25,5 +25,7 @@ data class ProductDto(
     var saleId: String = "",
 
     val rate: String = "",
-    val url: List<String> = listOf()
+    val url: List<String> = listOf(),
+    val sizes: List<String> = listOf(),
+    val colors: List<Long> = listOf()
 )
