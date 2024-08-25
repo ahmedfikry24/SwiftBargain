@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.swiftbargain.ui.composable.PrimarySnackBar
 import com.example.swiftbargain.ui.composable.UserBottomNavigation
 import com.example.swiftbargain.ui.home.HomeScreen
+import com.example.swiftbargain.ui.product_details.ProductDetailsScreen
 import com.example.swiftbargain.ui.sale.SaleScreen
 import com.example.swiftbargain.ui.theme.colors
 
@@ -37,6 +38,7 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Offer> {}
                 composable<Account> {}
                 composable<Sale> { SaleScreen(navController) }
+                composable<ProductDetails> { ProductDetailsScreen(navController) }
             }
         }
     }
