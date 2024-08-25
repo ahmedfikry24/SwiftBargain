@@ -4,6 +4,7 @@ import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.ProductDto
+import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
@@ -152,6 +153,21 @@ class RepositoryImpl @Inject constructor(
                 .endAt(itemName + "\uf8ff")
                 .get().await()
             result.toObjects(ProductDto::class.java)
+        }
+    }
+
+    override suspend fun getProductDetails(id: String): ProductDto {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(PRODUCTS).document(id).get().await()
+            result.toObject(ProductDto::class.java) ?: ProductDto()
+        }
+    }
+
+    override suspend fun getProductReviews(id: String): List<ReviewDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result =
+                fireStore.collection(PRODUCTS).document(id).collection(REVIEWS).get().await()
+            result.toObjects(ReviewDto::class.java)
         }
     }
 
