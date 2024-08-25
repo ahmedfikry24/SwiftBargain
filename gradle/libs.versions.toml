@@ -4,13 +4,13 @@ coilCompose = "2.7.0"
 datastorePreferences = "1.1.1"
 facebookLogin = "17.0.0"
 hiltNavigationCompose = "1.2.0"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinParcelizeRuntime = "2.0.20-Beta2"
-kotlinxSerializationJson = "1.6.3"
+kotlinxSerializationJson = "1.7.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
@@ -21,6 +21,8 @@ firebaseBom = "33.1.2"
 googleService = "4.4.2"
 playServicesAuth = "21.0.0"
 hiltAndroid = "2.50"
+roomRuntime = "2.6.1"
+ksp = "2.0.20-1.0.24"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +56,9 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltA
 hilt_android_compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomRuntime" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime" }
 
 
 [plugins]
@@ -65,6 +70,7 @@ gms-google-service = { id = "com.google.gms.google-services", version.ref = "goo
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinParcelizeRuntime" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 
 
