@@ -25,7 +25,7 @@ class ProductDetailsViewModel @Inject constructor(
         getData()
     }
 
-    fun getData() {
+    override fun getData() {
         getDetails()
     }
 
@@ -51,4 +51,27 @@ class ProductDetailsViewModel @Inject constructor(
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
 
+    override fun onClickBack() {
+        sendEvent(ProductDetailsEvents.NavigateToBack)
+    }
+
+    override fun onClickFavorite() {
+
+    }
+
+    override fun onClickSize(size: String) {
+        _state.update { it.copy(selectedSize = size) }
+    }
+
+    override fun onCLickColor(color: Long) {
+        _state.update { it.copy(selectedColor = color) }
+    }
+
+    override fun onCLickMoreReviews() {
+        sendEvent(ProductDetailsEvents.NavigateToReviews)
+    }
+
+    override fun onCLickAddToCart() {
+
+    }
 }

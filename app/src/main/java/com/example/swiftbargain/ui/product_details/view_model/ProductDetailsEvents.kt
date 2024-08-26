@@ -1,3 +1,6 @@
 package com.example.swiftbargain.ui.product_details.view_model
 
-sealed interface ProductDetailsEvents
+sealed interface ProductDetailsEvents {
+    data object NavigateToBack : ProductDetailsEvents
+    data object NavigateToReviews : ProductDetailsEvents
+}
