@@ -2,10 +2,11 @@ package com.example.swiftbargain.ui.product_details.view_model
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.ProductDto
+import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.ProductDetails
-import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
@@ -19,35 +20,39 @@ class ProductDetailsViewModel @Inject constructor(
     private val repository: Repository
 ) : BaseViewModel<ProductDetailsUiState, ProductDetailsEvents>(ProductDetailsUiState()),
     ProductDetailsInteractions {
-    val args = savedStateHandle.toRoute<ProductDetails>()
+    private val args = savedStateHandle.toRoute<ProductDetails>()
 
     init {
         getData()
     }
 
     override fun getData() {
-        getDetails()
-    }
-
-    private fun getDetails() {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
-            { repository.getProductDetails(args.id) },
-            ::detailsSuccess,
-            ::detailsError
+            {
+                mapOf(
+                    DETAILS to repository.getProductDetails(args.id),
+                    IS_FAVORITE to repository.getAllFavorites(),
+                    REVIEWS to repository.getProductReviews(args.id)
+                )
+            },
+            ::dataSuccess,
+            { dataError() }
         )
     }
 
-    private fun detailsSuccess(product: ProductDto) {
+    private fun dataSuccess(info: Map<String, Any>) {
         _state.update { value ->
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
-                product = product.toUiState()
+                product = (info[DETAILS] as ProductDto).toUiState(),
+                isFavorite = (info[IS_FAVORITE] as List<*>).any { (it as FavoriteProductEntity).id == (info[DETAILS] as ProductDto).id },
+                reviews = (info[REVIEWS] as List<*>).map { (it as ReviewDto).toUiState() }
             )
         }
     }
 
-    private fun detailsError(error: BaseError) {
+    private fun dataError() {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
 
@@ -73,5 +78,11 @@ class ProductDetailsViewModel @Inject constructor(
 
     override fun onCLickAddToCart() {
 
+    }
+
+    companion object {
+        private const val DETAILS = "details"
+        private const val IS_FAVORITE = "isFavorite"
+        private const val REVIEWS = "reviews"
     }
 }
