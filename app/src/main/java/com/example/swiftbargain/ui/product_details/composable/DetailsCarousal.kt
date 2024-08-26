@@ -3,13 +3,16 @@ package com.example.swiftbargain.ui.product_details.composable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.swiftbargain.ui.composable.Banner
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.swiftbargain.ui.composable.CarouselIndicator
 import com.example.swiftbargain.ui.theme.spacing
 
@@ -28,7 +31,14 @@ fun DetailsCarousal(
         HorizontalPager(
             state = pagerState
         ) { page ->
-            Banner(url = imagesUrl[page], title = "")
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp),
+                model = imagesUrl[page],
+                contentDescription = null,
+                contentScale = ContentScale.Fit
+            )
         }
         CarouselIndicator(pagerState = pagerState, listSize = imagesUrl.size)
     }

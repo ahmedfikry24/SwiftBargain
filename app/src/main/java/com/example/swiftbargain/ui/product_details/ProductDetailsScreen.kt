@@ -20,6 +20,7 @@ import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.product_details.composable.DetailsCarousal
 import com.example.swiftbargain.ui.product_details.composable.DetailsColors
+import com.example.swiftbargain.ui.product_details.composable.DetailsReview
 import com.example.swiftbargain.ui.product_details.composable.DetailsSizes
 import com.example.swiftbargain.ui.product_details.composable.DetailsTitle
 import com.example.swiftbargain.ui.product_details.view_model.ProductDetailsEvents
@@ -95,9 +96,18 @@ private fun ProductDetailsContent(
             item {
                 if (state.product.colors.isNotEmpty())
                     DetailsColors(
-                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.space16),
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                         state = state,
                         onClickColor = interactions::onCLickColor
+                    )
+            }
+
+            item {
+                if (state.reviews.isNotEmpty())
+                    DetailsReview(
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                        state = state,
+                        onClickMore = {}
                     )
             }
         }
