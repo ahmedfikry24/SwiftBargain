@@ -3,6 +3,7 @@ package com.example.swiftbargain.ui.product_details.view_model
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
@@ -88,7 +89,18 @@ class ProductDetailsViewModel @Inject constructor(
     }
 
     override fun onCLickAddToCart() {
-
+        val value = state.value.product
+        viewModelScope.launch {
+            repository.addProductToCart(
+                CartProductEntity(
+                    id = value.id,
+                    name = value.title,
+                    priceAfterDiscount = value.priceAfterDiscount,
+                    imageUrl = value.url.first()
+                )
+            )
+            sendEvent(ProductDetailsEvents.AddToCartSuccessfully)
+        }
     }
 
     companion object {

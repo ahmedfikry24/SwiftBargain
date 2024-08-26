@@ -18,6 +18,7 @@ import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
+import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.product_details.composable.DetailsCarousal
 import com.example.swiftbargain.ui.product_details.composable.DetailsColors
 import com.example.swiftbargain.ui.product_details.composable.DetailsReview
@@ -31,6 +32,9 @@ import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
+import com.example.swiftbargain.ui.utils.SnackBarManager
+import com.example.swiftbargain.ui.utils.SnackBarManager.showSuccess
+import com.example.swiftbargain.ui.utils.UiConstants
 
 @Composable
 fun ProductDetailsScreen(
@@ -38,10 +42,15 @@ fun ProductDetailsScreen(
     viewModel: ProductDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    EventHandler(effects = viewModel.event) { events, _ ->
+    val snackBar = SnackBarManager.init()
+    EventHandler(effects = viewModel.event) { events, scope ->
         when (events) {
             ProductDetailsEvents.NavigateToBack -> navController.popBackStack()
             ProductDetailsEvents.NavigateToReviews -> Unit
+            ProductDetailsEvents.AddToCartSuccessfully -> snackBar.showSuccess(
+                UiConstants.ADD_TO_CART_SUCCESS,
+                scope
+            )
         }
     }
     ProductDetailsContent(state = state, interactions = viewModel)
@@ -109,6 +118,13 @@ private fun ProductDetailsContent(
                         state = state,
                         onClickMore = {}
                     )
+            }
+            item {
+                PrimaryTextButton(
+                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space16),
+                    text = stringResource(R.string.add_to_cart),
+                    onClick = interactions::onCLickAddToCart
+                )
             }
         }
     }
