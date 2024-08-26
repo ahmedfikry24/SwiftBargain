@@ -1,6 +1,5 @@
 package com.example.swiftbargain.ui.product_details
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,6 +22,7 @@ import com.example.swiftbargain.ui.product_details.composable.DetailsCarousal
 import com.example.swiftbargain.ui.product_details.composable.DetailsColors
 import com.example.swiftbargain.ui.product_details.composable.DetailsSizes
 import com.example.swiftbargain.ui.product_details.composable.DetailsTitle
+import com.example.swiftbargain.ui.product_details.view_model.ProductDetailsEvents
 import com.example.swiftbargain.ui.product_details.view_model.ProductDetailsInteractions
 import com.example.swiftbargain.ui.product_details.view_model.ProductDetailsUiState
 import com.example.swiftbargain.ui.product_details.view_model.ProductDetailsViewModel
@@ -30,7 +30,6 @@ import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
-
 
 @Composable
 fun ProductDetailsScreen(
@@ -40,8 +39,8 @@ fun ProductDetailsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     EventHandler(effects = viewModel.event) { events, _ ->
         when (events) {
-
-            else -> Unit
+            ProductDetailsEvents.NavigateToBack -> navController.popBackStack()
+            ProductDetailsEvents.NavigateToReviews -> Unit
         }
     }
     ProductDetailsContent(state = state, interactions = viewModel)
@@ -56,29 +55,51 @@ private fun ProductDetailsContent(
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+            contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16)
         ) {
-            item { PrimaryAppbar(title = stringResource(R.string.details), onClickBack = {}) }
+            item {
+                PrimaryAppbar(
+                    title = stringResource(R.string.details),
+                    onClickBack = interactions::onClickBack
+                )
+            }
             item { DetailsCarousal(imagesUrl = state.product.url) }
             item {
                 DetailsTitle(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                     title = state.product.title,
                     isFavorite = state.isFavorite,
                     rate = state.product.rate.toFloat(),
-                    onCLickFavorite = {}
+                    onCLickFavorite = interactions::onClickFavorite
                 )
             }
             item {
                 Text(
-                    modifier = Modifier.padding(start = MaterialTheme.spacing.space16),
+                    modifier = Modifier.padding(
+                        start = MaterialTheme.spacing.space16,
+                        top = MaterialTheme.spacing.space16
+                    ),
                     text = "$ ${state.product.priceAfterDiscount}",
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colors.primary
                 )
             }
-            item { DetailsSizes(state = state, onClickSize = {}) }
-            item { DetailsColors(state = state, onClickColor = {}) }
+            item {
+                if (state.product.sizes.isNotEmpty())
+                    DetailsSizes(
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                        state = state,
+                        onClickSize = interactions::onClickSize
+                    )
+            }
+            item {
+                if (state.product.colors.isNotEmpty())
+                    DetailsColors(
+                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.space16),
+                        state = state,
+                        onClickColor = interactions::onCLickColor
+                    )
+            }
         }
     }
     ContentError(isVisible = state.contentStatus == ContentStatus.FAILURE, onTryAgain = {})
