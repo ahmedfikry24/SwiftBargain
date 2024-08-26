@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.product_details.view_model
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.ProductDto
@@ -9,9 +10,11 @@ import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
+import com.example.swiftbargain.ui.utils.shared_ui_state.toEntity
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -61,7 +64,15 @@ class ProductDetailsViewModel @Inject constructor(
     }
 
     override fun onClickFavorite() {
-
+        val value = state.value
+        viewModelScope.launch {
+            if (state.value.isFavorite) {
+                repository.removeFavoriteProduct(value.product.id)
+            } else {
+                repository.addFavoriteProduct(value.product.toEntity())
+            }
+        }
+        _state.update { it.copy(isFavorite = !it.isFavorite) }
     }
 
     override fun onClickSize(size: String) {

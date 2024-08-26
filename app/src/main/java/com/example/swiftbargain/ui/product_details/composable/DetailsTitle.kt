@@ -56,7 +56,7 @@ fun DetailsTitle(
                 onClick = onCLickFavorite
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_favourite),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_favorite_fill),
                     contentDescription = null
                 )
             }

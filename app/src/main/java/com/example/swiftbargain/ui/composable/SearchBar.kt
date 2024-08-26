@@ -45,7 +45,7 @@ fun SearchBar(
             onClick = onClickFavourite
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_favourite),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_favourite_outline),
                 contentDescription = null
             )
         }
