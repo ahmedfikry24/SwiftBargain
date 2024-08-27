@@ -14,6 +14,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.ProductReviews
+import com.example.swiftbargain.navigation.ReviewsParam
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
@@ -46,7 +48,10 @@ fun ProductDetailsScreen(
     EventHandler(effects = viewModel.event) { events, scope ->
         when (events) {
             ProductDetailsEvents.NavigateToBack -> navController.popBackStack()
-            ProductDetailsEvents.NavigateToReviews -> Unit
+            ProductDetailsEvents.NavigateToReviews -> navController.navigate(
+                ProductReviews(ReviewsParam(state.reviews))
+            )
+
             ProductDetailsEvents.AddToCartSuccessfully -> snackBar.showSuccess(
                 UiConstants.ADD_TO_CART_SUCCESS,
                 scope
@@ -116,12 +121,12 @@ private fun ProductDetailsContent(
                     DetailsReview(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                         state = state,
-                        onClickMore = {}
+                        onClickMore = interactions::onCLickMoreReviews
                     )
             }
             item {
                 PrimaryTextButton(
-                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.space16),
+                    modifier = Modifier.padding(MaterialTheme.spacing.space16),
                     text = stringResource(R.string.add_to_cart),
                     onClick = interactions::onCLickAddToCart
                 )
