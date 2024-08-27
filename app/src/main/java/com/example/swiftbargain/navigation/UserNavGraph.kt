@@ -15,8 +15,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.swiftbargain.ui.composable.PrimarySnackBar
 import com.example.swiftbargain.ui.composable.UserBottomNavigation
 import com.example.swiftbargain.ui.home.HomeScreen
+import com.example.swiftbargain.ui.product_details.ProductDetailsScreen
+import com.example.swiftbargain.ui.reviews.ReviewsScreen
+import com.example.swiftbargain.ui.reviews.nav_type.ReviewNavType
 import com.example.swiftbargain.ui.sale.SaleScreen
 import com.example.swiftbargain.ui.theme.colors
+import kotlin.reflect.typeOf
 
 @Composable
 fun UserNavGraph(mainNavController: NavController) {
@@ -37,6 +41,10 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Offer> {}
                 composable<Account> {}
                 composable<Sale> { SaleScreen(navController) }
+                composable<ProductDetails> { ProductDetailsScreen(navController) }
+                composable<ProductReviews>(typeMap = mapOf(typeOf<ReviewsParam>() to ReviewNavType())) {
+                    ReviewsScreen(navController = navController)
+                }
             }
         }
     }

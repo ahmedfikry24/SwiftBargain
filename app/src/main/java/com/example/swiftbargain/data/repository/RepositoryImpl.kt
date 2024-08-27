@@ -2,8 +2,12 @@ package com.example.swiftbargain.data.repository
 
 import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
+import com.example.swiftbargain.data.local.room.RoomManager
+import com.example.swiftbargain.data.local.room.entity.CartProductEntity
+import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.ProductDto
+import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
@@ -24,6 +28,7 @@ class RepositoryImpl @Inject constructor(
     private val dataStore: DataStoreManager,
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val localDB: RoomManager,
     private val connectivityChecker: InternetConnectivityChecker
 ) : Repository {
 
@@ -152,6 +157,57 @@ class RepositoryImpl @Inject constructor(
                 .endAt(itemName + "\uf8ff")
                 .get().await()
             result.toObjects(ProductDto::class.java)
+        }
+    }
+
+    override suspend fun getProductDetails(id: String): ProductDto {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(PRODUCTS).document(id).get().await()
+            result.toObject(ProductDto::class.java) ?: ProductDto()
+        }
+    }
+
+    override suspend fun getProductReviews(id: String): List<ReviewDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result =
+                fireStore.collection(PRODUCTS).document(id).collection(REVIEWS).get().await()
+            result.toObjects(ReviewDto::class.java)
+        }
+    }
+
+    override suspend fun addFavoriteProduct(product: FavoriteProductEntity) {
+        wrapApiCall(connectivityChecker) {
+            localDB.favorites.addProduct(product)
+        }
+    }
+
+    override suspend fun getAllFavorites(): List<FavoriteProductEntity> {
+        return wrapApiCall(connectivityChecker) {
+            localDB.favorites.getAllProducts()
+        }
+    }
+
+    override suspend fun removeFavoriteProduct(id: String) {
+        wrapApiCall(connectivityChecker) {
+            localDB.favorites.deleteProduct(id)
+        }
+    }
+
+    override suspend fun addProductToCart(product: CartProductEntity) {
+        wrapApiCall(connectivityChecker) {
+            localDB.cart.addProduct(product)
+        }
+    }
+
+    override suspend fun getAllCartProducts(): List<CartProductEntity> {
+        return wrapApiCall(connectivityChecker) {
+            localDB.cart.getAllProducts()
+        }
+    }
+
+    override suspend fun removeProductFromCart(id: String) {
+        wrapApiCall(connectivityChecker) {
+            localDB.cart.deleteProduct(id)
         }
     }
 
