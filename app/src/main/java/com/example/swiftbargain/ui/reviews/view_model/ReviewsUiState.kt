@@ -7,6 +7,6 @@ data class ReviewsUiState(
     val contentStatus: ContentStatus = ContentStatus.VISIBLE,
     val isReviewsContentVisible: Boolean = true,
     val allReviews: List<ReviewUiState> = listOf(),
-    val selectedFilter: Int = 0,
+    val selectedFilter: Int = -1,
     val filteredReviews: List<ReviewUiState> = listOf()
 ) 
