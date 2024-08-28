@@ -52,6 +52,6 @@ private fun ReviewsContent(
     }
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
-        onTryAgain = {}
+        onTryAgain = interactions::getReviews
     )
 }
