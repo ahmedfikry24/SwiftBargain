@@ -1,8 +1,5 @@
 package com.example.swiftbargain.navigation
 
-import android.os.Parcelable
-import com.example.swiftbargain.ui.utils.shared_ui_state.ReviewUiState
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -42,11 +39,7 @@ data class Category(val id: String)
 data class ProductDetails(val id: String)
 
 @Serializable
-@Parcelize
-data class ReviewsParam(val items: List<ReviewUiState>) : Parcelable
-
-@Serializable
-data class ProductReviews(val param: ReviewsParam)
+data class ProductReviews(val id: String)
 
 @Serializable
 object Search
