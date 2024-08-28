@@ -1,13 +1,22 @@
 package com.example.swiftbargain.ui.reviews
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.ui.composable.ContentError
+import com.example.swiftbargain.ui.composable.ContentLoading
+import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.reviews.composable.ReviewsMainContent
+import com.example.swiftbargain.ui.reviews.composable.WriteReviewContent
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsInteractions
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsUiState
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsViewModel
+import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
 
 @Composable
@@ -28,5 +37,21 @@ private fun ReviewsContent(
     state: ReviewsUiState,
     interactions: ReviewsInteractions
 ) {
-
+    ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
+    ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
+        Crossfade(
+            modifier = Modifier.fillMaxSize(),
+            targetState = state.isReviewsContentVisible,
+            label = "transition"
+        ) { value ->
+            if (value)
+                ReviewsMainContent(state = state, interactions = interactions)
+            else
+                WriteReviewContent(state = state, interactions = interactions)
+        }
+    }
+    ContentError(
+        isVisible = state.contentStatus == ContentStatus.FAILURE,
+        onTryAgain = {}
+    )
 }
