@@ -61,4 +61,8 @@ class ReviewsViewModel @Inject constructor(
         }
     }
 
+    override fun controlSwitchContent() {
+        _state.update { it.copy(isReviewsContentVisible = !it.isReviewsContentVisible) }
+    }
+
 }

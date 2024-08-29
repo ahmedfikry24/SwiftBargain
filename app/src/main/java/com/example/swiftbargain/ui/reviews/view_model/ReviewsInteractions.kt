@@ -4,4 +4,5 @@ interface ReviewsInteractions {
     fun getReviews()
     fun onClickBack()
     fun onClickFilterReviews(filter: Int)
+    fun controlSwitchContent()
 }
