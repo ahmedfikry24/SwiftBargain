@@ -1,7 +1,5 @@
 package com.example.swiftbargain.ui.reviews.composable
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -29,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.composable.ControlItemVisibility
 import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
@@ -141,21 +140,6 @@ private fun ReviewTab(
         ),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
         onClick = onClick,
-        content = content
-    )
-}
-
-@Composable
-fun ControlItemVisibility(
-    modifier: Modifier = Modifier,
-    isVisible: Boolean,
-    content: @Composable AnimatedVisibilityScope.() -> Unit
-) {
-    AnimatedVisibility(
-        modifier = modifier.fillMaxWidth(),
-        visible = isVisible,
-        enter = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
-        exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500)),
         content = content
     )
 }

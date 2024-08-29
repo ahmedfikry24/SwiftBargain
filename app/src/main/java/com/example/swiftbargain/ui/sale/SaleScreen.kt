@@ -1,12 +1,5 @@
 package com.example.swiftbargain.ui.sale
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -35,6 +28,7 @@ import com.example.swiftbargain.ui.composable.Banner
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.ControlItemVisibility
 import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.ProductItem
 import com.example.swiftbargain.ui.sale.composable.SaleAppBar
@@ -97,7 +91,7 @@ private fun SaleContent(
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ControlSaleContentBody(
+                ControlItemVisibility(
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
                     isVisible = !state.isSearchVisible
                 ) {
@@ -105,7 +99,7 @@ private fun SaleContent(
                 }
             }
             itemsIndexed(state.products) { index, product ->
-                ControlSaleContentBody(
+                ControlItemVisibility(
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
                     isVisible = !state.isSearchVisible
                 ) {
@@ -119,7 +113,7 @@ private fun SaleContent(
                 }
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ControlSaleContentBody(
+                ControlItemVisibility(
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
                     isVisible = !state.isSearchVisible
                 ) {
@@ -133,7 +127,7 @@ private fun SaleContent(
                 }
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ControlSaleContentBody(
+                ControlItemVisibility(
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
                     isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.LOADING
                 ) {
@@ -141,7 +135,7 @@ private fun SaleContent(
                 }
             }
             items(state.searchProducts) { product ->
-                ControlSaleContentBody(
+                ControlItemVisibility(
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
                     isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.VISIBLE
                 ) {
@@ -153,7 +147,7 @@ private fun SaleContent(
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ControlSaleContentBody(
+                ControlItemVisibility(
                     modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                     isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.FAILURE
                 ) {
@@ -166,21 +160,5 @@ private fun SaleContent(
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
         onTryAgain = interactions::getProducts
-    )
-}
-
-@Composable
-fun ControlSaleContentBody(
-    modifier: Modifier = Modifier,
-    isVisible: Boolean,
-    content: @Composable (AnimatedVisibilityScope.() -> Unit)
-
-) {
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = isVisible,
-        enter = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
-        exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500)),
-        content = content
     )
 }
