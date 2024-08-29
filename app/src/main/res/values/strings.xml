@@ -50,4 +50,5 @@
     <string name="add_to_cart">Add To Cart</string>
     <string name="reviews">Reviews</string>
     <string name="all_review">All Review</string>
+    <string name="write_review">Write Review</string>
 </resources>

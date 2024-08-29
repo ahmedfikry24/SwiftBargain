@@ -1,6 +1,14 @@
 package com.example.swiftbargain.ui.reviews.composable
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +24,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
+import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.RatingStar
 import com.example.swiftbargain.ui.composable.ReviewItem
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsInteractions
@@ -34,64 +45,83 @@ fun ReviewsMainContent(
     state: ReviewsUiState,
     interactions: ReviewsInteractions
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
     ) {
-        item {
-            PrimaryAppbar(
-                title = stringResource(R.string.reviews),
-                onClickBack = interactions::onClickBack
-            )
-        }
-        item {
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.space16),
-                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.space16),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
-            ) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            item {
+                PrimaryAppbar(
+                    title = stringResource(R.string.reviews),
+                    onClickBack = interactions::onClickBack
+                )
+            }
+            item {
+                LazyRow(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                    contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.space16),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
+                ) {
 
-                item {
-                    ReviewTab(
-                        isSelected = state.selectedFilter == -1,
-                        onClick = { interactions.onClickFilterReviews(-1) }
-                    ) {
-                        Text(
-                            text = stringResource(R.string.all_review),
-                            style = MaterialTheme.typography.headlineSmall,
-                        )
+                    item {
+                        ReviewTab(
+                            isSelected = state.selectedFilter == -1,
+                            onClick = { interactions.onClickFilterReviews(-1) }
+                        ) {
+                            Text(
+                                text = stringResource(R.string.all_review),
+                                style = MaterialTheme.typography.headlineSmall,
+                            )
+                        }
                     }
-                }
 
-                items(5) {
-                    ReviewTab(
-                        isSelected = state.selectedFilter == it,
-                        onClick = { interactions.onClickFilterReviews(it) }
-                    ) {
-                        RatingStar(
-                            modifier = Modifier.size(MaterialTheme.spacing.space16),
-                            fillFraction = 1f,
-                        )
-                        Text(
-                            modifier = Modifier.padding(start = MaterialTheme.spacing.space8),
-                            text = it.inc().toString(),
-                            style = MaterialTheme.typography.titleSmall,
-                        )
+                    items(5) {
+                        ReviewTab(
+                            isSelected = state.selectedFilter == it,
+                            onClick = { interactions.onClickFilterReviews(it) }
+                        ) {
+                            RatingStar(
+                                modifier = Modifier.size(MaterialTheme.spacing.space16),
+                                fillFraction = 1f,
+                            )
+                            Text(
+                                modifier = Modifier.padding(start = MaterialTheme.spacing.space8),
+                                text = it.inc().toString(),
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                        }
                     }
                 }
             }
-        }
+            items(state.filteredReviews) { review ->
+                ControlItemVisibility(isVisible = state.filteredReviews.isNotEmpty()) {
+                    ReviewItem(
+                        modifier = Modifier
+                            .padding(horizontal = MaterialTheme.spacing.space16)
+                            .padding(top = MaterialTheme.spacing.space16),
+                        state = review
+                    )
+                }
 
-        items(state.filteredReviews) { review ->
-            ReviewItem(
-                modifier = Modifier
-                    .padding(horizontal = MaterialTheme.spacing.space16)
-                    .padding(top = MaterialTheme.spacing.space16),
-                state = review
-            )
+            }
+
+            item {
+                NoItemFound(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    isVisible = state.filteredReviews.isEmpty(),
+                    enterTransition = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
+                    exitTransition = slideOutHorizontally(tween(500)) + fadeOut(tween(500))
+                )
+            }
         }
+        PrimaryTextButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.space16)
+                .padding(bottom = MaterialTheme.spacing.space16),
+            text = stringResource(R.string.write_review),
+            onClick = interactions::controlSwitchContent
+        )
     }
 }
 
@@ -111,6 +141,21 @@ private fun ReviewTab(
         ),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
         onClick = onClick,
+        content = content
+    )
+}
+
+@Composable
+fun ControlItemVisibility(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    content: @Composable AnimatedVisibilityScope.() -> Unit
+) {
+    AnimatedVisibility(
+        modifier = modifier.fillMaxWidth(),
+        visible = isVisible,
+        enter = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
+        exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500)),
         content = content
     )
 }
