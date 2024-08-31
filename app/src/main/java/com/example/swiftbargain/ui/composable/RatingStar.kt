@@ -27,9 +27,15 @@ fun RatingStar(
     innerRadiusFraction: Float = 0.25f,
     outlineColor: Color = MaterialTheme.colors.textLight,
     color: Color = MaterialTheme.colors.yellow,
+    isOnClickOn: Boolean = false,
     onClick: () -> Unit = {}
 ) {
-    Canvas(modifier = modifier.clickable { onClick() }) {
+    Canvas(
+        modifier = if (isOnClickOn) modifier.clickable(
+            enabled = true,
+            onClick = onClick
+        ) else modifier
+    ) {
         val cx = size.width / 2
         val cy = size.height / 2
         val outerRadius = min(size.width, size.height) * outerRadiusFraction

@@ -15,7 +15,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
 import com.example.swiftbargain.navigation.ProductReviews
-import com.example.swiftbargain.navigation.ReviewsParam
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
@@ -48,9 +47,7 @@ fun ProductDetailsScreen(
     EventHandler(effects = viewModel.event) { events, scope ->
         when (events) {
             ProductDetailsEvents.NavigateToBack -> navController.popBackStack()
-            ProductDetailsEvents.NavigateToReviews -> navController.navigate(
-                ProductReviews(ReviewsParam(state.reviews))
-            )
+            ProductDetailsEvents.NavigateToReviews -> navController.navigate(ProductReviews(state.product.id))
 
             ProductDetailsEvents.AddToCartSuccessfully -> snackBar.showSuccess(
                 UiConstants.ADD_TO_CART_SUCCESS,
