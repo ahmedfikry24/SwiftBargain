@@ -58,9 +58,16 @@ fun HomeScreen(
     }
     EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
-            is HomeEvents.GoToSale -> navController.navigate(Sale(event.id, event.title, event.url))
-            is HomeEvents.GoToCategory -> navController.navigate(Category(event.id))
-            is HomeEvents.GoToProductDetails -> navController.navigate(ProductDetails(event.id))
+            is HomeEvents.NavigateToSale -> navController.navigate(
+                Sale(
+                    event.id,
+                    event.title,
+                    event.url
+                )
+            )
+
+            is HomeEvents.NavigateToCategory -> navController.navigate(Category(event.id))
+            is HomeEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
             HomeEvents.NavigateToFavorites -> navController.navigate(Favorites)
         }
     }

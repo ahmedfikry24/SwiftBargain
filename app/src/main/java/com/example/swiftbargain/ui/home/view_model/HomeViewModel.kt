@@ -4,7 +4,6 @@ import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.SaleAdDto
 import com.example.swiftbargain.data.repository.Repository
-import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
@@ -28,7 +27,7 @@ class HomeViewModel @Inject constructor(
                 )
             },
             ::dataSuccess,
-            ::dataError
+            { dataError() }
         )
     }
 
@@ -36,43 +35,43 @@ class HomeViewModel @Inject constructor(
         _state.update { value ->
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
-                saleAds = (data[SALE_ADS] as List<SaleAdDto>).map { it.toUiState() },
+                saleAds = (data[SALE_ADS] as List<*>).map { (it as SaleAdDto).toUiState() },
 
-                categories = (data[CATEGORIES] as List<CategoryDto>).map { it.toUiState() },
+                categories = (data[CATEGORIES] as List<*>).map { (it as CategoryDto).toUiState() },
 
-                flashSale = (data[PRODUCTS] as List<ProductDto>)
+                flashSale = (data[PRODUCTS] as List<*>)
                     .filter {
-                        (it.discountPercentage.toDoubleOrNull() ?: 1.0) >= 50.0
+                        ((it as ProductDto).discountPercentage.toDoubleOrNull() ?: 1.0) >= 50.0
                     }
-                    .map { it.toUiState() }.take(5),
+                    .map { (it as ProductDto).toUiState() }.take(5),
 
-                megaSale = (data[PRODUCTS] as List<ProductDto>)
+                megaSale = (data[PRODUCTS] as List<*>)
                     .filter {
-                        (it.discountPercentage.toDoubleOrNull() ?: 1.0) < 50.0
+                        ((it as ProductDto).discountPercentage.toDoubleOrNull() ?: 1.0) < 50.0
                     }
-                    .map { it.toUiState() }.take(5),
+                    .map { (it as ProductDto).toUiState() }.take(5),
 
-                recommendedProducts = (data[PRODUCTS] as List<ProductDto>)
-                    .filterNot { it.recommended }
-                    .map { it.toUiState() }.take(8)
+                recommendedProducts = (data[PRODUCTS] as List<*>)
+                    .filterNot { (it as ProductDto).recommended }
+                    .map { (it as ProductDto).toUiState() }.take(8)
             )
         }
     }
 
-    private fun dataError(error: BaseError) {
+    private fun dataError() {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
 
     override fun onClickSale(id: String, title: String, url: String) {
-        sendEvent(HomeEvents.GoToSale(id, title, url))
+        sendEvent(HomeEvents.NavigateToSale(id, title, url))
     }
 
     override fun onClickCategory(id: String) {
-        sendEvent(HomeEvents.GoToCategory(id))
+        sendEvent(HomeEvents.NavigateToCategory(id))
     }
 
     override fun onClickProduct(id: String) {
-        sendEvent(HomeEvents.GoToProductDetails(id))
+        sendEvent(HomeEvents.NavigateToProductDetails(id))
     }
 
     override fun onClickFavorites() {
