@@ -1,11 +1,10 @@
 package com.example.swiftbargain.data.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class UserInfoDto(
-    val id: String,
-    val name: String?,
-    val email: String?
-) : Parcelable
+    val id: String = "",
+    val name: String? = null,
+    val email: String? = null
+)

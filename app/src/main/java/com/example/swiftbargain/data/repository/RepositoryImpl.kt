@@ -211,6 +211,23 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addProductReview(
+        uid: String,
+        productId: String,
+        review: ReviewDto
+    ): ReviewDto {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(USERS).document(uid).get().await()
+            val user = result.toObject(UserInfoDto::class.java)
+            val updatedReviewInfo = review.copy(name = user?.name ?: "", email = user?.email ?: "")
+            fireStore.collection(PRODUCTS)
+                .document(productId).collection(REVIEWS)
+                .add(updatedReviewInfo)
+                .await()
+            updatedReviewInfo
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
