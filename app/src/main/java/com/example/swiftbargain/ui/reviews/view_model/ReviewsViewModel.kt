@@ -56,7 +56,7 @@ class ReviewsViewModel @Inject constructor(
         _state.update { value ->
             value.copy(
                 selectedFilter = filter,
-                filteredReviews = value.allReviews.filter { if (filter != -1) it.rating.toInt() == filter else true }
+                filteredReviews = value.allReviews.filter { if (filter != -1) it.rating.toInt() == filter.inc() else true }
             )
         }
     }
