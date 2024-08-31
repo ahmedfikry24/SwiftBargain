@@ -6,10 +6,13 @@ import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.ProductReviews
 import com.example.swiftbargain.ui.base.BaseViewModel
-import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
+import com.example.swiftbargain.ui.utils.validateRequireFields
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +27,7 @@ class ReviewsViewModel @Inject constructor(
     }
 
     override fun getReviews() {
-        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
+        _state.update { it.copy(contentStatus = ReviewsUiState.ReviewContentStatus.LOADING) }
         tryExecute(
             { repository.getProductReviews(args.id) },
             ::reviewsSuccess,
@@ -36,7 +39,7 @@ class ReviewsViewModel @Inject constructor(
         val uiReviews = review.map { it.toUiState() }
         _state.update { value ->
             value.copy(
-                contentStatus = ContentStatus.VISIBLE,
+                contentStatus = ReviewsUiState.ReviewContentStatus.VISIBLE,
                 allReviews = uiReviews,
                 filteredReviews = uiReviews
             )
@@ -45,7 +48,7 @@ class ReviewsViewModel @Inject constructor(
 
 
     private fun reviewsError() {
-        _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        _state.update { it.copy(contentStatus = ReviewsUiState.ReviewContentStatus.REVIEWS_FAILURE) }
     }
 
     override fun onClickBack() {
@@ -65,4 +68,55 @@ class ReviewsViewModel @Inject constructor(
         _state.update { it.copy(isReviewsContentVisible = !it.isReviewsContentVisible) }
     }
 
+    override fun onSelectReviewRate(rate: Int) {
+        _state.update { it.copy(selectedReviewRate = rate) }
+    }
+
+    override fun onChangeReview(review: String) {
+        _state.update { it.copy(reviewComment = review) }
+    }
+
+    override fun onClickAddReview() {
+        if (validateReviewComment()) {
+            _state.update { it.copy(contentStatus = ReviewsUiState.ReviewContentStatus.LOADING) }
+            tryExecute(
+                {
+                    val uid = repository.getUserUid().first()
+                    repository.addProductReview(
+                        uid, args.id, ReviewDto(
+                            rating = state.value.selectedReviewRate.toString(),
+                            comment = state.value.reviewComment,
+                            date = LocalDateTime.now()
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        )
+                    )
+                },
+                ::addReviewSuccess,
+                { addReviewError() }
+            )
+        }
+    }
+
+
+    private fun addReviewSuccess(review: ReviewDto) {
+        _state.update {
+            it.copy(
+                contentStatus = ReviewsUiState.ReviewContentStatus.VISIBLE,
+                allReviews = it.allReviews.toMutableList().apply {
+                    add(review.toUiState())
+                },
+                isReviewsContentVisible = !it.isReviewsContentVisible
+            )
+        }
+    }
+
+    private fun addReviewError() {
+        _state.update { it.copy(contentStatus = ReviewsUiState.ReviewContentStatus.ADD_REVIEW_FAILURE) }
+    }
+
+    private fun validateReviewComment(): Boolean {
+        val comment = state.value.reviewComment.validateRequireFields()
+        _state.update { it.copy(reviewCommentError = !comment) }
+        return comment
+    }
 }
