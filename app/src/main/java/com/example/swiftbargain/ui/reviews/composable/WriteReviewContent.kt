@@ -38,6 +38,7 @@ fun WriteReviewContent(
         ) {
             item {
                 PrimaryAppbar(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                     title = stringResource(R.string.write_review),
                     onClickBack = interactions::controlSwitchContent
                 )

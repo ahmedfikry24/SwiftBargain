@@ -42,4 +42,7 @@ data class ProductDetails(val id: String)
 data class ProductReviews(val id: String)
 
 @Serializable
+data object Favorites
+
+@Serializable
 object Search

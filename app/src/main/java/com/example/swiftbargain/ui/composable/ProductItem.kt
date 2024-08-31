@@ -11,19 +11,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.shared_ui_state.ProductUiState
@@ -33,6 +39,8 @@ fun ProductItem(
     modifier: Modifier = Modifier,
     item: ProductUiState,
     isRateVisible: Boolean = true,
+    isFavIconVisible: Boolean = false,
+    onClickFavIcon: (String) -> Unit = {},
     onClick: (String) -> Unit
 ) {
     Box(
@@ -94,6 +102,20 @@ fun ProductItem(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colors.red,
                 )
+                if (isFavIconVisible)
+                    IconButton(
+                        modifier = Modifier.padding(start = MaterialTheme.spacing.space8),
+                        onClick = { onClickFavIcon(item.id) },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colors.background,
+                            contentColor = MaterialTheme.colors.red
+                        )
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_favorite_fill),
+                            contentDescription = null
+                        )
+                    }
             }
         }
     }

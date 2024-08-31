@@ -75,6 +75,10 @@ class HomeViewModel @Inject constructor(
         sendEvent(HomeEvents.GoToProductDetails(id))
     }
 
+    override fun onClickFavorites() {
+        sendEvent(HomeEvents.NavigateToFavorites)
+    }
+
     companion object {
         const val SALE_ADS = "saleAd"
         const val CATEGORIES = "categories"

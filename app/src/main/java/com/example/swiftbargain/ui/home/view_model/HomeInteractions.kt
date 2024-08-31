@@ -5,4 +5,5 @@ interface HomeInteractions {
     fun onClickSale(id: String, title: String, url: String)
     fun onClickCategory(id: String)
     fun onClickProduct(id: String)
+    fun onClickFavorites()
 }
