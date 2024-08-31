@@ -6,4 +6,5 @@ interface HomeInteractions {
     fun onClickCategory(id: String)
     fun onClickProduct(id: String)
     fun onClickFavorites()
+    fun onClickNotifications()
 }

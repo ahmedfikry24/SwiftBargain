@@ -31,8 +31,8 @@ import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.ProductItem
-import com.example.swiftbargain.ui.composable.SearchBar
 import com.example.swiftbargain.ui.home.compsable.Carousal
+import com.example.swiftbargain.ui.home.compsable.HomeAppbar
 import com.example.swiftbargain.ui.home.compsable.HomeCategories
 import com.example.swiftbargain.ui.home.compsable.HomeSaleSection
 import com.example.swiftbargain.ui.home.view_model.HomeEvents
@@ -58,10 +58,18 @@ fun HomeScreen(
     }
     EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
-            is HomeEvents.GoToSale -> navController.navigate(Sale(event.id, event.title, event.url))
-            is HomeEvents.GoToCategory -> navController.navigate(Category(event.id))
-            is HomeEvents.GoToProductDetails -> navController.navigate(ProductDetails(event.id))
+            is HomeEvents.NavigateToSale -> navController.navigate(
+                Sale(
+                    event.id,
+                    event.title,
+                    event.url
+                )
+            )
+
+            is HomeEvents.NavigateToCategory -> navController.navigate(Category(event.id))
+            is HomeEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
             HomeEvents.NavigateToFavorites -> navController.navigate(Favorites)
+            HomeEvents.NavigateToNotifications -> Unit
         }
     }
     HomeContent(state = state, interactions = viewModel)
@@ -82,12 +90,9 @@ private fun HomeContent(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                SearchBar(
-                    value = state.search,
-                    onClickKeyboardDone = {},
-                    onChangeValue = {},
+                HomeAppbar(
                     onClickFavourite = interactions::onClickFavorites,
-                    onClickNotification = {}
+                    onClickNotification = interactions::onClickNotifications
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
