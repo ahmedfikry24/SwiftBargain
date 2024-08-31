@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
 import com.example.swiftbargain.navigation.Category
+import com.example.swiftbargain.navigation.Favorites
 import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.navigation.Sale
 import com.example.swiftbargain.ui.composable.Banner
@@ -60,6 +61,7 @@ fun HomeScreen(
             is HomeEvents.GoToSale -> navController.navigate(Sale(event.id, event.title, event.url))
             is HomeEvents.GoToCategory -> navController.navigate(Category(event.id))
             is HomeEvents.GoToProductDetails -> navController.navigate(ProductDetails(event.id))
+            HomeEvents.NavigateToFavorites -> navController.navigate(Favorites)
         }
     }
     HomeContent(state = state, interactions = viewModel)
@@ -84,7 +86,7 @@ private fun HomeContent(
                     value = state.search,
                     onClickKeyboardDone = {},
                     onChangeValue = {},
-                    onClickFavourite = {},
+                    onClickFavourite = interactions::onClickFavorites,
                     onClickNotification = {}
                 )
             }
