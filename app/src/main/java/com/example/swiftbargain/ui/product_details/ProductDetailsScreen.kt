@@ -74,103 +74,106 @@ private fun ProductDetailsContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-        LazyColumn(
+        Column(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
         ) {
-            item {
-                PrimaryAppbar(
-                    title = stringResource(R.string.details),
-                    onClickBack = interactions::onClickBack
-                )
-            }
-            item { DetailsCarousal(imagesUrl = state.product.url) }
-            item {
-                DetailsTitle(
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                    title = state.product.title,
-                    isFavorite = state.isFavorite,
-                    rate = state.product.rate.toFloat(),
-                    onCLickFavorite = interactions::onClickFavorite
-                )
-            }
-            item {
-                Text(
-                    modifier = Modifier.padding(
-                        start = MaterialTheme.spacing.space16,
-                        top = MaterialTheme.spacing.space16
-                    ),
-                    text = "$ ${state.product.priceAfterDiscount}",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colors.primary
-                )
-            }
-            item {
-                if (state.product.sizes.isNotEmpty())
-                    DetailsSizes(
-                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                        state = state,
-                        onClickSize = interactions::onClickSize
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16)
+            ) {
+                item {
+                    PrimaryAppbar(
+                        title = stringResource(R.string.details),
+                        onClickBack = interactions::onClickBack
                     )
-            }
-            item {
-                if (state.product.colors.isNotEmpty())
-                    DetailsColors(
+                }
+                item { DetailsCarousal(imagesUrl = state.product.url) }
+                item {
+                    DetailsTitle(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                        state = state,
-                        onClickColor = interactions::onCLickColor
+                        title = state.product.title,
+                        isFavorite = state.isFavorite,
+                        rate = state.product.rate.toFloat(),
+                        onCLickFavorite = interactions::onClickFavorite
                     )
-            }
+                }
+                item {
+                    Text(
+                        modifier = Modifier.padding(
+                            start = MaterialTheme.spacing.space16,
+                            top = MaterialTheme.spacing.space16
+                        ),
+                        text = "$ ${state.product.priceAfterDiscount}",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+                item {
+                    if (state.product.sizes.isNotEmpty())
+                        DetailsSizes(
+                            modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                            state = state,
+                            onClickSize = interactions::onClickSize
+                        )
+                }
+                item {
+                    if (state.product.colors.isNotEmpty())
+                        DetailsColors(
+                            modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                            state = state,
+                            onClickColor = interactions::onCLickColor
+                        )
+                }
 
-            item {
-                if (state.reviews.isNotEmpty())
-                    DetailsReview(
-                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                        state = state,
-                        onClickMore = interactions::onCLickMoreReviews
-                    )
-            }
-            item {
-                if (state.reviews.isEmpty())
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = MaterialTheme.spacing.space16)
-                            .padding(horizontal = MaterialTheme.spacing.space16)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = stringResource(R.string.review_product),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colors.text
-                            )
-                            Text(
-                                modifier = Modifier.clickable { interactions.onCLickMoreReviews() },
-                                text = stringResource(R.string.add_review),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colors.primary
-                            )
-                        }
-                        NoItemFound(
+                item {
+                    if (state.reviews.isNotEmpty())
+                        DetailsReview(
+                            modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                            state = state,
+                            onClickMore = interactions::onCLickMoreReviews
+                        )
+                }
+                item {
+                    if (state.reviews.isEmpty())
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(100.dp)
-                                .align(Alignment.CenterHorizontally),
-                            isVisible = true
-                        )
-                    }
+                                .padding(top = MaterialTheme.spacing.space16)
+                                .padding(horizontal = MaterialTheme.spacing.space16)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.review_product),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colors.text
+                                )
+                                Text(
+                                    modifier = Modifier.clickable { interactions.onCLickMoreReviews() },
+                                    text = stringResource(R.string.add_review),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colors.primary
+                                )
+                            }
+                            NoItemFound(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(100.dp)
+                                    .align(Alignment.CenterHorizontally),
+                                isVisible = true
+                            )
+                        }
+                }
             }
-            item {
-                PrimaryTextButton(
-                    modifier = Modifier.padding(MaterialTheme.spacing.space16),
-                    text = stringResource(R.string.add_to_cart),
-                    onClick = interactions::onCLickAddToCart
-                )
-            }
+            PrimaryTextButton(
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space16),
+                text = stringResource(R.string.add_to_cart),
+                onClick = interactions::onCLickAddToCart
+            )
         }
     }
     ContentError(isVisible = state.contentStatus == ContentStatus.FAILURE, onTryAgain = {})
