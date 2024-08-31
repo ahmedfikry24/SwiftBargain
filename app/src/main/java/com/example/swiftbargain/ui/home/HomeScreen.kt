@@ -31,8 +31,8 @@ import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.ProductItem
-import com.example.swiftbargain.ui.composable.SearchBar
 import com.example.swiftbargain.ui.home.compsable.Carousal
+import com.example.swiftbargain.ui.home.compsable.HomeAppbar
 import com.example.swiftbargain.ui.home.compsable.HomeCategories
 import com.example.swiftbargain.ui.home.compsable.HomeSaleSection
 import com.example.swiftbargain.ui.home.view_model.HomeEvents
@@ -82,10 +82,7 @@ private fun HomeContent(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                SearchBar(
-                    value = state.search,
-                    onClickKeyboardDone = {},
-                    onChangeValue = {},
+                HomeAppbar(
                     onClickFavourite = interactions::onClickFavorites,
                     onClickNotification = {}
                 )
