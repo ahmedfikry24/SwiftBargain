@@ -6,7 +6,6 @@ import androidx.navigation.toRoute
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.Sale
-import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
@@ -35,7 +34,7 @@ class SaleViewModel @Inject constructor(
         tryExecute(
             { repository.getSaleProducts(args.id, null) },
             ::productsSuccess,
-            ::productsError
+            { productsError() }
         )
     }
 
@@ -57,7 +56,7 @@ class SaleViewModel @Inject constructor(
         tryExecute(
             { repository.getSaleProducts(args.id, lastItemId) },
             ::moreProductsSuccess,
-            ::productsError
+            { productsError() }
         )
     }
 
@@ -73,7 +72,7 @@ class SaleViewModel @Inject constructor(
         }
     }
 
-    private fun productsError(error: BaseError) {
+    private fun productsError() {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
 
@@ -107,7 +106,7 @@ class SaleViewModel @Inject constructor(
         tryExecute(
             { repository.searchSaleProducts(args.id, state.value.search) },
             ::searchSuccess,
-            ::searchError
+            { searchError() }
         )
     }
 
@@ -120,7 +119,7 @@ class SaleViewModel @Inject constructor(
         }
     }
 
-    private fun searchError(error: BaseError) {
+    private fun searchError() {
         _state.update { it.copy(searchContentStatus = ContentStatus.FAILURE) }
     }
 
