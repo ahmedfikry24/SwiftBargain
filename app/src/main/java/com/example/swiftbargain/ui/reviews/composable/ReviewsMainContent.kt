@@ -62,6 +62,7 @@ fun ReviewsMainContent(
             ) {
                 item {
                     PrimaryAppbar(
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                         title = stringResource(R.string.reviews),
                         onClickBack = interactions::onClickBack
                     )
