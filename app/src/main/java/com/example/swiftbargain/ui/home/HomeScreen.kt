@@ -69,6 +69,7 @@ fun HomeScreen(
             is HomeEvents.NavigateToCategory -> navController.navigate(Category(event.id))
             is HomeEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
             HomeEvents.NavigateToFavorites -> navController.navigate(Favorites)
+            HomeEvents.NavigateToNotifications -> Unit
         }
     }
     HomeContent(state = state, interactions = viewModel)
@@ -91,7 +92,7 @@ private fun HomeContent(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 HomeAppbar(
                     onClickFavourite = interactions::onClickFavorites,
-                    onClickNotification = {}
+                    onClickNotification = interactions::onClickNotifications
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
