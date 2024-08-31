@@ -16,7 +16,6 @@ import com.example.swiftbargain.ui.reviews.composable.WriteReviewContent
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsInteractions
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsUiState
 import com.example.swiftbargain.ui.reviews.view_model.ReviewsViewModel
-import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
 
 @Composable
@@ -37,8 +36,8 @@ private fun ReviewsContent(
     state: ReviewsUiState,
     interactions: ReviewsInteractions
 ) {
-    ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
-    ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
+    ContentLoading(isVisible = state.contentStatus == ReviewsUiState.ReviewContentStatus.LOADING)
+    ContentVisibility(isVisible = state.contentStatus == ReviewsUiState.ReviewContentStatus.VISIBLE) {
         Crossfade(
             modifier = Modifier.fillMaxSize(),
             targetState = state.isReviewsContentVisible,
@@ -51,7 +50,11 @@ private fun ReviewsContent(
         }
     }
     ContentError(
-        isVisible = state.contentStatus == ContentStatus.FAILURE,
+        isVisible = state.contentStatus == ReviewsUiState.ReviewContentStatus.REVIEWS_FAILURE,
         onTryAgain = interactions::getReviews
+    )
+    ContentError(
+        isVisible = state.contentStatus == ReviewsUiState.ReviewContentStatus.ADD_REVIEW_FAILURE,
+        onTryAgain = interactions::onClickAddReview
     )
 }
