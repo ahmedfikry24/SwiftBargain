@@ -52,7 +52,7 @@ class ReviewsViewModel @Inject constructor(
     }
 
     override fun onClickBack() {
-
+        sendEvent(ReviewsEvents.NavigateToBack)
     }
 
     override fun onClickFilterReviews(filter: Int) {
@@ -108,6 +108,7 @@ class ReviewsViewModel @Inject constructor(
                 isReviewsContentVisible = !it.isReviewsContentVisible
             )
         }
+        sendEvent(ReviewsEvents.ReviewAddedSuccess)
     }
 
     private fun addReviewError() {

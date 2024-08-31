@@ -9,4 +9,5 @@ object UiConstants {
     const val REGISTRATION_FAILED = "registration failed, try to register again"
     const val EMAIL_ALREADY_USED = "this email address is already used by another account"
     const val ADD_TO_CART_SUCCESS = "add to cart successfully"
+    const val ADD_REVIEW_SUCCESS = "review added successfully"
 }
