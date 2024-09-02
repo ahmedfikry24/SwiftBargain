@@ -1,12 +1,5 @@
 package com.example.swiftbargain.ui.sale.composable
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +18,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.composable.ControlItemVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
@@ -61,7 +55,7 @@ fun SaleAppBar(
                     contentDescription = null
                 )
             }
-            ControlSearchItemVisibility(isVisible = isSearchVisible) {
+            ControlItemVisibility(isVisible = isSearchVisible) {
                 PrimaryTextField(
                     modifier = Modifier.weight(1f),
                     value = searchText,
@@ -71,7 +65,7 @@ fun SaleAppBar(
                     onChangeValue = onChangeSearch
                 )
             }
-            ControlSearchItemVisibility(isVisible = !isSearchVisible) {
+            ControlItemVisibility(isVisible = !isSearchVisible) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
@@ -79,7 +73,7 @@ fun SaleAppBar(
                 )
             }
         }
-        ControlSearchItemVisibility(isVisible = !isSearchVisible) {
+        ControlItemVisibility(isVisible = !isSearchVisible) {
             IconButton(
                 colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colors.textGrey),
                 onClick = onClickSearch
@@ -91,20 +85,4 @@ fun SaleAppBar(
             }
         }
     }
-}
-
-
-@Composable
-private fun ControlSearchItemVisibility(
-    modifier: Modifier = Modifier,
-    isVisible: Boolean,
-    content: @Composable (AnimatedVisibilityScope.() -> Unit)
-) {
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = isVisible,
-        enter = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
-        exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500)),
-        content = content
-    )
 }
