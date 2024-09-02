@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lottie)
     implementation(libs.coil.compose)
+    implementation(libs.accompanist.permissions)
 
 
     // firebase
