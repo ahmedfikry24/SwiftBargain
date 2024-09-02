@@ -64,47 +64,47 @@ private fun ExploreContent(
                 modifier = Modifier.fillMaxSize(),
                 state = scrollState,
                 columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16)
+                contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16),
             ) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     ExploreAppBar(
                         isSearchVisible = state.isSearchVisible,
                         search = state.searchValue,
-                        onClickSearchIcon = {},
-                        onClickBack = {},
-                        onClickMic = {},
-                        onChangeSearch = {}
+                        onClickSearchIcon = interactions::controlSearchVisibility,
+                        onClickBack = interactions::controlSearchVisibility,
+                        onClickMic = interactions::onClickMic,
+                        onChangeSearch = interactions::onChangeSearch
                     )
                 }
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     ControlItemVisibility(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                        isVisible = !state.isSearchVisible
+                        isVisible = !state.isSearchVisible && state.manCategories.isNotEmpty()
                     ) {
                         ExploreCategorySection(
                             title = stringResource(R.string.man_fashion),
                             categoryList = state.manCategories,
-                            onClickCategory = { _, _ -> }
+                            onClickCategory = interactions::onClickCategory
                         )
                     }
                 }
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     ControlItemVisibility(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
-                        isVisible = !state.isSearchVisible
+                        isVisible = !state.isSearchVisible && state.womanCategories.isNotEmpty()
                     ) {
                         ExploreCategorySection(
                             title = stringResource(R.string.woman_fashion),
                             categoryList = state.womanCategories,
-                            onClickCategory = { _, _ -> }
+                            onClickCategory = interactions::onClickCategory
                         )
                     }
                 }
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     ControlItemVisibility(
-                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.space16),
                         isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.LOADING
                     ) {
                         ContentLoading(isVisible = true)
@@ -112,25 +112,29 @@ private fun ExploreContent(
                 }
                 items(state.searchProducts) { product ->
                     ControlItemVisibility(
-                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.space8),
+                        modifier = Modifier.padding(MaterialTheme.spacing.space16),
                         isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.VISIBLE
                     ) {
                         ProductItem(
                             item = product,
-                            onClick = {}
+                            onClick = interactions::onClickProduct
                         )
                     }
                 }
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     ControlItemVisibility(
-                        modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
                         isVisible = state.isSearchVisible && state.searchContentStatus == ContentStatus.FAILURE
                     ) {
-                        ContentError(isVisible = true, onTryAgain = {})
+                        ContentError(isVisible = true, onTryAgain = interactions::getSearchResult)
                     }
                 }
             }
         }
     }
+    ContentError(
+        isVisible = state.contentStatus == ContentStatus.FAILURE,
+        onTryAgain = interactions::getCategories
+    )
 }
