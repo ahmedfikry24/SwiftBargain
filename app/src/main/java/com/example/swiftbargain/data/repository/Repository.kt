@@ -39,5 +39,6 @@ interface Repository {
     suspend fun getAllCartProducts(): List<CartProductEntity>
     suspend fun removeProductFromCart(id: String)
     suspend fun addProductReview(uid: String, productId: String, review: ReviewDto): ReviewDto
+    suspend fun searchProducts(itemName: String): List<ProductDto>
     //endregion
 }
