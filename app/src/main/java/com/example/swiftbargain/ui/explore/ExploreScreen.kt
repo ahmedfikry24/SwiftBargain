@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,10 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,6 +36,7 @@ import com.example.swiftbargain.ui.composable.ScrollToFirstItemFab
 import com.example.swiftbargain.ui.explore.composable.ExploreAppBar
 import com.example.swiftbargain.ui.explore.composable.ExploreCategorySection
 import com.example.swiftbargain.ui.explore.composable.rememberMicPermission
+import com.example.swiftbargain.ui.explore.composable.searchVoiceListener
 import com.example.swiftbargain.ui.explore.view_model.ExploreInteractions
 import com.example.swiftbargain.ui.explore.view_model.ExploreUiState
 import com.example.swiftbargain.ui.explore.view_model.ExploreViewModel
@@ -64,8 +69,24 @@ private fun ExploreContent(
         val scrollState = rememberLazyGridState()
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
+        var isListening by remember { mutableStateOf(false) }
         val micPermission = rememberMicPermission(
-            onGranted = {},
+            onGranted = {
+                if (!isListening) {
+                    isListening = true
+                    searchVoiceListener(
+                        context = context,
+                        onResult = { text ->
+                            interactions.onChangeSearch(text)
+                            isListening = false
+                        },
+                        onError = { message ->
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            isListening = false
+                        }
+                    )
+                }
+            },
             goToSettings = { context.getToSettings() }
         )
         ScrollToFirstItemFab(
