@@ -1,15 +1,6 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.gms.google.service)
-    alias(libs.plugins.hilt.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -18,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.swiftbargain"
-        minSdk = 28
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -28,6 +19,7 @@ android {
             useSupportLibrary = true
         }
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -36,24 +28,7 @@ android {
                 "proguard-rules.pro"
             )
         }
-        forEach {
-            val properties = Properties()
-            properties.load(project.rootProject.file("local.properties").inputStream())
-
-            it.buildConfigField("String", "clientId", "\"${properties.getProperty("clientId")}\"")
-            it.resValue("string", "FACEBOOK_APP_ID", properties.getProperty("FACEBOOK_APP_ID"))
-            it.resValue(
-                "string",
-                "FACEBOOK_CLIENT_TOKEN",
-                properties.getProperty("FACEBOOK_CLIENT_TOKEN")
-            )
-        }
     }
-
-    buildFeatures {
-        buildConfig = true
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -64,6 +39,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -71,11 +49,8 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -91,42 +66,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.lottie)
-    implementation(libs.coil.compose)
-    implementation(libs.accompanist.permissions)
-
-
-    // firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
-    implementation(libs.play.services.auth)
-    implementation(libs.firebase.firestore)
-
-    //facebook sdk
-    implementation(libs.facebook.login)
-
-    //navigation
-    implementation(libs.androidx.navigation.compose)
-
-    // view_model
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    //hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    // data store
-    implementation(libs.androidx.datastore.preferences)
-
-    // room DB
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
-
 }
