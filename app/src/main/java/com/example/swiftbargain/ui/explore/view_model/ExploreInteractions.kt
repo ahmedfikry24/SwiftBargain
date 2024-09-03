@@ -6,6 +6,5 @@ interface ExploreInteractions {
     fun controlSearchVisibility()
     fun onChangeSearch(text: String)
     fun getSearchResult()
-    fun onClickMic()
     fun onClickProduct(id: String)
 }

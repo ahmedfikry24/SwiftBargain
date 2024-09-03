@@ -27,6 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.Category
+import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
@@ -37,6 +39,7 @@ import com.example.swiftbargain.ui.explore.composable.ExploreAppBar
 import com.example.swiftbargain.ui.explore.composable.ExploreCategorySection
 import com.example.swiftbargain.ui.explore.composable.rememberMicPermission
 import com.example.swiftbargain.ui.explore.composable.searchVoiceListener
+import com.example.swiftbargain.ui.explore.view_model.ExploreEvents
 import com.example.swiftbargain.ui.explore.view_model.ExploreInteractions
 import com.example.swiftbargain.ui.explore.view_model.ExploreUiState
 import com.example.swiftbargain.ui.explore.view_model.ExploreViewModel
@@ -53,7 +56,16 @@ fun ExploreScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EventHandler(effects = viewModel.event) { event, _ ->
+        when (event) {
+            is ExploreEvents.NavigateToCategory -> navController.navigate(
+                Category(
+                    event.id,
+                    event.label
+                )
+            )
 
+            is ExploreEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
+        }
     }
     ExploreContent(state = state, interactions = viewModel)
 }

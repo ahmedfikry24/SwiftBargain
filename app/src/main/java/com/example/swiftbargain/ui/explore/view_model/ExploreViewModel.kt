@@ -58,7 +58,7 @@ class ExploreViewModel @Inject constructor(
     }
 
     override fun onClickCategory(id: String, label: String) {
-
+        sendEvent(ExploreEvents.NavigateToCategory(id, label))
     }
 
     override fun controlSearchVisibility() {
@@ -102,12 +102,8 @@ class ExploreViewModel @Inject constructor(
         _state.update { it.copy(searchContentStatus = ContentStatus.FAILURE) }
     }
 
-    override fun onClickMic() {
-
-    }
-
     override fun onClickProduct(id: String) {
-
+        sendEvent(ExploreEvents.NavigateToProductDetails(id))
     }
 
 }
