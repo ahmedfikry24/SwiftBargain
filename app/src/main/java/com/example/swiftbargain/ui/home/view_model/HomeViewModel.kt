@@ -66,8 +66,8 @@ class HomeViewModel @Inject constructor(
         sendEvent(HomeEvents.NavigateToSale(id, title, url))
     }
 
-    override fun onClickCategory(id: String) {
-        sendEvent(HomeEvents.NavigateToCategory(id))
+    override fun onClickCategory(id: String, label: String) {
+        sendEvent(HomeEvents.NavigateToCategory(id, label))
     }
 
     override fun onClickProduct(id: String) {

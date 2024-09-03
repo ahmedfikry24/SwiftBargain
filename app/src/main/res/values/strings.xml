@@ -56,4 +56,9 @@
     <string name="write_your_review">Write Your Review</string>
     <string name="write_your_review_here">Write your review here</string>
     <string name="favorites">Favorites</string>
+    <string name="man_fashion">Man Fashion</string>
+    <string name="woman_fashion">Woman Fashion</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="this_app_requires_microphone_access_to_perform_voice_searches_please_grant_the_permission">This app requires microphone access to perform voice searches. Please grant the permission.</string>
+    <string name="this_app_needs_microphone_access_for_voice_search_please_allow_access_in_the_settings">This app needs microphone access for voice search. Please allow access in the settings.</string>
 </resources>

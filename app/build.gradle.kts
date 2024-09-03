@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -35,14 +37,16 @@ android {
             )
         }
         forEach {
-            it.buildConfigField(
-                "String",
-                "clientId",
-                "\"931177986261-icudbred62fgn93ouuprf10lu93tg9k0.apps.googleusercontent.com\""
+            val properties = Properties()
+            properties.load(project.rootProject.file("local.properties").inputStream())
 
+            it.buildConfigField("String", "clientId", "\"${properties.getProperty("clientId")}\"")
+            it.resValue("string", "FACEBOOK_APP_ID", properties.getProperty("FACEBOOK_APP_ID"))
+            it.resValue(
+                "string",
+                "FACEBOOK_CLIENT_TOKEN",
+                properties.getProperty("FACEBOOK_CLIENT_TOKEN")
             )
-            it.resValue("string", "FACEBOOK_APP_ID", "372582868869091")
-            it.resValue("string", "FACEBOOK_CLIENT_TOKEN", "105a87fb5058002c9f57101f570e2170")
         }
     }
 
@@ -92,6 +96,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lottie)
     implementation(libs.coil.compose)
+    implementation(libs.accompanist.permissions)
 
 
     // firebase

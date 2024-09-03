@@ -228,6 +228,17 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun searchProducts(itemName: String): List<ProductDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(PRODUCTS)
+                .orderBy(TITLE)
+                .startAt(itemName)
+                .endAt(itemName + "\uf8ff")
+                .get().await()
+            result.toObjects(ProductDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"

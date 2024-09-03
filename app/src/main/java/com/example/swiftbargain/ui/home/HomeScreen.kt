@@ -66,7 +66,13 @@ fun HomeScreen(
                 )
             )
 
-            is HomeEvents.NavigateToCategory -> navController.navigate(Category(event.id))
+            is HomeEvents.NavigateToCategory -> navController.navigate(
+                Category(
+                    event.id,
+                    event.label
+                )
+            )
+
             is HomeEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
             HomeEvents.NavigateToFavorites -> navController.navigate(Favorites)
             HomeEvents.NavigateToNotifications -> Unit

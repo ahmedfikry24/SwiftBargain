@@ -13,9 +13,9 @@ kotlinParcelizeRuntime = "2.0.20-Beta2"
 kotlinxSerializationJson = "1.7.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
-composeBom = "2024.06.00"
+composeBom = "2024.08.00"
 lottie = "6.4.0"
-navigationCompose = "2.8.0-beta06"
+navigationCompose = "2.8.0-rc01"
 splash = "1.0.1"
 firebaseBom = "33.1.2"
 googleService = "4.4.2"
@@ -23,6 +23,7 @@ playServicesAuth = "21.0.0"
 hiltAndroid = "2.50"
 roomRuntime = "2.6.1"
 ksp = "2.0.20-1.0.24"
+accompanistPermissions = "0.35.2-beta"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,7 +60,7 @@ lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" 
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomRuntime" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime" }
-
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
