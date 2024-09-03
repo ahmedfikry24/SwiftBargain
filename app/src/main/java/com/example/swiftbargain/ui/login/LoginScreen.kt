@@ -194,7 +194,9 @@ private fun LoginContent(
 
             item {
                 PrimaryTextButton(
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.space16),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = MaterialTheme.spacing.space16),
                     text = stringResource(R.string.sign_in),
                     onClick = interactions::loginWithEmailAndPassword
                 )

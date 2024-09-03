@@ -54,6 +54,7 @@ fun ForgetPasswordBottomSheet(
                 onChangeValue = onChangeValue
             )
             PrimaryTextButton(
+                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.send),
                 onClick = onSend
             )

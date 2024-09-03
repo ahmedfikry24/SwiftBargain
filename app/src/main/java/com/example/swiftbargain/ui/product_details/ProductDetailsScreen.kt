@@ -170,7 +170,9 @@ private fun ProductDetailsContent(
                 }
             }
             PrimaryTextButton(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space16),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.space16),
                 text = stringResource(R.string.add_to_cart),
                 onClick = interactions::onCLickAddToCart
             )

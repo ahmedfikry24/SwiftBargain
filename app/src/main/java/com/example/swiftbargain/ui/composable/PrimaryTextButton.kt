@@ -1,7 +1,6 @@
 package com.example.swiftbargain.ui.composable
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 
@@ -16,13 +16,15 @@ import com.example.swiftbargain.ui.theme.spacing
 fun PrimaryTextButton(
     modifier: Modifier = Modifier,
     text: String,
+    containerColor: Color = MaterialTheme.colors.primary,
+    contentColor: Color = MaterialTheme.colors.background,
     onClick: () -> Unit
 ) {
     TextButton(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colors.primary,
-            contentColor = MaterialTheme.colors.background
+            containerColor = containerColor,
+            contentColor = contentColor
         ),
         shape = RoundedCornerShape(MaterialTheme.spacing.space4),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
