@@ -1,5 +1,9 @@
 package com.example.swiftbargain.ui.explore
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,12 +31,14 @@ import com.example.swiftbargain.ui.composable.ProductItem
 import com.example.swiftbargain.ui.composable.ScrollToFirstItemFab
 import com.example.swiftbargain.ui.explore.composable.ExploreAppBar
 import com.example.swiftbargain.ui.explore.composable.ExploreCategorySection
+import com.example.swiftbargain.ui.explore.composable.rememberMicPermission
 import com.example.swiftbargain.ui.explore.view_model.ExploreInteractions
 import com.example.swiftbargain.ui.explore.view_model.ExploreUiState
 import com.example.swiftbargain.ui.explore.view_model.ExploreViewModel
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 
 @Composable
@@ -46,6 +53,7 @@ fun ExploreScreen(
     ExploreContent(state = state, interactions = viewModel)
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun ExploreContent(
     state: ExploreUiState,
@@ -55,6 +63,11 @@ private fun ExploreContent(
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
         val scrollState = rememberLazyGridState()
         val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val micPermission = rememberMicPermission(
+            onGranted = {},
+            goToSettings = { context.getToSettings() }
+        )
         ScrollToFirstItemFab(
             modifier = Modifier.fillMaxSize(),
             isFabVisible = scrollState.canScrollBackward,
@@ -72,7 +85,7 @@ private fun ExploreContent(
                         search = state.searchValue,
                         onClickSearchIcon = interactions::controlSearchVisibility,
                         onClickBack = interactions::controlSearchVisibility,
-                        onClickMic = interactions::onClickMic,
+                        onClickMic = { micPermission.launchPermissionRequest() },
                         onChangeSearch = interactions::onChangeSearch
                     )
                 }
@@ -137,4 +150,11 @@ private fun ExploreContent(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
         onTryAgain = interactions::getCategories
     )
+}
+
+private fun Context.getToSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", this.packageName, null)
+    ).also(::startActivity)
 }
