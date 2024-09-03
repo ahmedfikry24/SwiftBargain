@@ -33,7 +33,7 @@ object Account
 data class Sale(val id: String, val title: String, val url: String)
 
 @Serializable
-data class Category(val id: String)
+data class Category(val id: String, val label: String)
 
 @Serializable
 data class ProductDetails(val id: String)
