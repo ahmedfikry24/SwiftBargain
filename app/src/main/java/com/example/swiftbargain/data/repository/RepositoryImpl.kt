@@ -239,6 +239,22 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getCategoryProducts(
+        categoryId: String,
+        lastItemId: String?
+    ): List<ProductDto> {
+        return wrapApiCall(connectivityChecker) {
+            var result = fireStore.collection(PRODUCTS)
+                .whereEqualTo(CATEGORY_ID, categoryId)
+                .orderBy(ID)
+
+            if (lastItemId != null) {
+                result = result.startAfter(lastItemId)
+            }
+            result.limit(10L).get().await().toObjects(ProductDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
@@ -249,5 +265,6 @@ class RepositoryImpl @Inject constructor(
         private const val SALE_ID = "sale_id"
         private const val ID = "id"
         private const val TITLE = "title"
+        private const val CATEGORY_ID = "category_id"
     }
 }
