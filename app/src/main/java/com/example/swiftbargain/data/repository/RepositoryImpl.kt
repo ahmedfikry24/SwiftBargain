@@ -245,7 +245,7 @@ class RepositoryImpl @Inject constructor(
     ): List<ProductDto> {
         return wrapApiCall(connectivityChecker) {
             var result = fireStore.collection(PRODUCTS)
-                .whereEqualTo("category_id", categoryId)
+                .whereEqualTo(CATEGORY_ID, categoryId)
                 .orderBy(ID)
 
             if (lastItemId != null) {
@@ -265,5 +265,6 @@ class RepositoryImpl @Inject constructor(
         private const val SALE_ID = "sale_id"
         private const val ID = "id"
         private const val TITLE = "title"
+        private const val CATEGORY_ID = "category_id"
     }
 }
