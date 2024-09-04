@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.swiftbargain.ui.category.CategoryScreen
 import com.example.swiftbargain.ui.composable.PrimarySnackBar
 import com.example.swiftbargain.ui.composable.UserBottomNavigation
 import com.example.swiftbargain.ui.explore.ExploreScreen
@@ -44,6 +45,7 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<ProductDetails> { ProductDetailsScreen(navController) }
                 composable<ProductReviews> { ReviewsScreen(navController) }
                 composable<Favorites> { FavoritesScreen(navController) }
+                composable<Category> { CategoryScreen(navController) }
             }
         }
     }
