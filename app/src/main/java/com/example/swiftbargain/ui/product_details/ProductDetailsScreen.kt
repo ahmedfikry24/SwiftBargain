@@ -178,5 +178,8 @@ private fun ProductDetailsContent(
             )
         }
     }
-    ContentError(isVisible = state.contentStatus == ContentStatus.FAILURE, onTryAgain = {})
+    ContentError(
+        isVisible = state.contentStatus == ContentStatus.FAILURE,
+        onTryAgain = interactions::getData
+    )
 }
