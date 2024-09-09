@@ -31,8 +31,8 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun loginWithEmailAndPassword() {
-        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         if (validateFields()) {
+            _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
             tryExecute(
                 { repository.loginWithEmailAndPassword(state.value.email, state.value.password) },
                 ::signInSuccess,
