@@ -4,6 +4,7 @@ import android.content.Intent
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.CategoryDto
+import com.example.swiftbargain.data.models.CouponCodeDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
@@ -41,5 +42,6 @@ interface Repository {
     suspend fun addProductReview(uid: String, productId: String, review: ReviewDto): ReviewDto
     suspend fun searchProducts(itemName: String): List<ProductDto>
     suspend fun getCategoryProducts(categoryId: String, lastItemId: String?): List<ProductDto>
+    suspend fun getAllCouponCodes(): List<CouponCodeDto>
     //endregion
 }
