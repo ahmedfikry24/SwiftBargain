@@ -10,7 +10,7 @@ data class CartProductUiState(
     val size: String = "",
     val color: String = "",
     val quantity: String = "",
-    val orderQuantity: String = "1",
+    val orderQuantity: Int = 1,
 )
 
 fun CartProductEntity.toUiState(): CartProductUiState {
@@ -21,7 +21,8 @@ fun CartProductEntity.toUiState(): CartProductUiState {
         color = this.color,
         size = this.size,
         imageUrl = this.imageUrl,
-        quantity = this.quantity
+        quantity = this.quantity,
+        orderQuantity = this.orderQuantity
     )
 }
 
@@ -33,6 +34,7 @@ fun CartProductUiState.toEntity(): CartProductEntity {
         color = this.color,
         size = this.size,
         imageUrl = this.imageUrl,
-        quantity = this.quantity
+        quantity = this.quantity,
+        orderQuantity = this.orderQuantity
     )
 }

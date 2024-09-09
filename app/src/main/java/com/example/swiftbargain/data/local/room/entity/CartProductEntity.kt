@@ -13,4 +13,5 @@ data class CartProductEntity(
     @ColumnInfo val size: String,
     @ColumnInfo val imageUrl: String,
     @ColumnInfo val quantity: String,
+    @ColumnInfo val orderQuantity: Int = 1,
 )

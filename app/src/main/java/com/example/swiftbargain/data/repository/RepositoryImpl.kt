@@ -201,7 +201,17 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getAllCartProducts(): List<CartProductEntity> {
         return wrapApiCall(connectivityChecker) {
-            localDB.cart.getAllProducts()
+            val localProducts = localDB.cart.getAllProducts().toMutableList()
+            localProducts.forEachIndexed { index, product ->
+                val remoteProduct = fireStore.collection(PRODUCTS)
+                    .whereEqualTo(ID, product.id).get().await()
+                    .toObjects(ProductDto::class.java).first()
+
+                localProducts.apply {
+                    this[index] = this[index].copy(quantity = remoteProduct.quantity)
+                }
+            }
+            localProducts
         }
     }
 
