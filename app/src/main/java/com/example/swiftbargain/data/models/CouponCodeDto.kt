@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class CouponCodeDto(
     val id: String = "",
     val code: String = "",
+    val discount: String = "",
 
     @get:PropertyName("code_owner")
     @set:PropertyName("code_owner")
