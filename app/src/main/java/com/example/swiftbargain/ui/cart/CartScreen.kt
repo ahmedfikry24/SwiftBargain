@@ -111,7 +111,7 @@ fun CartContent(
                 PrimaryTextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.check_out),
-                    onClick = {}
+                    onClick = interactions::onClickCheckOut
                 )
             }
         }

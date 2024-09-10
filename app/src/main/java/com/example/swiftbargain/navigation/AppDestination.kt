@@ -24,6 +24,9 @@ object Explore
 object Cart
 
 @Serializable
+data class CartCheckOut(val totalPrice: Int)
+
+@Serializable
 object Offer
 
 @Serializable
