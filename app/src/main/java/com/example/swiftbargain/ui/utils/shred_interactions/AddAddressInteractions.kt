@@ -1,0 +1,3 @@
+package com.example.swiftbargain.ui.utils.shred_interactions
+
+interface AddAddressInteractions
