@@ -66,7 +66,7 @@ class CartViewModel @Inject constructor(
     }
 
     override fun onClickItem(id: String) {
-
+        sendEvent(CartEvents.NavigateToProductDetails(id))
     }
 
     override fun onChangeQuantity(index: Int, quantity: Int) {
@@ -100,6 +100,10 @@ class CartViewModel @Inject constructor(
                 totalPrice = calculateTotalPrice(state.value.products, coupon?.discount?.toInt())
             )
         }
+    }
+
+    override fun onClickCheckOut() {
+        sendEvent(CartEvents.NavigateToCartCheckOut)
     }
 
     companion object {

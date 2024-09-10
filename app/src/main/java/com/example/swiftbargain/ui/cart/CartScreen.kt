@@ -20,8 +20,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.CartCheckOut
+import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.cart.composable.CartDetails
 import com.example.swiftbargain.ui.cart.composable.CartProduct
+import com.example.swiftbargain.ui.cart.view_model.CartEvents
 import com.example.swiftbargain.ui.cart.view_model.CartInteractions
 import com.example.swiftbargain.ui.cart.view_model.CartUiState
 import com.example.swiftbargain.ui.cart.view_model.CartViewModel
@@ -42,7 +45,10 @@ fun CartScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EventHandler(effects = viewModel.event) { event, _ ->
-
+        when (event) {
+            CartEvents.NavigateToCartCheckOut -> navController.navigate(CartCheckOut(state.totalPrice))
+            is CartEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
+        }
     }
     CartContent(state = state, interactions = viewModel)
 }

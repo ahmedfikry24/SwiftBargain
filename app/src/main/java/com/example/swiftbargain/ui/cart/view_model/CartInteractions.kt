@@ -7,4 +7,5 @@ interface CartInteractions {
     fun onChangeQuantity(index: Int, quantity: Int)
     fun onChangeCouponCode(code: String)
     fun checkCouponCode()
+    fun onClickCheckOut()
 }
