@@ -1,13 +1,14 @@
 package com.example.swiftbargain.ui.cart_check_out
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.ui.cart_check_out.composable.ShipToContent
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutInteractions
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutUiState
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutViewModel
@@ -36,8 +37,20 @@ private fun CartCheckOutContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        Crossfade(
+            modifier = Modifier.fillMaxSize(),
+            targetState = state.visibleContent,
+            label = "transition"
+        ) { content ->
+            when (content) {
+                CartCheckOutUiState.VisibleContent.SHIP_TO -> ShipToContent(
+                    state = state,
+                    interactions = interactions
+                )
 
+                CartCheckOutUiState.VisibleContent.PAYMENT -> Unit
+                CartCheckOutUiState.VisibleContent.CHOOSE_CARD -> Unit
+            }
         }
     }
     ContentError(
