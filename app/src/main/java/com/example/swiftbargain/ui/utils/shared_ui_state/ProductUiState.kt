@@ -13,6 +13,7 @@ data class ProductUiState(
     val discountPercentage: String = "",
     val saleId: String = "",
     val rate: String = "",
+    val quantity: String = "",
     val url: List<String> = listOf(),
     val sizes: List<String> = listOf(),
     val colors: List<Long> = listOf()
@@ -32,6 +33,7 @@ fun ProductDto.toUiState(): ProductUiState {
         discountPercentage = this.discountPercentage,
         saleId = this.saleId,
         rate = this.rate,
+        quantity = this.quantity,
         url = this.url,
         sizes = this.sizes,
         colors = this.colors
@@ -55,7 +57,7 @@ fun FavoriteProductEntity.toUiState(): ProductUiState {
     )
 }
 
-fun ProductUiState.toEntity(): FavoriteProductEntity {
+fun ProductUiState.toFavoriteEntity(): FavoriteProductEntity {
     return FavoriteProductEntity(
         id = this.id,
         name = this.title,

@@ -11,8 +11,9 @@ import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
-import com.example.swiftbargain.ui.utils.shared_ui_state.toEntity
+import com.example.swiftbargain.ui.utils.shared_ui_state.toFavoriteEntity
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
+import com.example.swiftbargain.ui.utils.validateRequireFields
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -70,7 +71,7 @@ class ProductDetailsViewModel @Inject constructor(
             if (state.value.isFavorite) {
                 repository.removeFavoriteProduct(value.product.id)
             } else {
-                repository.addFavoriteProduct(value.product.toEntity())
+                repository.addFavoriteProduct(value.product.toFavoriteEntity())
             }
         }
         _state.update { it.copy(isFavorite = !it.isFavorite) }
@@ -90,17 +91,34 @@ class ProductDetailsViewModel @Inject constructor(
 
     override fun onCLickAddToCart() {
         val value = state.value.product
-        viewModelScope.launch {
-            repository.addProductToCart(
-                CartProductEntity(
-                    id = value.id,
-                    name = value.title,
-                    priceAfterDiscount = value.priceAfterDiscount,
-                    imageUrl = value.url.first()
+        if (validateFullProductInfo()) {
+            viewModelScope.launch {
+                repository.addProductToCart(
+                    CartProductEntity(
+                        id = value.id,
+                        name = value.title,
+                        price = value.priceAfterDiscount,
+                        imageUrl = value.url.first(),
+                        color = state.value.selectedColor.toString(),
+                        size = state.value.selectedSize,
+                        quantity = value.quantity
+                    )
                 )
-            )
-            sendEvent(ProductDetailsEvents.AddToCartSuccessfully)
+                sendEvent(ProductDetailsEvents.AddToCartSuccessfully)
+            }
         }
+    }
+
+    private fun validateFullProductInfo(): Boolean {
+        val value = state.value
+        val validateSize = value.selectedSize.validateRequireFields()
+        val validateColor = value.selectedColor != 0L
+
+        if (!validateSize || !validateColor) {
+            sendEvent(ProductDetailsEvents.CompleteProductInfo)
+            return false
+        }
+        return true
     }
 
     companion object {

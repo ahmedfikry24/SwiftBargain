@@ -6,6 +6,7 @@ import com.example.swiftbargain.data.local.room.RoomManager
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.CategoryDto
+import com.example.swiftbargain.data.models.CouponCodeDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
@@ -201,7 +202,17 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getAllCartProducts(): List<CartProductEntity> {
         return wrapApiCall(connectivityChecker) {
-            localDB.cart.getAllProducts()
+            val localProducts = localDB.cart.getAllProducts().toMutableList()
+            localProducts.forEachIndexed { index, product ->
+                val remoteProduct = fireStore.collection(PRODUCTS)
+                    .whereEqualTo(ID, product.id).get().await()
+                    .toObjects(ProductDto::class.java).first()
+
+                localProducts.apply {
+                    this[index] = this[index].copy(quantity = remoteProduct.quantity)
+                }
+            }
+            localProducts
         }
     }
 
@@ -255,12 +266,20 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllCouponCodes(): List<CouponCodeDto> {
+        return wrapApiCall(connectivityChecker) {
+            val result = fireStore.collection(COUPONS).get().await()
+            result.toObjects(CouponCodeDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
         private const val SALE_AD = "sale_ad"
         private const val PRODUCTS = "products"
         private const val REVIEWS = "reviews"
+        private const val COUPONS = "coupons"
 
         private const val SALE_ID = "sale_id"
         private const val ID = "id"
