@@ -1,5 +1,6 @@
 package com.example.swiftbargain.ui.composable
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -18,6 +19,7 @@ fun PrimaryTextButton(
     text: String,
     containerColor: Color = MaterialTheme.colors.primary,
     contentColor: Color = MaterialTheme.colors.background,
+    border: BorderStroke? = null,
     onClick: () -> Unit
 ) {
     TextButton(
@@ -28,6 +30,7 @@ fun PrimaryTextButton(
         ),
         shape = RoundedCornerShape(MaterialTheme.spacing.space4),
         contentPadding = PaddingValues(MaterialTheme.spacing.space16),
+        border = border,
         onClick = onClick
     ) {
         Text(
