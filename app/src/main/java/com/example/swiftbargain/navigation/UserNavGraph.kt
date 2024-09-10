@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.swiftbargain.ui.cart.CartScreen
+import com.example.swiftbargain.ui.cart_check_out.CartCheckOutScreen
 import com.example.swiftbargain.ui.category.CategoryScreen
 import com.example.swiftbargain.ui.composable.PrimarySnackBar
 import com.example.swiftbargain.ui.composable.UserBottomNavigation
@@ -40,6 +41,7 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Home> { HomeScreen(navController) }
                 composable<Explore> { ExploreScreen(navController) }
                 composable<Cart> { CartScreen(navController) }
+                composable<CartCheckOut> { CartCheckOutScreen(navController) }
                 composable<Offer> {}
                 composable<Account> {}
                 composable<Sale> { SaleScreen(navController) }
