@@ -273,6 +273,24 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addUserAddressInfo(address: UserInfoDto.AddressInfo) {
+        wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            fireStore.collection(USERS)
+                .document(currentUserId)
+                .update(ADDRESSES, listOf(address))
+                .await()
+        }
+    }
+
+    override suspend fun getUserAddress(): List<UserInfoDto.AddressInfo> {
+        return wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val result = fireStore.collection(USERS).document(currentUserId).get().await()
+            result.toObject(UserInfoDto::class.java)?.addresses ?: listOf()
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
@@ -285,5 +303,6 @@ class RepositoryImpl @Inject constructor(
         private const val ID = "id"
         private const val TITLE = "title"
         private const val CATEGORY_ID = "category_id"
+        private const val ADDRESSES = "addresses"
     }
 }

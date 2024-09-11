@@ -8,6 +8,7 @@ import com.example.swiftbargain.data.models.CouponCodeDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
+import com.example.swiftbargain.data.models.UserInfoDto
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -43,5 +44,7 @@ interface Repository {
     suspend fun searchProducts(itemName: String): List<ProductDto>
     suspend fun getCategoryProducts(categoryId: String, lastItemId: String?): List<ProductDto>
     suspend fun getAllCouponCodes(): List<CouponCodeDto>
+    suspend fun addUserAddressInfo(address: UserInfoDto.AddressInfo)
+    suspend fun getUserAddress(): List<UserInfoDto.AddressInfo>
     //endregion
 }
