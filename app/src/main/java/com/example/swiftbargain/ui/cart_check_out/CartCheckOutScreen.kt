@@ -55,6 +55,6 @@ private fun CartCheckOutContent(
     }
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
-        onTryAgain = {}
+        onTryAgain = interactions::getAllAddress
     )
 }

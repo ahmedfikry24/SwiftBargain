@@ -1,12 +1,16 @@
 package com.example.swiftbargain.ui.cart_check_out.view_model
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
+import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.repository.Repository
+import com.example.swiftbargain.navigation.CartCheckOut
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.AddAddressUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.toDto
+import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 import com.example.swiftbargain.ui.utils.validateRequireFields
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -19,6 +23,33 @@ class CartCheckOutViewModel
     private val repository: Repository
 ) : BaseViewModel<CartCheckOutUiState, CartCheckOutEvents>(CartCheckOutUiState()),
     CartCheckOutInteractions {
+    private val args = savedStateHandle.toRoute<CartCheckOut>()
+
+    init {
+        getAllAddress()
+    }
+
+    override fun getAllAddress() {
+        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
+        tryExecute(
+            { repository.getUserAddress() },
+            ::allAddressSuccess,
+            ::allAddressError
+        )
+    }
+
+    private fun allAddressSuccess(address: List<UserInfoDto.AddressInfo>) {
+        _state.update { value ->
+            value.copy(
+                contentStatus = ContentStatus.VISIBLE,
+                allAddresses = address.map { it.toUiState() }
+            )
+        }
+    }
+
+    private fun allAddressError(error: BaseError) {
+        _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+    }
 
     override fun onClickBack() {
 
