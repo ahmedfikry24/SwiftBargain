@@ -67,4 +67,14 @@
     <string name="total_price">Total Price</string>
     <string name="check_out">Check Out</string>
     <string name="ship_to">Ship To</string>
+    <string name="first_name">First Name</string>
+    <string name="country">Country</string>
+    <string name="last_name">Last Name</string>
+    <string name="street_address">Street Address</string>
+    <string name="optional">" (optional)"</string>
+    <string name="city">City</string>
+    <string name="region">Region</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="add_address">Add Address</string>
 </resources>
