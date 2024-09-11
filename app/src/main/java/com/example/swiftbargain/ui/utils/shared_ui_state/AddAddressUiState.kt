@@ -1,6 +1,8 @@
 package com.example.swiftbargain.ui.utils.shared_ui_state
 
 data class AddAddressUiState(
+    val country: String = "",
+    val countryError: Boolean = false,
     val firstName: String = "",
     val firstNameError: Boolean = false,
     val lastname: String = "",
