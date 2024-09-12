@@ -64,25 +64,44 @@ class CartCheckOutViewModel
     }
 
     override fun onDeleteAddress(address: AddressUiState) {
-        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
+        _state.update {
+            it.copy(
+                selectedDeleteAddress = address,
+                isDeleteAddressVisible = true
+            )
+        }
+
+    }
+
+    override fun deleteAddress() {
+        _state.update {
+            it.copy(
+                contentStatus = ContentStatus.LOADING,
+                isDeleteAddressVisible = false
+            )
+        }
         tryExecute(
-            { repository.deleteUserAddress(address.toDto()) },
-            { deleteAddressSuccess(address) },
+            { repository.deleteUserAddress(state.value.selectedDeleteAddress.toDto()) },
+            { deleteAddressSuccess() },
             ::deleteAddressError
         )
     }
 
-    private fun deleteAddressSuccess(address: AddressUiState) {
+    private fun deleteAddressSuccess() {
         _state.update { value ->
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
-                allAddresses = value.allAddresses.filter { it != address }
+                allAddresses = value.allAddresses.filter { it != value.selectedDeleteAddress }
             )
         }
     }
 
     private fun deleteAddressError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+    }
+
+    override fun onDismissDeleteAddressDialog() {
+        _state.update { it.copy(isDeleteAddressVisible = false) }
     }
 
     // region add address
@@ -105,10 +124,6 @@ class CartCheckOutViewModel
 
     override fun onChangeCity(city: String) {
         _state.update { it.copy(addAddressState = it.addAddressState.copy(city = city)) }
-    }
-
-    override fun onChangeRegion(region: String) {
-        _state.update { it.copy(addAddressState = it.addAddressState.copy(region = region)) }
     }
 
     override fun onChangeZipCode(code: String) {
@@ -135,6 +150,7 @@ class CartCheckOutViewModel
             it.copy(
                 addAddressState = it.addAddressState.copy(contentStatus = ContentStatus.VISIBLE),
                 isAddAddressVisible = false,
+                allAddresses = it.allAddresses.toMutableList().apply { add(it.addAddressState) }
             )
         }
         _state.update { it.copy(addAddressState = AddressUiState()) }
@@ -150,10 +166,9 @@ class CartCheckOutViewModel
         val name = value.name.validateRequireFields()
         val streetAddress = value.streetAddress.validateRequireFields()
         val city = value.city.validateRequireFields()
-        val region = value.region.validateRequireFields()
         val code = value.zipCode.validateRequireFields()
         val phone = value.phone.validateRequireFields()
-        val hasError = listOf(country, name, streetAddress, code, city, region, phone).any { !it }
+        val hasError = listOf(country, name, streetAddress, code, city, phone).any { !it }
         _state.update {
             it.copy(
                 addAddressState = it.addAddressState.copy(
@@ -161,7 +176,6 @@ class CartCheckOutViewModel
                     nameError = !name,
                     streetAddressError = !streetAddress,
                     cityError = !city,
-                    regionError = !region,
                     zipCodeError = !code,
                     phoneError = !phone
                 )

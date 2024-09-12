@@ -9,4 +9,6 @@ interface CartCheckOutInteractions : AddAddressInteractions {
     fun controlAddAddressVisibility()
     fun onSelectAddress(address: AddressUiState)
     fun onDeleteAddress(address: AddressUiState)
+    fun deleteAddress()
+    fun onDismissDeleteAddressDialog()
 }

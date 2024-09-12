@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutInteractions
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutUiState
 import com.example.swiftbargain.ui.composable.AddressItem
+import com.example.swiftbargain.ui.composable.PrimaryDeleteItemDialog
 import com.example.swiftbargain.ui.composable.ScrollToFirstItemFab
 import com.example.swiftbargain.ui.theme.spacing
 import kotlinx.coroutines.launch
@@ -58,4 +59,9 @@ fun ShipToContent(
         state = state,
         interactions = interactions
     )
+    if (state.isDeleteAddressVisible)
+        PrimaryDeleteItemDialog(
+            onConfirm = interactions::deleteAddress,
+            onCancel = interactions::onDismissDeleteAddressDialog
+        )
 }

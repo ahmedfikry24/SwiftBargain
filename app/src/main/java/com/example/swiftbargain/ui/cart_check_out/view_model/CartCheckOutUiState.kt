@@ -9,7 +9,9 @@ data class CartCheckOutUiState(
     val allAddresses: List<AddressUiState> = listOf(),
     val selectedAddress: AddressUiState = AddressUiState(),
     val isAddAddressVisible: Boolean = false,
-    val addAddressState: AddressUiState = AddressUiState()
+    val addAddressState: AddressUiState = AddressUiState(),
+    val isDeleteAddressVisible: Boolean = false,
+    val selectedDeleteAddress: AddressUiState = AddressUiState()
 ) {
     enum class VisibleContent {
         SHIP_TO,
