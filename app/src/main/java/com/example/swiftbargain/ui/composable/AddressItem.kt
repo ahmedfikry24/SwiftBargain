@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.swiftbargain.R
@@ -30,7 +29,6 @@ fun AddressItem(
     isSelected: Boolean,
     address: AddAddressUiState,
     onClickItem: () -> Unit,
-    onClickEdit: () -> Unit,
     onClickDelete: () -> Unit
 ) {
     Surface(
@@ -64,17 +62,13 @@ fun AddressItem(
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colors.textGrey
             )
-            Row(modifier = Modifier.fillMaxWidth()) {
-                PrimaryTextButton(
-                    text = stringResource(R.string.edit),
-                    onClick = onClickEdit
-                )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 IconButton(
                     modifier = Modifier.padding(start = MaterialTheme.spacing.space8),
                     onClick = onClickDelete,
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colors.background,
-                        contentColor = MaterialTheme.colors.textGrey
+                        contentColor = MaterialTheme.colors.red
                     )
                 ) {
                     Icon(

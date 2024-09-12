@@ -49,7 +49,7 @@ fun ShipToAddAddress(
         exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500))
     ) {
         AddAddressContent(
-            state = state.addAddressUiState,
+            state = state.addAddressState,
             interactions = interactions,
             onCancel = interactions::controlAddAddressVisibility
         )

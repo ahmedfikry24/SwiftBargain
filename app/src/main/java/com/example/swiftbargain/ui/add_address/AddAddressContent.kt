@@ -101,15 +101,6 @@ fun AddAddressContent(
 
             item {
                 InfoSection(
-                    title = stringResource(R.string.region),
-                    fieldValue = state.region,
-                    isValueError = state.regionError,
-                    onChangeValue = interactions::onChangeRegion
-                )
-            }
-
-            item {
-                InfoSection(
                     title = stringResource(R.string.zip_code),
                     fieldValue = state.zipCode,
                     isValueError = state.zipCodeError,

@@ -49,8 +49,7 @@ fun ShipToContent(
                     isSelected = state.selectedAddress == address,
                     address = address,
                     onClickItem = { interactions.onSelectAddress(address) },
-                    onClickEdit = interactions::onEditAddress,
-                    onClickDelete = interactions::onDeleteAddress
+                    onClickDelete = { interactions.onDeleteAddress(address) }
                 )
             }
         }
