@@ -59,46 +59,71 @@ class CartCheckOutViewModel
         _state.update { it.copy(isAddAddressVisible = !it.isAddAddressVisible) }
     }
 
+    override fun onSelectAddress(address: AddAddressUiState) {
+        _state.update { it.copy(selectedAddress = address) }
+    }
+
+    override fun onDeleteAddress(address: AddAddressUiState) {
+        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
+        tryExecute(
+            { repository.deleteUserAddress(address.toDto()) },
+            { deleteAddressSuccess(address) },
+            ::deleteAddressError
+        )
+    }
+
+    private fun deleteAddressSuccess(address: AddAddressUiState) {
+        _state.update { value ->
+            value.copy(
+                contentStatus = ContentStatus.VISIBLE,
+                allAddresses = value.allAddresses.filter { it != address }
+            )
+        }
+    }
+
+    private fun deleteAddressError(error: BaseError) {
+        _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+    }
 
     // region add address
 
     override fun onChangeCountry(country: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(country = country)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(country = country)) }
     }
 
     override fun onChangeName(name: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(name = name)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(name = name)) }
     }
 
     override fun onChangeStreetAddress(address: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(streetAddress = address)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(streetAddress = address)) }
     }
 
     override fun onChangeStreetAddress2(address: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(streetAddress2 = address)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(streetAddress2 = address)) }
     }
 
     override fun onChangeCity(city: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(city = city)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(city = city)) }
     }
 
     override fun onChangeRegion(region: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(region = region)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(region = region)) }
     }
 
     override fun onChangeZipCode(code: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(zipCode = code)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(zipCode = code)) }
     }
 
     override fun onChangePhone(phone: String) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(phone = phone)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(phone = phone)) }
     }
 
     override fun onClickAddAddress() {
         if (validateAddAddress()) {
-            _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(contentStatus = ContentStatus.LOADING)) }
+            _state.update { it.copy(addAddressState = it.addAddressState.copy(contentStatus = ContentStatus.LOADING)) }
             tryExecute(
-                { repository.addUserAddressInfo(state.value.addAddressUiState.toDto()) },
+                { repository.addUserAddressInfo(state.value.addAddressState.toDto()) },
                 { addressSuccess() },
                 ::addressError
             )
@@ -108,19 +133,19 @@ class CartCheckOutViewModel
     private fun addressSuccess() {
         _state.update {
             it.copy(
-                addAddressUiState = it.addAddressUiState.copy(contentStatus = ContentStatus.VISIBLE),
+                addAddressState = it.addAddressState.copy(contentStatus = ContentStatus.VISIBLE),
                 isAddAddressVisible = false,
             )
         }
-        _state.update { it.copy(addAddressUiState = AddAddressUiState()) }
+        _state.update { it.copy(addAddressState = AddAddressUiState()) }
     }
 
     private fun addressError(error: BaseError) {
-        _state.update { it.copy(addAddressUiState = it.addAddressUiState.copy(contentStatus = ContentStatus.FAILURE)) }
+        _state.update { it.copy(addAddressState = it.addAddressState.copy(contentStatus = ContentStatus.FAILURE)) }
     }
 
     private fun validateAddAddress(): Boolean {
-        val value = state.value.addAddressUiState
+        val value = state.value.addAddressState
         val country = value.country.validateRequireFields()
         val name = value.name.validateRequireFields()
         val streetAddress = value.streetAddress.validateRequireFields()
@@ -131,7 +156,7 @@ class CartCheckOutViewModel
         val hasError = listOf(country, name, streetAddress, code, city, region, phone).any { !it }
         _state.update {
             it.copy(
-                addAddressUiState = it.addAddressUiState.copy(
+                addAddressState = it.addAddressState.copy(
                     countryError = !country,
                     nameError = !name,
                     streetAddressError = !streetAddress,
