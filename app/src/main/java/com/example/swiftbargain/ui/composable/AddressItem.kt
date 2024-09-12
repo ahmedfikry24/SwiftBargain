@@ -53,7 +53,7 @@ fun AddressItem(
                 color = MaterialTheme.colors.text
             )
             Text(
-                text = "${address.country}/${address.city}/${address.streetAddress}, ${address.streetAddress2} ${address.region}",
+                text = "${address.country}/${address.city}/${address.streetAddress}" + if (address.streetAddress2.isNotEmpty()) ", ${address.streetAddress2}" else "",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colors.textGrey
             )

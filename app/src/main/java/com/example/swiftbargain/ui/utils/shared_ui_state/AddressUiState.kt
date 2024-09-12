@@ -14,8 +14,6 @@ data class AddressUiState(
     val streetAddress2: String = "",
     val city: String = "",
     val cityError: Boolean = false,
-    val region: String = "",
-    val regionError: Boolean = false,
     val zipCode: String = "",
     val zipCodeError: Boolean = false,
     val phone: String = "",
@@ -29,7 +27,7 @@ fun AddressUiState.toDto(): UserInfoDto.AddressInfo {
         streetAddress = this.streetAddress,
         streetAddress2 = this.streetAddress2,
         city = this.city,
-        region = this.region,
+
         zipCode = this.zipCode,
         phone = this.phone
     )
@@ -42,7 +40,6 @@ fun UserInfoDto.AddressInfo.toUiState(): AddressUiState {
         streetAddress = this.streetAddress,
         streetAddress2 = this.streetAddress2 ?: "",
         city = this.city,
-        region = this.region,
         zipCode = this.zipCode,
         phone = this.phone
     )

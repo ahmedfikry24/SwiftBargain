@@ -6,7 +6,6 @@ interface AddAddressInteractions {
     fun onChangeStreetAddress(address: String)
     fun onChangeStreetAddress2(address: String)
     fun onChangeCity(city: String)
-    fun onChangeRegion(region: String)
     fun onChangeZipCode(code: String)
     fun onChangePhone(phone: String)
     fun onClickAddAddress()
