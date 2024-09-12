@@ -26,13 +26,13 @@ import com.example.swiftbargain.ui.composable.PrimaryTextField
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
-import com.example.swiftbargain.ui.utils.shared_ui_state.AddAddressUiState
+import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
 import com.example.swiftbargain.ui.utils.shred_interactions.AddAddressInteractions
 
 @Composable
 fun AddAddressContent(
     modifier: Modifier = Modifier,
-    state: AddAddressUiState,
+    state: AddressUiState,
     interactions: AddAddressInteractions,
     onCancel: () -> Unit
 ) {

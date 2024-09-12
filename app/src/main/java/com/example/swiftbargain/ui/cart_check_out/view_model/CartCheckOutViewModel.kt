@@ -8,7 +8,7 @@ import com.example.swiftbargain.navigation.CartCheckOut
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
-import com.example.swiftbargain.ui.utils.shared_ui_state.AddAddressUiState
+import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.toDto
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 import com.example.swiftbargain.ui.utils.validateRequireFields
@@ -59,11 +59,11 @@ class CartCheckOutViewModel
         _state.update { it.copy(isAddAddressVisible = !it.isAddAddressVisible) }
     }
 
-    override fun onSelectAddress(address: AddAddressUiState) {
+    override fun onSelectAddress(address: AddressUiState) {
         _state.update { it.copy(selectedAddress = address) }
     }
 
-    override fun onDeleteAddress(address: AddAddressUiState) {
+    override fun onDeleteAddress(address: AddressUiState) {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
             { repository.deleteUserAddress(address.toDto()) },
@@ -72,7 +72,7 @@ class CartCheckOutViewModel
         )
     }
 
-    private fun deleteAddressSuccess(address: AddAddressUiState) {
+    private fun deleteAddressSuccess(address: AddressUiState) {
         _state.update { value ->
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
@@ -137,7 +137,7 @@ class CartCheckOutViewModel
                 isAddAddressVisible = false,
             )
         }
-        _state.update { it.copy(addAddressState = AddAddressUiState()) }
+        _state.update { it.copy(addAddressState = AddressUiState()) }
     }
 
     private fun addressError(error: BaseError) {

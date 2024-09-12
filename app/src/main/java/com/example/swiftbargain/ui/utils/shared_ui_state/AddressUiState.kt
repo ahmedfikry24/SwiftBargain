@@ -3,7 +3,7 @@ package com.example.swiftbargain.ui.utils.shared_ui_state
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.ui.utils.ContentStatus
 
-data class AddAddressUiState(
+data class AddressUiState(
     val contentStatus: ContentStatus = ContentStatus.VISIBLE,
     val country: String = "",
     val countryError: Boolean = false,
@@ -22,7 +22,7 @@ data class AddAddressUiState(
     val phoneError: Boolean = false,
 )
 
-fun AddAddressUiState.toDto(): UserInfoDto.AddressInfo {
+fun AddressUiState.toDto(): UserInfoDto.AddressInfo {
     return UserInfoDto.AddressInfo(
         country = this.country,
         name = this.name,
@@ -35,8 +35,8 @@ fun AddAddressUiState.toDto(): UserInfoDto.AddressInfo {
     )
 }
 
-fun UserInfoDto.AddressInfo.toUiState(): AddAddressUiState {
-    return AddAddressUiState(
+fun UserInfoDto.AddressInfo.toUiState(): AddressUiState {
+    return AddressUiState(
         country = this.country,
         name = this.name,
         streetAddress = this.streetAddress,

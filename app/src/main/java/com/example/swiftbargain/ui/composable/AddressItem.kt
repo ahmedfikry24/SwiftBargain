@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
-import com.example.swiftbargain.ui.utils.shared_ui_state.AddAddressUiState
+import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
 
 @Composable
 fun AddressItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean,
-    address: AddAddressUiState,
+    address: AddressUiState,
     onClickItem: () -> Unit,
     onClickDelete: () -> Unit
 ) {
