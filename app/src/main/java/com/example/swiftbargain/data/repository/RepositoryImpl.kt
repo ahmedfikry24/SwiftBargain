@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
@@ -278,7 +279,7 @@ class RepositoryImpl @Inject constructor(
             val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
             fireStore.collection(USERS)
                 .document(currentUserId)
-                .update(ADDRESSES, listOf(address))
+                .update(ADDRESSES, FieldValue.arrayUnion(address))
                 .await()
         }
     }
@@ -288,6 +289,16 @@ class RepositoryImpl @Inject constructor(
             val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
             val result = fireStore.collection(USERS).document(currentUserId).get().await()
             result.toObject(UserInfoDto::class.java)?.addresses ?: listOf()
+        }
+    }
+
+    override suspend fun deleteUserAddress(address: UserInfoDto.AddressInfo) {
+        wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            fireStore.collection(USERS)
+                .document(currentUserId)
+                .update(ADDRESSES, FieldValue.arrayRemove(address))
+                .await()
         }
     }
 

@@ -46,5 +46,6 @@ interface Repository {
     suspend fun getAllCouponCodes(): List<CouponCodeDto>
     suspend fun addUserAddressInfo(address: UserInfoDto.AddressInfo)
     suspend fun getUserAddress(): List<UserInfoDto.AddressInfo>
+    suspend fun deleteUserAddress(address: UserInfoDto.AddressInfo)
     //endregion
 }
