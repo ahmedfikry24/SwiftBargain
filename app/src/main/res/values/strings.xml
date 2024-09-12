@@ -78,4 +78,6 @@
     <string name="phone_number">Phone Number</string>
     <string name="add_address">Add Address</string>
     <string name="edit">Edit</string>
+    <string name="alert">Alert</string>
+    <string name="are_you_sure_that_you_want_delete_this_item_we_can_t_undo_this_action_later">Are you sure that you want delete this item? we can\'t undo this action later.</string>
 </resources>
