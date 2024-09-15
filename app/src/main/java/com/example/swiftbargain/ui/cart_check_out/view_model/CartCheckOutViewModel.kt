@@ -187,6 +187,53 @@ class CartCheckOutViewModel
     }
     // endregion
 
+    // region add credit
+    override fun onChangeCreditNumber(number: String) {
+        _state.update { it.copy(addCreditState = it.addCreditState.copy(cardNum = number)) }
+    }
+
+    override fun onChangeExpiration(number: String) {
+        _state.update { it.copy(addCreditState = it.addCreditState.copy(expiration = number)) }
+    }
+
+    override fun onChangeSecurityNumber(number: String) {
+        _state.update { it.copy(addCreditState = it.addCreditState.copy(securityCode = number)) }
+    }
+
+    override fun onChangeHolderNMame(name: String) {
+        _state.update { it.copy(addCreditState = it.addCreditState.copy(holderName = name)) }
+    }
+
+    override fun addCard() {
+        if (validateAddCredit()) {
+
+        }
+    }
+
+    private fun validateAddCredit(): Boolean {
+        val value = state.value.addCreditState
+        val cardNum = value.cardNum.validateRequireFields()
+        val expiration = value.expiration.validateRequireFields()
+        val securityCode = value.securityCode.validateRequireFields()
+        val holderName = value.holderName.validateRequireFields()
+
+        val hasError = listOf(cardNum, expiration, securityCode, holderName).any { !it }
+        _state.update {
+            it.copy(
+                addCreditState = it.addCreditState.copy(
+                    cardNumError = !cardNum,
+                    expirationError = !expiration,
+                    securityCodeError = !securityCode,
+                    holderNameError = !holderName
+                )
+            )
+        }
+
+        return !hasError
+    }
+
+    //endregion
+
     override fun onSwitchContent(content: CartCheckOutUiState.VisibleContent) {
         _state.update { it.copy(visibleContent = content) }
     }
@@ -198,4 +245,9 @@ class CartCheckOutViewModel
     override fun checkOutOder() {
 
     }
+
+    override fun controlAddCreditVisibility() {
+        _state.update { it.copy(isAddCreditCardVisible = !it.isAddCreditCardVisible) }
+    }
+
 }
