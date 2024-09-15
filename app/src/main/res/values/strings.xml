@@ -87,4 +87,10 @@
     <string name="paypal">Paypal</string>
     <string name="bank_transfer">Bank Transfer</string>
     <string name="choose_payment_method_please">choose payment method please</string>
+    <string name="card_number">Card Number</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="security_code">Security Code</string>
+    <string name="card_holder">Card Holder</string>
+    <string name="add_card">Add Card</string>
+    <string name="choose_card">Choose Card</string>
 </resources>
