@@ -9,6 +9,7 @@ import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
+import com.example.swiftbargain.ui.utils.shared_ui_state.PaymentMethod
 import com.example.swiftbargain.ui.utils.shared_ui_state.toDto
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 import com.example.swiftbargain.ui.utils.validateRequireFields
@@ -186,5 +187,15 @@ class CartCheckOutViewModel
     }
     // endregion
 
+    override fun onSwitchContent(content: CartCheckOutUiState.VisibleContent) {
+        _state.update { it.copy(visibleContent = content) }
+    }
 
+    override fun onChoosePaymentMethodL(payment: PaymentMethod) {
+        _state.update { it.copy(paymentMethod = payment) }
+    }
+
+    override fun checkOutOder() {
+
+    }
 }
