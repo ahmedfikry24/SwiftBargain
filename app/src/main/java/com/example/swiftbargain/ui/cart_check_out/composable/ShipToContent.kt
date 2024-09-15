@@ -46,9 +46,10 @@ fun ShipToContent(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
             ) {
                 item {
-                    ShipToAppbar(
+                    AddItemAppbar(
+                        title = stringResource(R.string.ship_to),
                         onClickBack = interactions::onClickBack,
-                        onClickAddAddress = interactions::controlAddAddressVisibility
+                        onClickAdd = interactions::controlAddAddressVisibility
                     )
                 }
                 items(state.allAddresses) { address ->

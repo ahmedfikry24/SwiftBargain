@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.swiftbargain.R
@@ -22,10 +21,11 @@ import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 
 @Composable
-fun ShipToAppbar(
+fun AddItemAppbar(
     modifier: Modifier = Modifier,
+    title: String,
     onClickBack: () -> Unit,
-    onClickAddAddress: () -> Unit
+    onClickAdd: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -50,7 +50,7 @@ fun ShipToAppbar(
                 )
             }
             Text(
-                text = stringResource(R.string.ship_to),
+                text = title,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colors.text
             )
@@ -58,7 +58,7 @@ fun ShipToAppbar(
         IconButton(
             modifier = Modifier.padding(end = MaterialTheme.spacing.space16),
             colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colors.primary),
-            onClick = onClickAddAddress
+            onClick = onClickAdd
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_plus),
