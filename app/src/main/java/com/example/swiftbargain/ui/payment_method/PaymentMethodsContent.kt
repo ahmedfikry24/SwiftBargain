@@ -78,15 +78,22 @@ private fun ItemSection(
         modifier = modifier
             .fillMaxWidth()
             .background(if (isSelected) MaterialTheme.colors.textLight else MaterialTheme.colors.background)
+            .clickable { onClick() }
             .padding(horizontal = MaterialTheme.spacing.space16)
-            .clickable { onClick() },
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+
     ) {
-        Image(imageVector = ImageVector.vectorResource(iconId), contentDescription = null)
-        Text(
-            text = text,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colors.text
-        )
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(MaterialTheme.spacing.space16),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+        ) {
+            Image(imageVector = ImageVector.vectorResource(iconId), contentDescription = null)
+            Text(
+                text = text,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colors.text
+            )
+        }
     }
 }

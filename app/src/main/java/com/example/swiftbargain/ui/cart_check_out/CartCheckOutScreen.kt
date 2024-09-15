@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.ui.cart_check_out.composable.CheckOutPaymentContent
 import com.example.swiftbargain.ui.cart_check_out.composable.ShipToContent
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutInteractions
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutUiState
@@ -48,7 +49,11 @@ private fun CartCheckOutContent(
                     interactions = interactions
                 )
 
-                CartCheckOutUiState.VisibleContent.PAYMENT -> Unit
+                CartCheckOutUiState.VisibleContent.PAYMENT -> CheckOutPaymentContent(
+                    payment = state.paymentMethod,
+                    interactions = interactions
+                )
+
                 CartCheckOutUiState.VisibleContent.CHOOSE_CARD -> Unit
             }
         }
