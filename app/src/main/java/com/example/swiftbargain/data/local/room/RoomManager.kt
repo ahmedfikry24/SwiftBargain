@@ -12,6 +12,7 @@ abstract class RoomManager : RoomDatabase() {
 
     abstract val favorites: FavoritesDao
     abstract val cart: CartDao
+    abstract val credit: CreditDao
 
     companion object {
         @Volatile
