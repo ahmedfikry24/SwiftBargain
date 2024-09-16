@@ -1,6 +1,6 @@
 package com.example.swiftbargain.ui.utils.shared_ui_state
 
-import com.example.swiftbargain.data.models.UserInfoDto
+import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.ui.utils.ContentStatus
 
 data class AddressUiState(
@@ -20,8 +20,8 @@ data class AddressUiState(
     val phoneError: Boolean = false,
 )
 
-fun AddressUiState.toDto(): UserInfoDto.AddressInfo {
-    return UserInfoDto.AddressInfo(
+fun AddressUiState.toDto(): AddressDto {
+    return AddressDto(
         country = this.country,
         name = this.name,
         streetAddress = this.streetAddress,
@@ -33,7 +33,7 @@ fun AddressUiState.toDto(): UserInfoDto.AddressInfo {
     )
 }
 
-fun UserInfoDto.AddressInfo.toUiState(): AddressUiState {
+fun AddressDto.toUiState(): AddressUiState {
     return AddressUiState(
         country = this.country,
         name = this.name,
