@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
-import com.example.swiftbargain.data.models.UserInfoDto
+import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.CartCheckOut
 import com.example.swiftbargain.ui.base.BaseError
@@ -22,6 +22,8 @@ import com.example.swiftbargain.ui.utils.validateRequireFields
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,9 +58,10 @@ class CartCheckOutViewModel
         _state.update { value ->
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
-                allAddresses = (success[ADDRESSES] as List<*>).map { (it as UserInfoDto.AddressInfo).toUiState() },
+                allAddresses = (success[ADDRESSES] as List<*>).map { (it as AddressDto).toUiState() },
                 allCreditCards = (success[CREDIT_CARD] as List<*>).map { (it as CreditEntity).toUiState() },
-                allCartProducts = (success[CART] as List<*>).map { (it as CartProductEntity).toUiState() }
+                allCartProducts = (success[CART] as List<*>).map { (it as CartProductEntity).toUiState() },
+                currentOder = value.currentOder.copy(price = args.totalPrice)
             )
         }
     }
@@ -281,7 +284,39 @@ class CartCheckOutViewModel
     }
 
     override fun checkOutOder() {
+        _state.update { it.copy(chooseCardContentStatus = ContentStatus.LOADING) }
+        val value = state.value
+        tryExecute(
+            {
+                repository.addOrder(
+                    value.currentOder.toDto().copy(
+                        date = getTimeNow(),
+                        numOfItems = value.allCartProducts.size.toString(),
+                        productsId = value.allCartProducts.map { it.id },
+                        address = value.selectedAddress.toDto()
+                    )
+                )
+            },
+            { orderSuccess() },
+            ::orderError
+        )
+    }
 
+    private fun orderSuccess() {
+        viewModelScope.launch {
+            repository.deleteAllCartProducts()
+            sendEvent(CartCheckOutEvents.OrderSuccess)
+        }
+    }
+
+    private fun orderError(error: BaseError) {
+        _state.update { it.copy(chooseCardContentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(CartCheckOutEvents.UnAuthorizedToAccess)
+    }
+
+    private fun getTimeNow(): String {
+        val formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return LocalDateTime.now().format(formatPattern)
     }
 
     companion object {
