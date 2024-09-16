@@ -6,8 +6,10 @@ import com.example.swiftbargain.data.local.room.RoomManager
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
+import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.CouponCodeDto
+import com.example.swiftbargain.data.models.OrderDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
@@ -275,7 +277,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addUserAddressInfo(address: UserInfoDto.AddressInfo) {
+    override suspend fun addUserAddressInfo(address: AddressDto) {
         wrapApiCall(connectivityChecker) {
             val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
             fireStore.collection(USERS)
@@ -285,7 +287,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserAddress(): List<UserInfoDto.AddressInfo> {
+    override suspend fun getUserAddress(): List<AddressDto> {
         return wrapApiCall(connectivityChecker) {
             val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
             val result = fireStore.collection(USERS).document(currentUserId).get().await()
@@ -293,7 +295,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteUserAddress(address: UserInfoDto.AddressInfo) {
+    override suspend fun deleteUserAddress(address: AddressDto) {
         wrapApiCall(connectivityChecker) {
             val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
             fireStore.collection(USERS)
@@ -315,6 +317,24 @@ class RepositoryImpl @Inject constructor(
         localDB.credit.clearCards()
     }
 
+    override suspend fun addOrder(order: OrderDto) {
+        wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val document =
+                fireStore.collection(USERS).document(currentUserId).collection(ORDERS).document()
+            document.set(order.copy(id = document.id)).await()
+        }
+    }
+
+    override suspend fun getAllOrders(): List<OrderDto> {
+        return wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val result =
+                fireStore.collection(USERS).document(currentUserId).collection(ORDERS).get().await()
+            result.toObjects(OrderDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
@@ -322,6 +342,7 @@ class RepositoryImpl @Inject constructor(
         private const val PRODUCTS = "products"
         private const val REVIEWS = "reviews"
         private const val COUPONS = "coupons"
+        private const val ORDERS = "orders"
 
         private const val SALE_ID = "sale_id"
         private const val ID = "id"

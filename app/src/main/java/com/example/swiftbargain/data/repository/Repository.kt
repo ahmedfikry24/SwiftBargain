@@ -4,12 +4,13 @@ import android.content.Intent
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
+import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.CouponCodeDto
+import com.example.swiftbargain.data.models.OrderDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
-import com.example.swiftbargain.data.models.UserInfoDto
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -45,11 +46,13 @@ interface Repository {
     suspend fun searchProducts(itemName: String): List<ProductDto>
     suspend fun getCategoryProducts(categoryId: String, lastItemId: String?): List<ProductDto>
     suspend fun getAllCouponCodes(): List<CouponCodeDto>
-    suspend fun addUserAddressInfo(address: UserInfoDto.AddressInfo)
-    suspend fun getUserAddress(): List<UserInfoDto.AddressInfo>
-    suspend fun deleteUserAddress(address: UserInfoDto.AddressInfo)
+    suspend fun addUserAddressInfo(address: AddressDto)
+    suspend fun getUserAddress(): List<AddressDto>
+    suspend fun deleteUserAddress(address: AddressDto)
     suspend fun addCreditCard(card: CreditEntity)
     suspend fun getAllCreditCards(): List<CreditEntity>
     suspend fun deleteAllCreditCards()
+    suspend fun addOrder(order: OrderDto)
+    suspend fun getAllOrders(): List<OrderDto>
     //endregion
 }
