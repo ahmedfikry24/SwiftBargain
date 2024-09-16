@@ -5,9 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
+import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 
-@Database(entities = [FavoriteProductEntity::class, CartProductEntity::class], version = 1)
+@Database(
+    entities = [
+        FavoriteProductEntity::class,
+        CartProductEntity::class,
+        CreditEntity::class
+    ],
+    version = 1
+)
 abstract class RoomManager : RoomDatabase() {
 
     abstract val favorites: FavoritesDao
