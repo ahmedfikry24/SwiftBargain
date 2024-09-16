@@ -4,6 +4,7 @@ import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.CartProductUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.CreditUiSate
+import com.example.swiftbargain.ui.utils.shared_ui_state.OrderUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.PaymentMethod
 
 data class CartCheckOutUiState(
@@ -16,11 +17,13 @@ data class CartCheckOutUiState(
     val isDeleteAddressVisible: Boolean = false,
     val selectedDeleteAddress: AddressUiState = AddressUiState(),
     val paymentMethod: PaymentMethod = PaymentMethod.DEFAULT,
+    val chooseCardContentStatus: ContentStatus = ContentStatus.VISIBLE,
     val allCreditCards: List<CreditUiSate> = listOf(),
     val selectedCreditCard: CreditUiSate = CreditUiSate(),
     val isAddCreditCardVisible: Boolean = false,
     val addCreditState: CreditUiSate = CreditUiSate(),
-    val allCartProducts: List<CartProductUiState> = listOf()
+    val allCartProducts: List<CartProductUiState> = listOf(),
+    val currentOder: OrderUiState = OrderUiState()
 ) {
     enum class VisibleContent {
         SHIP_TO,
