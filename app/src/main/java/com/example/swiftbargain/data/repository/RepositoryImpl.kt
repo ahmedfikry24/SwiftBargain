@@ -226,6 +226,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteAllCartProducts() {
+        localDB.cart.clearAllProducts()
+    }
+
     override suspend fun addProductReview(
         uid: String,
         productId: String,

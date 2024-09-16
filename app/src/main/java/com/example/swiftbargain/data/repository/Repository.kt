@@ -42,6 +42,7 @@ interface Repository {
     suspend fun addProductToCart(product: CartProductEntity)
     suspend fun getAllCartProducts(): List<CartProductEntity>
     suspend fun removeProductFromCart(id: String)
+    suspend fun deleteAllCartProducts()
     suspend fun addProductReview(uid: String, productId: String, review: ReviewDto): ReviewDto
     suspend fun searchProducts(itemName: String): List<ProductDto>
     suspend fun getCategoryProducts(categoryId: String, lastItemId: String?): List<ProductDto>
