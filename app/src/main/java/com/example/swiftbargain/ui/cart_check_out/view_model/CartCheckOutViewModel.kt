@@ -3,6 +3,7 @@ package com.example.swiftbargain.ui.cart_check_out.view_model
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.CartCheckOut
@@ -32,28 +33,34 @@ class CartCheckOutViewModel
     private val args = savedStateHandle.toRoute<CartCheckOut>()
 
     init {
-        getAllAddress()
+        getData()
     }
 
-    override fun getAllAddress() {
+    override fun getData() {
         _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
         tryExecute(
-            { repository.getUserAddress() },
-            ::allAddressSuccess,
-            ::allAddressError
+            {
+                mapOf(
+                    ADDRESSES to repository.getUserAddress(),
+                    CREDIT_CARD to repository.getAllCreditCards()
+                )
+            },
+            ::dataSuccess,
+            ::dataError
         )
     }
 
-    private fun allAddressSuccess(address: List<UserInfoDto.AddressInfo>) {
+    private fun dataSuccess(success: Map<String, List<Any>>) {
         _state.update { value ->
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
-                allAddresses = address.map { it.toUiState() }
+                allAddresses = (success[ADDRESSES] as List<*>).map { (it as UserInfoDto.AddressInfo).toUiState() },
+                allCreditCards = (success[CREDIT_CARD] as List<*>).map { (it as CreditEntity).toUiState() }
             )
         }
     }
 
-    private fun allAddressError(error: BaseError) {
+    private fun dataError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
         if (error is UserNotFound) sendEvent(CartCheckOutEvents.UnAuthorizedToAccess)
     }
@@ -195,6 +202,18 @@ class CartCheckOutViewModel
     }
     // endregion
 
+    override fun onSwitchContent(content: CartCheckOutUiState.VisibleContent) {
+        _state.update { it.copy(visibleContent = content) }
+    }
+
+    override fun onChoosePaymentMethodL(payment: PaymentMethod) {
+        _state.update { it.copy(paymentMethod = payment) }
+    }
+
+    override fun controlAddCreditVisibility() {
+        _state.update { it.copy(isAddCreditCardVisible = !it.isAddCreditCardVisible) }
+    }
+
     // region add credit
     override fun onChangeCreditNumber(number: String) {
         _state.update { it.copy(addCreditState = it.addCreditState.copy(cardNum = number)) }
@@ -231,7 +250,7 @@ class CartCheckOutViewModel
 
     private fun validateAddCredit(): Boolean {
         val value = state.value.addCreditState
-        val cardNum = value.cardNum.validateRequireFields()
+        val cardNum = value.cardNum.validateRequireFields() && value.cardNum.length == 16
         val expiration = value.expiration.validateRequireFields()
         val securityCode = value.securityCode.validateRequireFields()
         val holderName = value.holderName.validateRequireFields()
@@ -253,20 +272,17 @@ class CartCheckOutViewModel
 
     //endregion
 
-    override fun onSwitchContent(content: CartCheckOutUiState.VisibleContent) {
-        _state.update { it.copy(visibleContent = content) }
-    }
 
-    override fun onChoosePaymentMethodL(payment: PaymentMethod) {
-        _state.update { it.copy(paymentMethod = payment) }
+    override fun onSelectCredit(card: CreditUiSate) {
+        _state.update { it.copy(selectedCreditCard = card) }
     }
 
     override fun checkOutOder() {
 
     }
 
-    override fun controlAddCreditVisibility() {
-        _state.update { it.copy(isAddCreditCardVisible = !it.isAddCreditCardVisible) }
+    companion object {
+        private const val ADDRESSES = "addresses"
+        private const val CREDIT_CARD = "creditCards"
     }
-
 }
