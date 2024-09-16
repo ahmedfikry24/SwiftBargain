@@ -3,6 +3,7 @@ package com.example.swiftbargain.ui.cart_check_out.view_model
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.repository.Repository
@@ -42,7 +43,8 @@ class CartCheckOutViewModel
             {
                 mapOf(
                     ADDRESSES to repository.getUserAddress(),
-                    CREDIT_CARD to repository.getAllCreditCards()
+                    CREDIT_CARD to repository.getAllCreditCards(),
+                    CART to repository.getAllCartProducts()
                 )
             },
             ::dataSuccess,
@@ -55,7 +57,8 @@ class CartCheckOutViewModel
             value.copy(
                 contentStatus = ContentStatus.VISIBLE,
                 allAddresses = (success[ADDRESSES] as List<*>).map { (it as UserInfoDto.AddressInfo).toUiState() },
-                allCreditCards = (success[CREDIT_CARD] as List<*>).map { (it as CreditEntity).toUiState() }
+                allCreditCards = (success[CREDIT_CARD] as List<*>).map { (it as CreditEntity).toUiState() },
+                allCartProducts = (success[CART] as List<*>).map { (it as CartProductEntity).toUiState() }
             )
         }
     }
@@ -284,5 +287,6 @@ class CartCheckOutViewModel
     companion object {
         private const val ADDRESSES = "addresses"
         private const val CREDIT_CARD = "creditCards"
+        private const val CART = "cartProducts"
     }
 }
