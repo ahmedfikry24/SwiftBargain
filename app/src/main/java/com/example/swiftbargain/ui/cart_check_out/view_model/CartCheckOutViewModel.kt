@@ -1,20 +1,25 @@
 package com.example.swiftbargain.ui.cart_check_out.view_model
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.CartCheckOut
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
+import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
+import com.example.swiftbargain.ui.utils.shared_ui_state.CreditUiSate
 import com.example.swiftbargain.ui.utils.shared_ui_state.PaymentMethod
 import com.example.swiftbargain.ui.utils.shared_ui_state.toDto
+import com.example.swiftbargain.ui.utils.shared_ui_state.toEntity
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 import com.example.swiftbargain.ui.utils.validateRequireFields
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -206,7 +211,18 @@ class CartCheckOutViewModel
 
     override fun addCard() {
         if (validateAddCredit()) {
-
+            viewModelScope.launch {
+                repository.addCreditCard(state.value.addCreditState.toEntity())
+                _state.update {
+                    it.copy(
+                        isAddCreditCardVisible = false,
+                        addCreditState = CreditUiSate(),
+                        allCreditCards = it.allCreditCards.toMutableList()
+                            .apply { add(it.addCreditState) }
+                    )
+                }
+                sendEvent(CartCheckOutEvents.AddCreditSuccess)
+            }
         }
     }
 

@@ -19,6 +19,7 @@ data class CartCheckOutUiState(
     val selectedCreditCard: CreditUiSate = CreditUiSate(),
     val isAddCreditCardVisible: Boolean = false,
     val addCreditState: CreditUiSate = CreditUiSate(),
+    val totalPrice: Int = 0
 ) {
     enum class VisibleContent {
         SHIP_TO,
