@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -24,12 +26,21 @@ import com.example.swiftbargain.ui.product_details.ProductDetailsScreen
 import com.example.swiftbargain.ui.reviews.ReviewsScreen
 import com.example.swiftbargain.ui.sale.SaleScreen
 import com.example.swiftbargain.ui.theme.colors
+import com.example.swiftbargain.ui.utils.SnackBarManager
+import com.example.swiftbargain.ui.utils.SnackBarManager.showError
+import com.example.swiftbargain.ui.utils.UiConstants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun UserNavGraph(mainNavController: NavController) {
     val navController = rememberNavController()
+    val snackBar = SnackBarManager.init()
+    val scope = rememberCoroutineScope()
+    val unAuthorizedLogin = { logOut(mainNavController, snackBar, scope) }
     Scaffold(
-        snackbarHost = { PrimarySnackBar() }, bottomBar = { UserBottomNavigation(navController) }
+        snackbarHost = { PrimarySnackBar() },
+        bottomBar = { UserBottomNavigation(navController) }
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -41,7 +52,7 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Home> { HomeScreen(navController) }
                 composable<Explore> { ExploreScreen(navController) }
                 composable<Cart> { CartScreen(navController) }
-                composable<CartCheckOut> { CartCheckOutScreen(navController) }
+                composable<CartCheckOut> { CartCheckOutScreen(navController, unAuthorizedLogin) }
                 composable<Offer> {}
                 composable<Account> {}
                 composable<Sale> { SaleScreen(navController) }
@@ -50,6 +61,18 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Favorites> { FavoritesScreen(navController) }
                 composable<Category> { CategoryScreen(navController) }
             }
+        }
+    }
+}
+
+private fun logOut(
+    navController: NavController,
+    snackBar: SnackbarHostState,
+    scope: CoroutineScope
+) {
+    scope.launch {
+        snackBar.showError(UiConstants.UNAUTHORIZED_TO_ACCESS, this) {
+            navController.navigate(Authentication) { popUpTo(Authentication) { inclusive = false } }
         }
     }
 }
