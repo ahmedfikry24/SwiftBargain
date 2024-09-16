@@ -55,10 +55,11 @@ class CartCheckOutViewModel
 
     private fun allAddressError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(CartCheckOutEvents.UnAuthorizedToAccess)
     }
 
     override fun onClickBack() {
-
+        sendEvent(CartCheckOutEvents.NavigateToBack)
     }
 
     override fun controlAddAddressVisibility() {
@@ -104,6 +105,7 @@ class CartCheckOutViewModel
 
     private fun deleteAddressError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(CartCheckOutEvents.UnAuthorizedToAccess)
     }
 
     override fun onDismissDeleteAddressDialog() {
@@ -164,6 +166,7 @@ class CartCheckOutViewModel
 
     private fun addressError(error: BaseError) {
         _state.update { it.copy(addAddressState = it.addAddressState.copy(contentStatus = ContentStatus.FAILURE)) }
+        if (error is UserNotFound) sendEvent(CartCheckOutEvents.UnAuthorizedToAccess)
     }
 
     private fun validateAddAddress(): Boolean {
