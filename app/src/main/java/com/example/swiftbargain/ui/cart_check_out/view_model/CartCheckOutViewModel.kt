@@ -175,6 +175,7 @@ class CartCheckOutViewModel
             )
         }
         _state.update { it.copy(addAddressState = AddressUiState()) }
+        sendEvent(CartCheckOutEvents.AddAddressSuccess)
     }
 
     private fun addressError(error: BaseError) {
