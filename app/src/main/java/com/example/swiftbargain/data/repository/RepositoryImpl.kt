@@ -4,6 +4,7 @@ import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.local.room.RoomManager
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
+import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.CouponCodeDto
@@ -300,6 +301,18 @@ class RepositoryImpl @Inject constructor(
                 .update(ADDRESSES, FieldValue.arrayRemove(address))
                 .await()
         }
+    }
+
+    override suspend fun addCreditCard(card: CreditEntity) {
+        localDB.credit.addCard(card)
+    }
+
+    override suspend fun getAllCreditCards(): List<CreditEntity> {
+        return localDB.credit.getAllCards()
+    }
+
+    override suspend fun deleteAllCreditCards() {
+        localDB.credit.clearCards()
     }
 
     companion object {

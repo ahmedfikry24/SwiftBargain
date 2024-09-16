@@ -2,6 +2,7 @@ package com.example.swiftbargain.data.repository
 
 import android.content.Intent
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
+import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.CouponCodeDto
@@ -47,5 +48,8 @@ interface Repository {
     suspend fun addUserAddressInfo(address: UserInfoDto.AddressInfo)
     suspend fun getUserAddress(): List<UserInfoDto.AddressInfo>
     suspend fun deleteUserAddress(address: UserInfoDto.AddressInfo)
+    suspend fun addCreditCard(card: CreditEntity)
+    suspend fun getAllCreditCards(): List<CreditEntity>
+    suspend fun deleteAllCreditCards()
     //endregion
 }
