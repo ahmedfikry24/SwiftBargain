@@ -2,9 +2,12 @@ package com.example.swiftbargain.data.repository
 
 import android.content.Intent
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
+import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
+import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.CouponCodeDto
+import com.example.swiftbargain.data.models.OrderDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
@@ -39,9 +42,18 @@ interface Repository {
     suspend fun addProductToCart(product: CartProductEntity)
     suspend fun getAllCartProducts(): List<CartProductEntity>
     suspend fun removeProductFromCart(id: String)
+    suspend fun deleteAllCartProducts()
     suspend fun addProductReview(uid: String, productId: String, review: ReviewDto): ReviewDto
     suspend fun searchProducts(itemName: String): List<ProductDto>
     suspend fun getCategoryProducts(categoryId: String, lastItemId: String?): List<ProductDto>
     suspend fun getAllCouponCodes(): List<CouponCodeDto>
+    suspend fun addUserAddressInfo(address: AddressDto)
+    suspend fun getUserAddress(): List<AddressDto>
+    suspend fun deleteUserAddress(address: AddressDto)
+    suspend fun addCreditCard(card: CreditEntity)
+    suspend fun getAllCreditCards(): List<CreditEntity>
+    suspend fun deleteAllCreditCards()
+    suspend fun addOrder(order: OrderDto)
+    suspend fun getAllOrders(): List<OrderDto>
     //endregion
 }

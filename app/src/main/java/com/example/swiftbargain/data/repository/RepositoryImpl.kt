@@ -4,9 +4,12 @@ import android.content.Intent
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.local.room.RoomManager
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
+import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
+import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.data.models.CategoryDto
 import com.example.swiftbargain.data.models.CouponCodeDto
+import com.example.swiftbargain.data.models.OrderDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
@@ -20,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
@@ -222,6 +226,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteAllCartProducts() {
+        localDB.cart.clearAllProducts()
+    }
+
     override suspend fun addProductReview(
         uid: String,
         productId: String,
@@ -273,6 +281,64 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addUserAddressInfo(address: AddressDto) {
+        wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            fireStore.collection(USERS)
+                .document(currentUserId)
+                .update(ADDRESSES, FieldValue.arrayUnion(address))
+                .await()
+        }
+    }
+
+    override suspend fun getUserAddress(): List<AddressDto> {
+        return wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val result = fireStore.collection(USERS).document(currentUserId).get().await()
+            result.toObject(UserInfoDto::class.java)?.addresses ?: listOf()
+        }
+    }
+
+    override suspend fun deleteUserAddress(address: AddressDto) {
+        wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            fireStore.collection(USERS)
+                .document(currentUserId)
+                .update(ADDRESSES, FieldValue.arrayRemove(address))
+                .await()
+        }
+    }
+
+    override suspend fun addCreditCard(card: CreditEntity) {
+        localDB.credit.addCard(card)
+    }
+
+    override suspend fun getAllCreditCards(): List<CreditEntity> {
+        return localDB.credit.getAllCards()
+    }
+
+    override suspend fun deleteAllCreditCards() {
+        localDB.credit.clearCards()
+    }
+
+    override suspend fun addOrder(order: OrderDto) {
+        wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val document =
+                fireStore.collection(USERS).document(currentUserId).collection(ORDERS).document()
+            document.set(order.copy(id = document.id)).await()
+        }
+    }
+
+    override suspend fun getAllOrders(): List<OrderDto> {
+        return wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val result =
+                fireStore.collection(USERS).document(currentUserId).collection(ORDERS).get().await()
+            result.toObjects(OrderDto::class.java)
+        }
+    }
+
     companion object {
         private const val USERS = "users"
         private const val CATEGORIES = "categories"
@@ -280,10 +346,12 @@ class RepositoryImpl @Inject constructor(
         private const val PRODUCTS = "products"
         private const val REVIEWS = "reviews"
         private const val COUPONS = "coupons"
+        private const val ORDERS = "orders"
 
         private const val SALE_ID = "sale_id"
         private const val ID = "id"
         private const val TITLE = "title"
         private const val CATEGORY_ID = "category_id"
+        private const val ADDRESSES = "addresses"
     }
 }

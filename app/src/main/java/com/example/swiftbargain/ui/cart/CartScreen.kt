@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.cart
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -60,60 +61,65 @@ fun CartContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
-        ) {
-            itemsIndexed(state.products) { index, product ->
-                CartProduct(
-                    modifier = Modifier.animateItem(),
-                    product = product,
-                    onClickRemove = interactions::onRemoveItem,
-                    onChangeQuantity = { interactions.onChangeQuantity(index, it) },
-                    onClickItem = interactions::onClickItem
-                )
-            }
-            item {
-                NoItemFound(
-                    modifier = Modifier.fillMaxSize(),
-                    isVisible = state.products.isEmpty()
-                )
-            }
-            item {
-                if (state.products.isNotEmpty())
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = MaterialTheme.spacing.space16)
-                            .heightIn(max = 56.dp)
-                    ) {
-                        PrimaryTextField(
-                            modifier = Modifier.weight(1f),
-                            value = state.couponCode,
-                            hint = stringResource(R.string.enter_coupon_code),
-                            isError = state.couponCodeError,
-                            onChangeValue = interactions::onChangeCouponCode
-                        )
-                        PrimaryTextButton(
-                            modifier = Modifier.fillMaxHeight(),
-                            text = stringResource(R.string.apply),
-                            onClick = interactions::checkCouponCode
-                        )
-                    }
+        Column(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(MaterialTheme.spacing.space16),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+            ) {
+                itemsIndexed(state.products) { index, product ->
+                    CartProduct(
+                        modifier = Modifier.animateItem(),
+                        product = product,
+                        onClickRemove = interactions::onRemoveItem,
+                        onChangeQuantity = { interactions.onChangeQuantity(index, it) },
+                        onClickItem = interactions::onClickItem
+                    )
+                }
+                item {
+                    NoItemFound(
+                        modifier = Modifier.fillMaxSize(),
+                        isVisible = state.products.isEmpty()
+                    )
+                }
+                item {
+                    if (state.products.isNotEmpty())
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = MaterialTheme.spacing.space16)
+                                .heightIn(max = 56.dp)
+                        ) {
+                            PrimaryTextField(
+                                modifier = Modifier.weight(1f),
+                                value = state.couponCode,
+                                hint = stringResource(R.string.enter_coupon_code),
+                                isError = state.couponCodeError,
+                                onChangeValue = interactions::onChangeCouponCode
+                            )
+                            PrimaryTextButton(
+                                modifier = Modifier.fillMaxHeight(),
+                                text = stringResource(R.string.apply),
+                                onClick = interactions::checkCouponCode
+                            )
+                        }
+                }
+
+                item {
+                    if (state.products.isNotEmpty())
+                        CartDetails(state = state)
+                }
             }
 
-            item {
-                if (state.products.isNotEmpty())
-                    CartDetails(state = state)
-            }
-            item {
+            if (state.products.isNotEmpty())
                 PrimaryTextButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.space16)
+                        .padding(bottom = MaterialTheme.spacing.space16),
                     text = stringResource(R.string.check_out),
                     onClick = interactions::onClickCheckOut
                 )
-            }
         }
     }
     ContentError(

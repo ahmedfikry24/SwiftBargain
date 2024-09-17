@@ -11,4 +11,8 @@ object UiConstants {
     const val COMPLETE_CART_INFO = "please select oder info"
     const val ADD_TO_CART_SUCCESS = "add to cart successfully"
     const val ADD_REVIEW_SUCCESS = "review added successfully"
+    const val ADD_ADDRESS_SUCCESS = "address added successfully"
+    const val ADD_CREDIT_SUCCESS = "credit added successfully"
+    const val ORDER_SUCCESS = "your order recorded successfully"
+    const val UNAUTHORIZED_TO_ACCESS = "unauthorized access please login again"
 }
