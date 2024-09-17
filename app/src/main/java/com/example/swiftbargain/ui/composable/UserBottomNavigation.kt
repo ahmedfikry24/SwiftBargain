@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.swiftbargain.R
 import com.example.swiftbargain.navigation.Account
@@ -35,7 +36,7 @@ fun UserBottomNavigation(navController: NavController) {
     val screens = listOf(
         BottomNavItem("Home", R.drawable.ic_home, Home),
         BottomNavItem("Explore", R.drawable.ic_search, Explore),
-        BottomNavItem("Cart", R.drawable.ic_cart, Cart),
+        BottomNavItem("Cart", R.drawable.ic_cart, Cart()),
         BottomNavItem("Offer", R.drawable.ic_offer, Offer),
         BottomNavItem("Account", R.drawable.ic_profile, Account),
     )
@@ -63,8 +64,10 @@ fun UserBottomNavigation(navController: NavController) {
                         )
                     },
                     onClick = {
-                        if (!currentDestination.checkCurrentDestination(screen.route))
-                            navController.navigate(screen.route)
+                        navController.navigate(screen.route) {
+                            popUpTo(Home) { saveState = true }
+                            launchSingleTop = true
+                        }
                     },
                     icon = {
                         Icon(
@@ -78,6 +81,8 @@ fun UserBottomNavigation(navController: NavController) {
 }
 
 private fun NavDestination?.checkCurrentDestination(route: Any): Boolean {
-    return this?.route?.substringAfterLast(".") == route.toString().substringAfterLast(".")
-        .substringBefore("@")
+    return this?.hierarchy?.any {
+        it.route?.substringAfterLast(".")?.substringBefore("?") ==
+                route.javaClass.toString().substringAfterLast(".")
+    } == true
 }

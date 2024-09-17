@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
@@ -32,6 +33,7 @@ import com.example.swiftbargain.ui.cart.view_model.CartViewModel
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
@@ -45,6 +47,9 @@ fun CartScreen(
     viewModel: CartViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LifeCycleTracker { event ->
+        if (event == Lifecycle.Event.ON_RESUME) viewModel.checkClearCart()
+    }
     EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
             CartEvents.NavigateToCartCheckOut -> navController.navigate(CartCheckOut(state.totalPrice))

@@ -21,7 +21,7 @@ object Home
 object Explore
 
 @Serializable
-object Cart
+data class Cart(val isCartCleared: Boolean? = null)
 
 @Serializable
 data class CartCheckOut(val totalPrice: Int)

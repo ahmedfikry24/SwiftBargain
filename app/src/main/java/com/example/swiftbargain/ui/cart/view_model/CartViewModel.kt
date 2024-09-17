@@ -1,9 +1,12 @@
 package com.example.swiftbargain.ui.cart.view_model
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.models.CouponCodeDto
 import com.example.swiftbargain.data.repository.Repository
+import com.example.swiftbargain.navigation.Cart
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.CartProductUiState
@@ -16,8 +19,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: Repository
 ) : BaseViewModel<CartUiState, CartEvents>(CartUiState()), CartInteractions {
+    private val args = savedStateHandle.toRoute<Cart>()
 
     init {
         getDate()
@@ -104,6 +109,13 @@ class CartViewModel @Inject constructor(
 
     override fun onClickCheckOut() {
         sendEvent(CartEvents.NavigateToCartCheckOut)
+    }
+
+    override fun checkClearCart() {
+        if (args.isCartCleared == true) {
+            viewModelScope.launch { repository.deleteAllCartProducts() }
+            _state.update { it.copy(products = listOf()) }
+        }
     }
 
     companion object {
