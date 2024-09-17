@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.navigation.Cart
 import com.example.swiftbargain.ui.cart_check_out.composable.CheckOutPaymentContent
 import com.example.swiftbargain.ui.cart_check_out.composable.ChooseCardContent
 import com.example.swiftbargain.ui.cart_check_out.composable.ShipToContent
@@ -40,10 +41,17 @@ fun CartCheckOutScreen(
             )
 
             CartCheckOutEvents.NavigateToBack -> navController.popBackStack()
-            CartCheckOutEvents.OrderSuccess -> snackBar.showSuccess(
-                UiConstants.ORDER_SUCCESS,
-                scope
-            ) { navController.popBackStack() }
+            CartCheckOutEvents.OrderSuccess -> {
+                snackBar.showSuccess(
+                    UiConstants.ORDER_SUCCESS,
+                    scope
+                ) {
+                    navController.navigate(Cart(true)) {
+                        popUpTo(Cart()) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            }
 
             CartCheckOutEvents.UnAuthorizedToAccess -> unAuthorizedLogin()
             CartCheckOutEvents.AddAddressSuccess -> snackBar.showSuccess(

@@ -304,10 +304,7 @@ class CartCheckOutViewModel
     }
 
     private fun orderSuccess() {
-        viewModelScope.launch {
-            repository.deleteAllCartProducts()
-            sendEvent(CartCheckOutEvents.OrderSuccess)
-        }
+        viewModelScope.launch { sendEvent(CartCheckOutEvents.OrderSuccess) }
     }
 
     private fun orderError(error: BaseError) {
