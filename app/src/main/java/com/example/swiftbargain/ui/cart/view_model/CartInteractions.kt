@@ -8,4 +8,5 @@ interface CartInteractions {
     fun onChangeCouponCode(code: String)
     fun checkCouponCode()
     fun onClickCheckOut()
+    fun checkClearCart()
 }
