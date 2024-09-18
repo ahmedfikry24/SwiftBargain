@@ -11,6 +11,7 @@ import com.example.swiftbargain.data.models.OrderDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
+import com.example.swiftbargain.data.models.UserInfoDto
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -55,5 +56,7 @@ interface Repository {
     suspend fun deleteAllCreditCards()
     suspend fun addOrder(order: OrderDto)
     suspend fun getAllOrders(): List<OrderDto>
+    suspend fun getUserInfo(): UserInfoDto
+    suspend fun updateProfileInfo(info: UserInfoDto, password: String?)
     //endregion
 }

@@ -1,6 +1,7 @@
 package com.example.swiftbargain.data.repository
 
 import android.content.Intent
+import android.net.Uri
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.local.room.RoomManager
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
@@ -23,8 +24,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -342,6 +345,29 @@ class RepositoryImpl @Inject constructor(
             val result =
                 fireStore.collection(USERS).document(currentUserId).collection(ORDERS).get().await()
             result.toObjects(OrderDto::class.java)
+        }
+    }
+
+    override suspend fun getUserInfo(): UserInfoDto {
+        return wrapApiCall(connectivityChecker) {
+            val currentUser = auth.currentUser ?: throw UserNotFound()
+            val result = fireStore.collection(USERS).document(currentUser.uid).get().await()
+            result.toObject(UserInfoDto::class.java) ?: throw UserNotFound()
+        }
+    }
+
+    override suspend fun updateProfileInfo(info: UserInfoDto, password: String?) {
+        wrapApiCall(connectivityChecker) {
+            val currentUser = auth.currentUser ?: throw UserNotFound()
+            currentUser.updateProfile(userProfileChangeRequest {
+                displayName = info.name
+                photoUri = Uri.parse(info.imageUrl)
+            })
+            if (password != null) currentUser.updatePassword(password)
+
+            fireStore.collection(USERS).document(currentUser.uid)
+                .set(info, SetOptions.mergeFields())
+                .await()
         }
     }
 
