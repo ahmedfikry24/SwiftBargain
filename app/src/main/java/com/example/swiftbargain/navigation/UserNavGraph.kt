@@ -62,6 +62,10 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<ProductReviews> { ReviewsScreen(navController) }
                 composable<Favorites> { FavoritesScreen(navController) }
                 composable<Category> { CategoryScreen(navController) }
+                composable<Profile> { }
+                composable<Orders> { }
+                composable<Addresses> { }
+                composable<Payments> { }
             }
         }
     }
