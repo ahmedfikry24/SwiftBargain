@@ -8,7 +8,7 @@ data class UserInfoDto(
     val name: String? = "",
     val email: String? = "",
     val imageUrl: String? = "",
-    val gender: String = "",
+    val gender: String = "Male",
     val birthday: String = "",
     val phone: String? = "",
     val addresses: List<AddressDto> = listOf()
