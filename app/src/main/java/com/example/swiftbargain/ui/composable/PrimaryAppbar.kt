@@ -1,10 +1,12 @@
 package com.example.swiftbargain.ui.composable
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -26,27 +28,36 @@ fun PrimaryAppbar(
     title: String,
     onClickBack: () -> Unit
 ) {
-    Row(
-        modifier = modifier
+    Column(
+        modifier
             .fillMaxWidth()
             .sizeIn(minHeight = 48.dp, maxHeight = 56.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(
-            modifier = Modifier.padding(start = MaterialTheme.spacing.space16),
-            colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colors.textGrey),
-            onClick = onClickBack
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_bcak),
-                contentDescription = null
+            IconButton(
+                modifier = Modifier.padding(start = MaterialTheme.spacing.space16),
+                colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colors.textGrey),
+                onClick = onClickBack
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_bcak),
+                    contentDescription = null
+                )
+            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colors.text
             )
         }
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colors.text
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = MaterialTheme.colors.textGrey
         )
     }
 }
