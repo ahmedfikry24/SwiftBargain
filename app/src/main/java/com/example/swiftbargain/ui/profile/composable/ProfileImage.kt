@@ -61,7 +61,7 @@ fun ProfileImage(
                 ) {
                     Text(
                         text = state.name.first().uppercase(),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colors.background
                     )
                 }
