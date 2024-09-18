@@ -96,4 +96,8 @@
     <string name="card_holder_">CARD HOLDER</string>
     <string name="card_save">CARD SAVE</string>
     <string name="use_megsl_cupon_for_get_90_off">Use “MEGSL” Cupon For Get 90% off</string>
+    <string name="account">Account</string>
+    <string name="profile">profile</string>
+    <string name="orders">orders</string>
+    <string name="address">Address</string>
 </resources>

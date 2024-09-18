@@ -48,4 +48,13 @@ data class ProductReviews(val id: String)
 data object Favorites
 
 @Serializable
-object Search
+data object Profile
+
+@Serializable
+data object Orders
+
+@Serializable
+data object Addresses
+
+@Serializable
+data object Payments
