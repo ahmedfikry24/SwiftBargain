@@ -68,7 +68,9 @@ class RepositoryImpl @Inject constructor(
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = user.displayName,
-                email = user.email
+                email = user.email,
+                imageUrl = user.photoUrl.toString(),
+                phone = user.phoneNumber ?: ""
             )
             fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.uid
@@ -83,7 +85,9 @@ class RepositoryImpl @Inject constructor(
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = user.displayName,
-                email = user.email
+                email = user.email,
+                imageUrl = user.photoUrl.toString(),
+                phone = user.phoneNumber ?: ""
             )
             fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.uid
@@ -111,7 +115,9 @@ class RepositoryImpl @Inject constructor(
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = name,
-                email = email
+                email = email,
+                imageUrl = user.photoUrl.toString(),
+                phone = user.phoneNumber ?: ""
             )
             fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.sendEmailVerification().await()
