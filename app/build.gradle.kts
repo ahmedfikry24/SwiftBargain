@@ -105,6 +105,8 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.firestorage)
+
 
     //facebook sdk
     implementation(libs.facebook.login)

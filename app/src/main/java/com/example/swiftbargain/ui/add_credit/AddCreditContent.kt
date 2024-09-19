@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +22,7 @@ import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
-import com.example.swiftbargain.ui.composable.PrimaryTextField
+import com.example.swiftbargain.ui.composable.SecondaryTextField
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
@@ -43,7 +42,7 @@ fun AddCreditContent(
             LazyColumn(
                 modifier = modifier.weight(1f),
                 contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space24)
             ) {
                 item {
                     Column(modifier = Modifier.fillMaxWidth()) {
@@ -58,7 +57,7 @@ fun AddCreditContent(
                     }
                 }
                 item {
-                    InfoSection(
+                    SecondaryTextField(
                         title = stringResource(R.string.card_number),
                         fieldValue = state.cardNum,
                         isValueError = state.cardNumError,
@@ -70,14 +69,14 @@ fun AddCreditContent(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
                     ) {
-                        InfoSection(
+                        SecondaryTextField(
                             modifier = Modifier.weight(1f),
                             title = stringResource(R.string.expiration_date),
                             fieldValue = state.expiration,
                             isValueError = state.expirationError,
                             onChangeValue = interactions::onChangeExpiration
                         )
-                        InfoSection(
+                        SecondaryTextField(
                             modifier = Modifier.weight(1f),
                             title = stringResource(R.string.security_code),
                             fieldValue = state.securityCode,
@@ -88,7 +87,7 @@ fun AddCreditContent(
                 }
 
                 item {
-                    InfoSection(
+                    SecondaryTextField(
                         title = stringResource(R.string.card_holder),
                         fieldValue = state.holderName,
                         isValueError = state.holderNameError,
@@ -113,36 +112,4 @@ fun AddCreditContent(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
         onTryAgain = interactions::addCard
     )
-}
-
-@Composable
-private fun InfoSection(
-    modifier: Modifier = Modifier,
-    title: String,
-    fieldValue: String,
-    isValueError: Boolean,
-    imeAction: ImeAction = ImeAction.Next,
-    keyboardType: KeyboardType = KeyboardType.Number,
-    onChangeValue: (String) -> Unit
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = MaterialTheme.spacing.space8),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colors.text
-        )
-        PrimaryTextField(
-            value = fieldValue,
-            hint = "",
-            isError = isValueError,
-            imeAction = imeAction,
-            keyboardType = keyboardType,
-            onChangeValue = onChangeValue
-        )
-    }
 }

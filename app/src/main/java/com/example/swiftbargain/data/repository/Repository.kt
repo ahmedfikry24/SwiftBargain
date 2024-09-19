@@ -1,6 +1,7 @@
 package com.example.swiftbargain.data.repository
 
 import android.content.Intent
+import android.net.Uri
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
@@ -11,6 +12,7 @@ import com.example.swiftbargain.data.models.OrderDto
 import com.example.swiftbargain.data.models.ProductDto
 import com.example.swiftbargain.data.models.ReviewDto
 import com.example.swiftbargain.data.models.SaleAdDto
+import com.example.swiftbargain.data.models.UserInfoDto
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -55,5 +57,7 @@ interface Repository {
     suspend fun deleteAllCreditCards()
     suspend fun addOrder(order: OrderDto)
     suspend fun getAllOrders(): List<OrderDto>
+    suspend fun getUserInfo(): UserInfoDto
+    suspend fun updateProfileInfo(info: UserInfoDto, image: Uri?): String
     //endregion
 }

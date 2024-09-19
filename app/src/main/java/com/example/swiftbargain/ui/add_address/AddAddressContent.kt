@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +21,7 @@ import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
-import com.example.swiftbargain.ui.composable.PrimaryTextField
+import com.example.swiftbargain.ui.composable.SecondaryTextField
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
@@ -41,7 +40,7 @@ fun AddAddressContent(
         LazyColumn(
             modifier = modifier.fillMaxSize(),
             contentPadding = PaddingValues(MaterialTheme.spacing.space16),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space24)
         ) {
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
@@ -56,7 +55,7 @@ fun AddAddressContent(
                 }
             }
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.country),
                     fieldValue = state.country,
                     isValueError = state.countryError,
@@ -64,7 +63,7 @@ fun AddAddressContent(
                 )
             }
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.full_name),
                     fieldValue = state.name,
                     isValueError = state.nameError,
@@ -73,7 +72,7 @@ fun AddAddressContent(
             }
 
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.street_address),
                     fieldValue = state.streetAddress,
                     isValueError = state.streetAddressError,
@@ -82,7 +81,7 @@ fun AddAddressContent(
             }
 
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.street_address) + stringResource(R.string.optional),
                     fieldValue = state.streetAddress2,
                     isValueError = false,
@@ -91,7 +90,7 @@ fun AddAddressContent(
             }
 
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.city),
                     fieldValue = state.city,
                     isValueError = state.cityError,
@@ -100,7 +99,7 @@ fun AddAddressContent(
             }
 
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.zip_code),
                     fieldValue = state.zipCode,
                     isValueError = state.zipCodeError,
@@ -110,7 +109,7 @@ fun AddAddressContent(
             }
 
             item {
-                InfoSection(
+                SecondaryTextField(
                     title = stringResource(R.string.phone_number),
                     fieldValue = state.phone,
                     isValueError = state.phoneError,
@@ -134,37 +133,4 @@ fun AddAddressContent(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
         onTryAgain = interactions::onClickAddAddress
     )
-}
-
-
-@Composable
-private fun InfoSection(
-    modifier: Modifier = Modifier,
-    title: String,
-    fieldValue: String,
-    isValueError: Boolean,
-    imeAction: ImeAction = ImeAction.Next,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    onChangeValue: (String) -> Unit
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = MaterialTheme.spacing.space8),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colors.text
-        )
-        PrimaryTextField(
-            value = fieldValue,
-            hint = "",
-            isError = isValueError,
-            imeAction = imeAction,
-            keyboardType = keyboardType,
-            onChangeValue = onChangeValue
-        )
-    }
 }

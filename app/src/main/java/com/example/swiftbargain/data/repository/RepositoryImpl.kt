@@ -1,6 +1,7 @@
 package com.example.swiftbargain.data.repository
 
 import android.content.Intent
+import android.net.Uri
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.local.room.RoomManager
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
@@ -23,16 +24,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val dataStore: DataStoreManager,
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val fireStorage: FirebaseStorage,
     private val localDB: RoomManager,
     private val connectivityChecker: InternetConnectivityChecker
 ) : Repository {
@@ -68,7 +74,9 @@ class RepositoryImpl @Inject constructor(
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = user.displayName,
-                email = user.email
+                email = user.email,
+                imageUrl = user.photoUrl.toString(),
+                phone = user.phoneNumber ?: ""
             )
             fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.uid
@@ -83,7 +91,9 @@ class RepositoryImpl @Inject constructor(
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = user.displayName,
-                email = user.email
+                email = user.email,
+                imageUrl = user.photoUrl.toString(),
+                phone = user.phoneNumber ?: ""
             )
             fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.uid
@@ -111,7 +121,9 @@ class RepositoryImpl @Inject constructor(
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = name,
-                email = email
+                email = email,
+                imageUrl = user.photoUrl.toString(),
+                phone = user.phoneNumber ?: ""
             )
             fireStore.collection(USERS).document(user.uid).set(userInfo).await()
             user.sendEmailVerification().await()
@@ -336,6 +348,39 @@ class RepositoryImpl @Inject constructor(
             val result =
                 fireStore.collection(USERS).document(currentUserId).collection(ORDERS).get().await()
             result.toObjects(OrderDto::class.java)
+        }
+    }
+
+    override suspend fun getUserInfo(): UserInfoDto {
+        return wrapApiCall(connectivityChecker) {
+            val currentUser = auth.currentUser ?: throw UserNotFound()
+            val result = fireStore.collection(USERS).document(currentUser.uid).get().await()
+            result.toObject(UserInfoDto::class.java) ?: throw UserNotFound()
+        }
+    }
+
+    override suspend fun updateProfileInfo(info: UserInfoDto, image: Uri?): String {
+        return wrapApiCall(connectivityChecker) {
+            val currentUser = auth.currentUser ?: throw UserNotFound()
+            currentUser.updateProfile(userProfileChangeRequest {
+                displayName = info.name
+                photoUri = image ?: Uri.parse(info.imageUrl)
+            })
+            var imageUrl = ""
+            if (image != null) {
+                val fileName = "$USERS/${UUID.randomUUID()}.jpg"
+                val imageRef = fireStorage.reference.child(fileName)
+                val result = imageRef.putFile(image).await()
+                imageUrl = result.storage.downloadUrl.await().toString()
+            }
+
+            val updatedInfo = if (imageUrl.isNotEmpty()) info.copy(imageUrl = imageUrl) else info
+
+            fireStore.collection(USERS).document(currentUser.uid)
+                .set(updatedInfo, SetOptions.merge())
+                .await()
+
+            imageUrl.ifEmpty { info.imageUrl } ?: imageUrl
         }
     }
 

@@ -5,6 +5,7 @@ import com.example.swiftbargain.data.utils.InternetConnectivityChecker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +20,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideFireBasFireStore() = Firebase.firestore
+
+    @Provides
+    @Singleton
+    fun provideFireBasFireStorage() = FirebaseStorage.getInstance()
 
     @Provides
     @Singleton
