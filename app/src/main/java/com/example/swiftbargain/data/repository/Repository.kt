@@ -1,6 +1,7 @@
 package com.example.swiftbargain.data.repository
 
 import android.content.Intent
+import android.net.Uri
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
 import com.example.swiftbargain.data.local.room.entity.FavoriteProductEntity
@@ -57,6 +58,6 @@ interface Repository {
     suspend fun addOrder(order: OrderDto)
     suspend fun getAllOrders(): List<OrderDto>
     suspend fun getUserInfo(): UserInfoDto
-    suspend fun updateProfileInfo(info: UserInfoDto, password: String?)
+    suspend fun updateProfileInfo(info: UserInfoDto, image: Uri?): String
     //endregion
 }

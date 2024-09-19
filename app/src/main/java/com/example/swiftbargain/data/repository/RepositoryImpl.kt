@@ -28,14 +28,17 @@ import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val dataStore: DataStoreManager,
     private val auth: FirebaseAuth,
     private val fireStore: FirebaseFirestore,
+    private val fireStorage: FirebaseStorage,
     private val localDB: RoomManager,
     private val connectivityChecker: InternetConnectivityChecker
 ) : Repository {
@@ -356,18 +359,28 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateProfileInfo(info: UserInfoDto, password: String?) {
-        wrapApiCall(connectivityChecker) {
+    override suspend fun updateProfileInfo(info: UserInfoDto, image: Uri?): String {
+        return wrapApiCall(connectivityChecker) {
             val currentUser = auth.currentUser ?: throw UserNotFound()
             currentUser.updateProfile(userProfileChangeRequest {
                 displayName = info.name
-                photoUri = Uri.parse(info.imageUrl)
+                photoUri = image ?: Uri.parse(info.imageUrl)
             })
-            if (password != null) currentUser.updatePassword(password)
+            var imageUrl = ""
+            if (image != null) {
+                val fileName = "$USERS/${UUID.randomUUID()}.jpg"
+                val imageRef = fireStorage.reference.child(fileName)
+                val result = imageRef.putFile(image).await()
+                imageUrl = result.storage.downloadUrl.await().toString()
+            }
+
+            val updatedInfo = if (imageUrl.isNotEmpty()) info.copy(imageUrl = imageUrl) else info
 
             fireStore.collection(USERS).document(currentUser.uid)
-                .set(info, SetOptions.mergeFields())
+                .set(updatedInfo, SetOptions.merge())
                 .await()
+
+            imageUrl.ifEmpty { info.imageUrl } ?: imageUrl
         }
     }
 
