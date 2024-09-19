@@ -70,7 +70,7 @@ fun EditProfileBirthday(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = birthday.ifEmpty { "$day-$month-$year" },
+                text = birthday,
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colors.textGrey
             )

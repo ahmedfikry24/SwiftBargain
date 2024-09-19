@@ -109,5 +109,4 @@
     <string name="this_app_requires_media_access_to_update_profile_image_please_grant_the_permission">this app requires media access to update profile image, Please grant the permission.</string>
     <string name="this_app_needs_media_access_for_update_profile_image_please_allow_access_in_the_settings">This app needs media access for update profile image, Please allow access in the settings.</string>
     <string name="save_changes">Save changes</string>
-    <string name="are_you_need_to_save_changes_or_discard">Are you need to save changes or Discard?</string>
 </resources>

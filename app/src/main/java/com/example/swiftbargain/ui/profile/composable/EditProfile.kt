@@ -1,5 +1,6 @@
 package com.example.swiftbargain.ui.profile.composable
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -71,7 +72,12 @@ fun EditProfile(
         ContentVisibility(isVisible = state.updateProfile.contentStatus == ContentStatus.VISIBLE) {
             val imagePicker = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.GetContent()
-            ) { it?.let { interactions.onSelectImage(it) } }
+            ) {
+                it?.let {
+                    Log.e("TAG", "EditProfile: $it ")
+                    interactions.onSelectImage(it)
+                }
+            }
 
             val mediaPermission = rememberMediaPermission { imagePicker.launch("image/*") }
 
@@ -89,7 +95,7 @@ fun EditProfile(
                                 containerColor = MaterialTheme.colors.background,
                                 contentColor = MaterialTheme.colors.textGrey,
                                 border = BorderStroke(1.dp, MaterialTheme.colors.textLight),
-                                onClick = interactions::controlEditProfileVisibility
+                                onClick = interactions::onCancelEdit
                             )
                         }
                     }
@@ -146,13 +152,13 @@ fun EditProfile(
                         .padding(horizontal = MaterialTheme.spacing.space16)
                         .padding(bottom = MaterialTheme.spacing.space16),
                     text = stringResource(R.string.save),
-                    onClick = {}
+                    onClick = interactions::updateProfile
                 )
             }
         }
         ContentError(
             isVisible = state.updateProfile.contentStatus == ContentStatus.FAILURE,
-            onTryAgain = {}
+            onTryAgain = interactions::updateProfile
         )
     }
 }

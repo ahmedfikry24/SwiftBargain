@@ -37,7 +37,7 @@ fun SaveChangesDialog(
         },
         text = {
             Text(
-                text = stringResource(R.string.are_you_need_to_save_changes_or_discard),
+                text = "Are you need to save changes or Discard?",
                 fontSize = 16.sp,
                 fontFamily = FontFamily(Font(R.font.poppins_regular)),
                 color = Color.Black
