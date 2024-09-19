@@ -1,5 +1,7 @@
 package com.example.swiftbargain.ui.profile.composable
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
@@ -65,9 +67,14 @@ fun EditProfile(
         enter = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
         exit = slideOutHorizontally(tween(500)) + fadeOut(tween(500))
     ) {
-        ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
-        ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-            val mediaPermission = rememberMediaPermission {}
+        ContentLoading(isVisible = state.updateProfile.contentStatus == ContentStatus.LOADING)
+        ContentVisibility(isVisible = state.updateProfile.contentStatus == ContentStatus.VISIBLE) {
+            val imagePicker = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent()
+            ) { it?.let { interactions.onSelectImage(it) } }
+
+            val mediaPermission = rememberMediaPermission { imagePicker.launch("image/*") }
+
             Column(modifier = modifier.fillMaxSize()) {
                 LazyColumn(
                     modifier = modifier.weight(1f),
@@ -89,8 +96,9 @@ fun EditProfile(
 
                     item {
                         EditProfileImage(
-                            name = state.name,
-                            imageUrl = state.imageUrl,
+                            name = state.updateProfile.name,
+                            imageUrl = state.updateProfile.imageUrl,
+                            imageUri = state.updateImageProfile,
                             onClickEdit = { mediaPermission.launchPermissionRequest() }
                         )
                     }
@@ -98,15 +106,15 @@ fun EditProfile(
                     item {
                         SecondaryTextField(
                             title = stringResource(R.string.full_name),
-                            fieldValue = state.name,
-                            isValueError = state.nameError,
+                            fieldValue = state.updateProfile.name,
+                            isValueError = state.updateProfile.nameError,
                             onChangeValue = interactions::onChangeName
                         )
                     }
 
                     item {
                         EditProfileGender(
-                            gender = state.gender,
+                            gender = state.updateProfile.gender,
                             isExpanded = state.isGenderDropDownVisible,
                             onSelect = interactions::onSelectGender,
                             controlVisibility = interactions::controlGenderDropDownVisibility
@@ -115,7 +123,7 @@ fun EditProfile(
 
                     item {
                         EditProfileBirthday(
-                            birthday = state.birthday,
+                            birthday = state.updateProfile.birthday,
                             onSelectDate = interactions::onSelectDate
                         )
                     }
@@ -123,7 +131,7 @@ fun EditProfile(
                     item {
                         SecondaryTextField(
                             title = stringResource(R.string.phone),
-                            fieldValue = state.phone,
+                            fieldValue = state.updateProfile.phone,
                             isValueError = false,
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Done,
@@ -143,7 +151,7 @@ fun EditProfile(
             }
         }
         ContentError(
-            isVisible = state.contentStatus == ContentStatus.FAILURE,
+            isVisible = state.updateProfile.contentStatus == ContentStatus.FAILURE,
             onTryAgain = {}
         )
     }

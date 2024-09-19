@@ -1,5 +1,7 @@
 package com.example.swiftbargain.ui.profile.composable
 
+import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import coil.compose.rememberAsyncImagePainter
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
@@ -33,17 +36,18 @@ fun EditProfileImage(
     modifier: Modifier = Modifier,
     name: String,
     imageUrl: String,
+    imageUri: Uri?,
     onClickEdit: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(contentAlignment = Alignment.BottomEnd) {
             Box(
                 modifier = Modifier
-                    .size(88.dp)
+                    .size(96.dp)
                     .clip(CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                if (imageUrl.isEmpty()) {
+                if (imageUrl.isEmpty() && imageUri == null) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -56,6 +60,13 @@ fun EditProfileImage(
                             color = MaterialTheme.colors.background
                         )
                     }
+                } else if (imageUrl.isEmpty() && imageUri != null) {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        painter = rememberAsyncImagePainter(imageUri),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit
+                    )
                 } else {
                     SubcomposeAsyncImage(
                         modifier = Modifier.fillMaxSize(),

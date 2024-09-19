@@ -78,24 +78,24 @@ private fun ProfileContent(
                 InfoSection(
                     iconId = R.drawable.ic_gender,
                     title = stringResource(R.string.gender),
-                    value = state.gender
+                    value = state.profileInfo.gender
                 )
             }
-            if (state.birthday.isNotEmpty())
+            if (state.profileInfo.birthday.isNotEmpty())
                 item {
                     InfoSection(
                         iconId = R.drawable.ic_calender,
                         title = stringResource(R.string.birthday),
-                        value = state.birthday
+                        value = state.profileInfo.birthday
                     )
                 }
 
-            if (state.phone.isNotEmpty())
+            if (state.profileInfo.phone.isNotEmpty())
                 item {
                     InfoSection(
                         iconId = R.drawable.ic_phone,
                         title = stringResource(R.string.phone),
-                        value = state.phone
+                        value = state.profileInfo.phone
                     )
                 }
         }

@@ -52,7 +52,7 @@ fun ProfileImage(
                 .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            if (state.imageUrl.isEmpty()) {
+            if (state.profileInfo.imageUrl.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -60,7 +60,7 @@ fun ProfileImage(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = state.name.first().uppercase(),
+                        text = state.profileInfo.name.first().uppercase(),
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colors.background
                     )
@@ -68,7 +68,7 @@ fun ProfileImage(
             } else {
                 SubcomposeAsyncImage(
                     modifier = Modifier.fillMaxSize(),
-                    model = state.imageUrl,
+                    model = state.profileInfo.imageUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                 ) {
@@ -83,12 +83,12 @@ fun ProfileImage(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space4)
         ) {
             Text(
-                text = state.name,
+                text = state.profileInfo.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colors.text
             )
             Text(
-                text = state.email,
+                text = state.profileInfo.email,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colors.textGrey
             )
