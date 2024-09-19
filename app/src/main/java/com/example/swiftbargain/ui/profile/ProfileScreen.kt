@@ -30,6 +30,7 @@ import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.profile.composable.EditProfile
 import com.example.swiftbargain.ui.profile.composable.ProfileImage
+import com.example.swiftbargain.ui.profile.composable.SaveChangesDialog
 import com.example.swiftbargain.ui.profile.view_model.ProfileInteractions
 import com.example.swiftbargain.ui.profile.view_model.ProfileUiState
 import com.example.swiftbargain.ui.profile.view_model.ProfileViewModel
@@ -100,6 +101,14 @@ private fun ProfileContent(
                 }
         }
         EditProfile(state = state, interactions = interactions)
+        if (state.isSaveInfoDialogVisible)
+            SaveChangesDialog(
+                onSave = {
+                    interactions.controlSaveChangesDialogVisibility()
+                    interactions.updateProfile()
+                },
+                onCancel = interactions::controlSaveChangesDialogVisibility
+            )
     }
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
