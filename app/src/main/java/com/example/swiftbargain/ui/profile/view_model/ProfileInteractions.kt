@@ -3,6 +3,7 @@ package com.example.swiftbargain.ui.profile.view_model
 import android.net.Uri
 
 interface ProfileInteractions {
+    fun onClickBack()
     fun getProfileInfo()
     fun controlEditProfileVisibility()
     fun onCancelEdit()

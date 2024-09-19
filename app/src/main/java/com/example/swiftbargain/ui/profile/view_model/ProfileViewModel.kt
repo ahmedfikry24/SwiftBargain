@@ -5,6 +5,7 @@ import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
+import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.toDto
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
@@ -20,6 +21,10 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getProfileInfo()
+    }
+
+    override fun onClickBack() {
+        sendEvent(ProfileEvents.NavigateToBack)
     }
 
     override fun getProfileInfo() {
@@ -43,6 +48,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun profileError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(ProfileEvents.UnAuthorizedAccess)
     }
 
     override fun controlEditProfileVisibility() {
@@ -50,13 +56,9 @@ class ProfileViewModel @Inject constructor(
     }
 
     override fun onCancelEdit() {
-        val isTheSame = checkIsUpdatedInfoSameMain()
-        _state.update {
-            it.copy(
-                isEditProfileVisible = !isTheSame,
-                isSaveInfoDialogVisible = !isTheSame
-            )
-        }
+        if (checkIsUpdatedInfoSameMain()) {
+            _state.update { it.copy(isEditProfileVisible = false) }
+        } else _state.update { it.copy(isSaveInfoDialogVisible = true) }
     }
 
     override fun onSelectImage(image: Uri) {
@@ -96,7 +98,7 @@ class ProfileViewModel @Inject constructor(
         val gender = mainInfo.gender == updatedInfo.gender
         val birthday = mainInfo.birthday == updatedInfo.birthday
         val phone = mainInfo.phone == updatedInfo.phone
-        val isSame = listOf(name, gender, birthday, phone).any { false }
+        val isSame = listOf(name, gender, birthday, phone).any { !it }
 
         return !isSame
     }
@@ -132,9 +134,11 @@ class ProfileViewModel @Inject constructor(
                 profileInfo = it.updateProfile.copy(imageUrl = imageUrl),
             )
         }
+        sendEvent(ProfileEvents.UpdateProfileSuccess)
     }
 
     private fun updateError(error: BaseError) {
         _state.update { it.copy(updateProfile = it.updateProfile.copy(contentStatus = ContentStatus.FAILURE)) }
+        if (error is UserNotFound) sendEvent(ProfileEvents.UnAuthorizedAccess)
     }
 }

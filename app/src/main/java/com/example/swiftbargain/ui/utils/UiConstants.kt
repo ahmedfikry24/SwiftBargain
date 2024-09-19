@@ -15,4 +15,5 @@ object UiConstants {
     const val ADD_CREDIT_SUCCESS = "credit added successfully"
     const val ORDER_SUCCESS = "your order recorded successfully"
     const val UNAUTHORIZED_TO_ACCESS = "unauthorized access please login again"
+    const val UPDATE_PROFILE_SUCCESS = "profile updated successfully"
 }

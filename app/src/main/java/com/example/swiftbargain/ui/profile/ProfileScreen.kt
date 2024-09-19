@@ -31,6 +31,7 @@ import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.profile.composable.EditProfile
 import com.example.swiftbargain.ui.profile.composable.ProfileImage
 import com.example.swiftbargain.ui.profile.composable.SaveChangesDialog
+import com.example.swiftbargain.ui.profile.view_model.ProfileEvents
 import com.example.swiftbargain.ui.profile.view_model.ProfileInteractions
 import com.example.swiftbargain.ui.profile.view_model.ProfileUiState
 import com.example.swiftbargain.ui.profile.view_model.ProfileViewModel
@@ -38,6 +39,9 @@ import com.example.swiftbargain.ui.theme.colors
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
+import com.example.swiftbargain.ui.utils.SnackBarManager
+import com.example.swiftbargain.ui.utils.SnackBarManager.showSuccess
+import com.example.swiftbargain.ui.utils.UiConstants
 
 @Composable
 fun ProfileScreen(
@@ -46,8 +50,16 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    EventHandler(effects = viewModel.event) { event, _ ->
-
+    val snackBar = SnackBarManager.init()
+    EventHandler(effects = viewModel.event) { event, scope ->
+        when (event) {
+            ProfileEvents.NavigateToBack -> navController.popBackStack()
+            ProfileEvents.UnAuthorizedAccess -> unAuthorizedLogin()
+            ProfileEvents.UpdateProfileSuccess -> snackBar.showSuccess(
+                UiConstants.UPDATE_PROFILE_SUCCESS,
+                scope
+            )
+        }
     }
     ProfileContent(state = state, interactions = viewModel)
 }
@@ -66,7 +78,7 @@ private fun ProfileContent(
             item {
                 PrimaryAppbar(
                     title = stringResource(R.string.profile),
-                    onClickBack = {}
+                    onClickBack = interactions::onClickBack
                 )
             }
             item {
