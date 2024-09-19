@@ -28,6 +28,7 @@ import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
+import com.example.swiftbargain.ui.profile.composable.EditProfile
 import com.example.swiftbargain.ui.profile.composable.ProfileImage
 import com.example.swiftbargain.ui.profile.view_model.ProfileInteractions
 import com.example.swiftbargain.ui.profile.view_model.ProfileUiState
@@ -67,7 +68,12 @@ private fun ProfileContent(
                     onClickBack = {}
                 )
             }
-            item { ProfileImage(state = state, onClickEdit = {}) }
+            item {
+                ProfileImage(
+                    state = state,
+                    onClickEdit = interactions::controlEditProfileVisibility
+                )
+            }
             item {
                 InfoSection(
                     iconId = R.drawable.ic_gender,
@@ -93,6 +99,7 @@ private fun ProfileContent(
                     )
                 }
         }
+        EditProfile(state = state, interactions = interactions)
     }
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
