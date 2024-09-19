@@ -35,4 +35,28 @@ class ProfileViewModel @Inject constructor(
     private fun profileError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
     }
+
+    override fun controlEditProfileVisibility() {
+        _state.update { it.copy(isEditProfileVisible = !it.isEditProfileVisible) }
+    }
+
+    override fun onChangeName(name: String) {
+        _state.update { it.copy(name = name) }
+    }
+
+    override fun controlGenderDropDownVisibility() {
+        _state.update { it.copy(isGenderDropDownVisible = !it.isGenderDropDownVisible) }
+    }
+
+    override fun onSelectGender(gender: String) {
+        _state.update { it.copy(gender = gender, isGenderDropDownVisible = false) }
+    }
+
+    override fun onSelectDate(date: String) {
+        _state.update { it.copy(birthday = date) }
+    }
+
+    override fun onChangePhone(phone: String) {
+        _state.update { it.copy(phone = phone) }
+    }
 }

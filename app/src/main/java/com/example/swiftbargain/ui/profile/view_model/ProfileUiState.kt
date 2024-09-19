@@ -8,18 +8,17 @@ import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 
 data class ProfileUiState(
     val contentStatus: ContentStatus = ContentStatus.LOADING,
+    val isEditProfileVisible: Boolean = false,
     val updateContentStatus: ContentStatus = ContentStatus.VISIBLE,
     val id: String = "",
     val imageUrl: String = "",
     val name: String = "",
     val nameError: Boolean = false,
     val email: String = "",
-    val emailError: Boolean = false,
     val gender: String = "",
-    val genderError: Boolean = false,
+    val isGenderDropDownVisible: Boolean = false,
     val birthday: String = "",
     val phone: String = "",
-    val phoneError: Boolean = false,
     val address: List<AddressUiState> = listOf()
 )
 
