@@ -8,6 +8,7 @@ import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.navigation.OrderDetails
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
+import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,7 @@ class OrderDetailsViewModel @Inject constructor(
     }
 
     override fun onClickBack() {
-
+        sendEvent(OrderDetailsEvents.NavigateToBack)
     }
 
     override fun getOrderDetails() {
@@ -51,9 +52,10 @@ class OrderDetailsViewModel @Inject constructor(
 
     private fun detailsError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(OrderDetailsEvents.UnAuthorizedAccess)
     }
 
     override fun onClickProduct(id: String) {
-
+        sendEvent(OrderDetailsEvents.NavigateToProductDetails(id))
     }
 }

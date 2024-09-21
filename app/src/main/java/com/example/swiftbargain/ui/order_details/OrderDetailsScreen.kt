@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
@@ -21,6 +22,7 @@ import com.example.swiftbargain.ui.order_details.composable.OrderProducts
 import com.example.swiftbargain.ui.order_details.composable.OrderStatus
 import com.example.swiftbargain.ui.order_details.composable.PaymentDetails
 import com.example.swiftbargain.ui.order_details.composable.ShippingDetails
+import com.example.swiftbargain.ui.order_details.view_model.OrderDetailsEvents
 import com.example.swiftbargain.ui.order_details.view_model.OrderDetailsInteractions
 import com.example.swiftbargain.ui.order_details.view_model.OrderDetailsUiState
 import com.example.swiftbargain.ui.order_details.view_model.OrderDetailsViewModel
@@ -36,7 +38,16 @@ fun OrderDetailsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EventHandler(effects = viewModel.event) { event, _ ->
+        when (event) {
+            OrderDetailsEvents.NavigateToBack -> navController.popBackStack()
+            is OrderDetailsEvents.NavigateToProductDetails -> navController.navigate(
+                ProductDetails(
+                    event.id
+                )
+            )
 
+            OrderDetailsEvents.UnAuthorizedAccess -> unAuthorizedLogin()
+        }
     }
     OrderDetailsContent(state = state, interactions = viewModel)
 }
