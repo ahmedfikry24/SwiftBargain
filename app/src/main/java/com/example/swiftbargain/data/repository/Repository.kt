@@ -57,6 +57,7 @@ interface Repository {
     suspend fun deleteAllCreditCards()
     suspend fun addOrder(order: OrderDto)
     suspend fun getAllOrders(): List<OrderDto>
+    suspend fun getOrderDetails(id: String): Pair<OrderDto, List<ProductDto>>
     suspend fun getUserInfo(): UserInfoDto
     suspend fun updateProfileInfo(info: UserInfoDto, image: Uri?): String
     //endregion

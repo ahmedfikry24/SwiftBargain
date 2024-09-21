@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.navigation.OrderDetails
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
@@ -41,7 +42,7 @@ fun OrdersScreen(
     EventHandler(effects = viewModel.event) { event, _ ->
         when (event) {
             OrdersEvents.NavigateToBack -> navController.popBackStack()
-            is OrdersEvents.NavigateToOrderDetails -> Unit
+            is OrdersEvents.NavigateToOrderDetails -> navController.navigate(OrderDetails(event.id))
             OrdersEvents.UnAuthorizedAccess -> unAuthorizedLogin()
         }
     }

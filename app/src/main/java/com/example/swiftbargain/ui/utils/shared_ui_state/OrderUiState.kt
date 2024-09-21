@@ -11,11 +11,11 @@ data class OrderUiState(
     val price: Int = 0,
     val address: AddressUiState = AddressUiState()
 ) {
-    enum class OrderStatus {
-        PACKING,
-        SHIPPING,
-        ARRIVING,
-        SUCCESS
+    enum class OrderStatus(val value: String) {
+        PACKING("Packing"),
+        SHIPPING("Shipping"),
+        ARRIVING("Arriving"),
+        SUCCESS("Success")
     }
 }
 
@@ -48,7 +48,7 @@ fun OrderUiState.toDto(): OrderDto {
     return OrderDto(
         id = this.id,
         date = this.date,
-        status = this.status.toString(),
+        status = this.status.value,
         productsId = this.productsId,
         numOfItems = this.numOfItems,
         price = this.price,

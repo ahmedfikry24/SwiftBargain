@@ -54,6 +54,9 @@ data object Profile
 data object Orders
 
 @Serializable
+data class OrderDetails(val id: String)
+
+@Serializable
 data object Addresses
 
 @Serializable
