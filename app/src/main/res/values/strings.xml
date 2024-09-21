@@ -117,4 +117,6 @@
     <string name="shipping">Shipping</string>
     <string name="arriving">Arriving</string>
     <string name="products">Products</string>
+    <string name="shipping_details">Shipping Details</string>
+    <string name="date_shipping">Date Shipping</string>
 </resources>
