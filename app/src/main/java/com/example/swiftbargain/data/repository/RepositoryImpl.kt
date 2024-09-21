@@ -28,6 +28,7 @@ import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
@@ -348,6 +349,25 @@ class RepositoryImpl @Inject constructor(
             val result =
                 fireStore.collection(USERS).document(currentUserId).collection(ORDERS).get().await()
             result.toObjects(OrderDto::class.java)
+        }
+    }
+
+    override suspend fun getOrderDetails(id: String): Pair<OrderDto, List<ProductDto>> {
+        return wrapApiCall(connectivityChecker) {
+            val currentUserId = auth.currentUser?.uid ?: throw UserNotFound()
+            val result = fireStore.collection(USERS)
+                .document(currentUserId)
+                .collection(ORDERS)
+                .document(id)
+                .get().await()
+            val order = result.toObject(OrderDto::class.java) ?: OrderDto()
+            val products = mutableListOf<ProductDto>()
+            order.productsId.forEach { id ->
+                val product = fireStore.collection(PRODUCTS)
+                    .document(id).get().await().toObject<ProductDto>()
+                product?.let { products.add(it) }
+            }
+            Pair(order, products)
         }
     }
 
