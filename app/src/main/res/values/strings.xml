@@ -119,4 +119,6 @@
     <string name="products">Products</string>
     <string name="shipping_details">Shipping Details</string>
     <string name="date_shipping">Date Shipping</string>
+    <string name="payment_details">Payment Details</string>
+    <string name="import_charges">Import charges</string>
 </resources>
