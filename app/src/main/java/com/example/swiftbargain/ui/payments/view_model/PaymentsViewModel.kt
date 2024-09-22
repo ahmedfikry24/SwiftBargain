@@ -23,7 +23,7 @@ class PaymentsViewModel @Inject constructor(
     }
 
     override fun onClickBack() {
-
+        sendEvent(PaymentsEvents.NavigateToBack)
     }
 
     override fun getAllCredits() {
@@ -81,6 +81,7 @@ class PaymentsViewModel @Inject constructor(
                             .apply { add(it.addCredit) }
                     )
                 }
+                sendEvent(PaymentsEvents.AddCreditSuccess)
             }
         }
     }
