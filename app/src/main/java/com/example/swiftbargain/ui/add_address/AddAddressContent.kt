@@ -113,6 +113,7 @@ fun AddAddressContent(
                     title = stringResource(R.string.phone_number),
                     fieldValue = state.phone,
                     isValueError = state.phoneError,
+                    keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,
                     onChangeValue = interactions::onChangePhone
                 )
