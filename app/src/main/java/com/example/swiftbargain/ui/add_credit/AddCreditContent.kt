@@ -60,6 +60,7 @@ fun AddCreditContent(
                     SecondaryTextField(
                         title = stringResource(R.string.card_number),
                         fieldValue = state.cardNum,
+                        errorText = stringResource(R.string.incorrect_number),
                         isValueError = state.cardNumError,
                         onChangeValue = interactions::onChangeCreditNumber
                     )
