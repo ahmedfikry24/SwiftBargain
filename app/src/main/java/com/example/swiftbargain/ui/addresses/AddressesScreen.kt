@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.addresses.composable.AddressesAddAddress
+import com.example.swiftbargain.ui.addresses.view_model.AddressesEvents
 import com.example.swiftbargain.ui.addresses.view_model.AddressesInteractions
 import com.example.swiftbargain.ui.addresses.view_model.AddressesUiState
 import com.example.swiftbargain.ui.addresses.view_model.AddressesViewModel
@@ -30,6 +31,9 @@ import com.example.swiftbargain.ui.composable.PrimaryDeleteItemDialog
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
+import com.example.swiftbargain.ui.utils.SnackBarManager
+import com.example.swiftbargain.ui.utils.SnackBarManager.showSuccess
+import com.example.swiftbargain.ui.utils.UiConstants
 
 @Composable
 fun AddressesScreen(
@@ -38,8 +42,17 @@ fun AddressesScreen(
     viewModel: AddressesViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    EventHandler(effects = viewModel.event) { event, _ ->
+    val snackBar = SnackBarManager.init()
+    EventHandler(effects = viewModel.event) { event, scope ->
+        when (event) {
+            AddressesEvents.AddAddressSuccess -> snackBar.showSuccess(
+                UiConstants.ADD_ADDRESS_SUCCESS,
+                scope
+            )
 
+            AddressesEvents.NavigateToBack -> navController.popBackStack()
+            AddressesEvents.UnAuthorizedAccess -> unAuthorizedLogin()
+        }
     }
     AddressesContent(state = state, interactions = viewModel)
 }

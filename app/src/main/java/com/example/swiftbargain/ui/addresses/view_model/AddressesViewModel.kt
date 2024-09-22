@@ -4,6 +4,7 @@ import com.example.swiftbargain.data.models.AddressDto
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
+import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.shared_ui_state.AddressUiState
 import com.example.swiftbargain.ui.utils.shared_ui_state.toDto
@@ -42,10 +43,11 @@ class AddressesViewModel @Inject constructor(
 
     private fun addressesError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(AddressesEvents.UnAuthorizedAccess)
     }
 
     override fun onCLickBack() {
-
+        sendEvent(AddressesEvents.NavigateToBack)
     }
 
     override fun controlAddAddressVisibility() {
@@ -101,10 +103,12 @@ class AddressesViewModel @Inject constructor(
             )
         }
         _state.update { it.copy(addAddress = AddressUiState()) }
+        sendEvent(AddressesEvents.AddAddressSuccess)
     }
 
     private fun addressError(error: BaseError) {
         _state.update { it.copy(addAddress = it.addAddress.copy(contentStatus = ContentStatus.FAILURE)) }
+        if (error is UserNotFound) sendEvent(AddressesEvents.UnAuthorizedAccess)
     }
 
     private fun validateAddAddress(): Boolean {
@@ -167,5 +171,6 @@ class AddressesViewModel @Inject constructor(
 
     private fun deleteAddressError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.FAILURE) }
+        if (error is UserNotFound) sendEvent(AddressesEvents.UnAuthorizedAccess)
     }
 }
