@@ -1,19 +1,30 @@
 package com.example.swiftbargain.ui.addresses
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.addresses.view_model.AddressesInteractions
 import com.example.swiftbargain.ui.addresses.view_model.AddressesUiState
 import com.example.swiftbargain.ui.addresses.view_model.AddressesViewModel
+import com.example.swiftbargain.ui.composable.AddressItem
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.PrimaryAppbar
+import com.example.swiftbargain.ui.composable.PrimaryDeleteItemDialog
+import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
 
@@ -37,12 +48,39 @@ private fun AddressesContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+        ) {
+            item {
+                PrimaryAppbar(
+                    title = stringResource(R.string.address),
+                    onClickBack = interactions::onCLickBack
+                )
+            }
+            items(state.allAddresses) { address ->
+                AddressItem(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space16),
+                    isSelected = false,
+                    address = address,
+                    onClickItem = {},
+                    onClickDelete = {
+                        interactions.onSelectDeleteAddress(address)
+                        interactions.controlDeleteAddressDialogVisibility()
+                    }
+                )
+            }
         }
+
+        if (state.isDeleteAddressVisible)
+            PrimaryDeleteItemDialog(
+                onConfirm = interactions::onDeleteAddress,
+                onCancel = interactions::controlDeleteAddressDialogVisibility
+            )
     }
     ContentError(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
-        onTryAgain = {}
+        onTryAgain = interactions::getAllAddresses
     )
 }
