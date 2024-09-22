@@ -27,6 +27,7 @@ import com.example.swiftbargain.ui.home.HomeScreen
 import com.example.swiftbargain.ui.offer.OfferScreen
 import com.example.swiftbargain.ui.order_details.OrderDetailsScreen
 import com.example.swiftbargain.ui.orders.OrdersScreen
+import com.example.swiftbargain.ui.payments.PaymentsScreen
 import com.example.swiftbargain.ui.product_details.ProductDetailsScreen
 import com.example.swiftbargain.ui.profile.ProfileScreen
 import com.example.swiftbargain.ui.reviews.ReviewsScreen
@@ -70,7 +71,7 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Orders> { OrdersScreen(navController, unAuthorizedLogin) }
                 composable<OrderDetails> { OrderDetailsScreen(navController, unAuthorizedLogin) }
                 composable<Addresses> { AddressesScreen(navController, unAuthorizedLogin) }
-                composable<Payments> { }
+                composable<Payments> { PaymentsScreen(navController) }
             }
         }
     }
