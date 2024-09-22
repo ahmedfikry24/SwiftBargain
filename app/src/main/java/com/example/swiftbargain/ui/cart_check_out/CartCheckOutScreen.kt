@@ -1,5 +1,6 @@
 package com.example.swiftbargain.ui.cart_check_out
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -70,6 +71,20 @@ private fun CartCheckOutContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
+        BackHandler(
+            enabled = state.visibleContent.isBackEnabled,
+        ) {
+            when (state.visibleContent) {
+                CartCheckOutUiState.VisibleContent.SHIP_TO -> interactions.onClickBack()
+                CartCheckOutUiState.VisibleContent.PAYMENT -> interactions.onSwitchContent(
+                    CartCheckOutUiState.VisibleContent.SHIP_TO
+                )
+
+                CartCheckOutUiState.VisibleContent.CHOOSE_CARD -> interactions.onSwitchContent(
+                    CartCheckOutUiState.VisibleContent.PAYMENT
+                )
+            }
+        }
         Crossfade(
             modifier = Modifier.fillMaxSize(),
             targetState = state.visibleContent,

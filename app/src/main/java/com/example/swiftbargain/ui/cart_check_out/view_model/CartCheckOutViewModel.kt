@@ -213,7 +213,7 @@ class CartCheckOutViewModel
         _state.update { it.copy(visibleContent = content) }
     }
 
-    override fun onChoosePaymentMethodL(payment: PaymentMethod) {
+    override fun onChoosePaymentMethod(payment: PaymentMethod) {
         _state.update { it.copy(paymentMethod = payment) }
     }
 

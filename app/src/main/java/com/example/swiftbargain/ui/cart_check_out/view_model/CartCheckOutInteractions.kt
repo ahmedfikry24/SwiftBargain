@@ -15,7 +15,7 @@ interface CartCheckOutInteractions : AddAddressInteractions, AddCreditInteractio
     fun deleteAddress()
     fun onDismissDeleteAddressDialog()
     fun onSwitchContent(content: CartCheckOutUiState.VisibleContent)
-    fun onChoosePaymentMethodL(payment: PaymentMethod)
+    fun onChoosePaymentMethod(payment: PaymentMethod)
     fun checkOutOder()
     fun controlAddCreditVisibility()
     fun onSelectCredit(card: CreditUiSate)
