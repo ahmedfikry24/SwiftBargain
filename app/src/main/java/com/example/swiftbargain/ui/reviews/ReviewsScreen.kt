@@ -1,5 +1,6 @@
 package com.example.swiftbargain.ui.reviews
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -49,6 +50,7 @@ private fun ReviewsContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ReviewsUiState.ReviewContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ReviewsUiState.ReviewContentStatus.VISIBLE) {
+        BackHandler(enabled = !state.isReviewsContentVisible) { interactions.controlSwitchContent() }
         Crossfade(
             modifier = Modifier.fillMaxSize(),
             targetState = state.isReviewsContentVisible,
