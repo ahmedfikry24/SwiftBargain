@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.addresses
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,12 +10,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.R
+import com.example.swiftbargain.ui.addresses.composable.AddressesAddAddress
 import com.example.swiftbargain.ui.addresses.view_model.AddressesInteractions
 import com.example.swiftbargain.ui.addresses.view_model.AddressesUiState
 import com.example.swiftbargain.ui.addresses.view_model.AddressesViewModel
@@ -48,29 +51,36 @@ private fun AddressesContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
-        ) {
-            item {
-                PrimaryAppbar(
-                    title = stringResource(R.string.address),
-                    onClickBack = interactions::onCLickBack
-                )
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
+            ) {
+                item {
+                    PrimaryAppbar(
+                        title = stringResource(R.string.address),
+                        onClickBack = interactions::onCLickBack
+                    )
+                }
+                items(state.allAddresses) { address ->
+                    AddressItem(
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space16),
+                        isSelected = false,
+                        address = address,
+                        onClickItem = {},
+                        onClickDelete = {
+                            interactions.onSelectDeleteAddress(address)
+                            interactions.controlDeleteAddressDialogVisibility()
+                        }
+                    )
+                }
             }
-            items(state.allAddresses) { address ->
-                AddressItem(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space16),
-                    isSelected = false,
-                    address = address,
-                    onClickItem = {},
-                    onClickDelete = {
-                        interactions.onSelectDeleteAddress(address)
-                        interactions.controlDeleteAddressDialogVisibility()
-                    }
-                )
-            }
+            AddressesAddAddress(
+                isAddAddressVisible = state.isAddAddressVisible,
+                addAddress = state.addAddress,
+                interactions = interactions
+            )
         }
 
         if (state.isDeleteAddressVisible)
