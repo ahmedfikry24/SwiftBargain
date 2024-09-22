@@ -25,9 +25,9 @@ data class CartCheckOutUiState(
     val allCartProducts: List<CartProductUiState> = listOf(),
     val currentOder: OrderUiState = OrderUiState()
 ) {
-    enum class VisibleContent {
-        SHIP_TO,
-        PAYMENT,
-        CHOOSE_CARD
+    enum class VisibleContent(val isBackEnabled: Boolean) {
+        SHIP_TO(false),
+        PAYMENT(true),
+        CHOOSE_CARD(true)
     }
 }
