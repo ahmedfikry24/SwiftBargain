@@ -98,7 +98,7 @@ private fun ExploreContent(
         )
         ScrollToFirstItemFab(
             modifier = Modifier.fillMaxSize(),
-            isFabVisible = scrollState.canScrollBackward,
+            isFabVisible = scrollState.canScrollBackward && state.isSearchVisible,
             onClickFab = { scope.launch { scrollState.animateScrollToItem(0) } }
         ) {
             LazyVerticalGrid(
