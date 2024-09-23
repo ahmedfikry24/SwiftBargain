@@ -78,10 +78,6 @@ class HomeViewModel @Inject constructor(
         sendEvent(HomeEvents.NavigateToFavorites)
     }
 
-    override fun onClickNotifications() {
-        sendEvent(HomeEvents.NavigateToNotifications)
-    }
-
     companion object {
         const val SALE_ADS = "saleAd"
         const val CATEGORIES = "categories"

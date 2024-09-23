@@ -76,7 +76,6 @@ fun HomeScreen(
 
             is HomeEvents.NavigateToProductDetails -> navController.navigate(ProductDetails(event.id))
             HomeEvents.NavigateToFavorites -> navController.navigate(Favorites)
-            HomeEvents.NavigateToNotifications -> Unit
         }
     }
     HomeContent(state = state, interactions = viewModel)
@@ -98,10 +97,7 @@ private fun HomeContent(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                HomeAppbar(
-                    onClickFavourite = interactions::onClickFavorites,
-                    onClickNotification = interactions::onClickNotifications
-                )
+                HomeAppbar(onClickFavourite = interactions::onClickFavorites)
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Carousal(items = state.saleAds, onClick = interactions::onClickSale)

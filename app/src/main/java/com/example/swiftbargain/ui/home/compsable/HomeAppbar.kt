@@ -18,8 +18,7 @@ import com.example.swiftbargain.ui.theme.colors
 @Composable
 fun HomeAppbar(
     modifier: Modifier = Modifier,
-    onClickFavourite: () -> Unit,
-    onClickNotification: () -> Unit,
+    onClickFavourite: () -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -32,15 +31,6 @@ fun HomeAppbar(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_favourite_outline),
-                contentDescription = null
-            )
-        }
-        IconButton(
-            colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colors.textGrey),
-            onClick = onClickNotification
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_notification),
                 contentDescription = null
             )
         }
