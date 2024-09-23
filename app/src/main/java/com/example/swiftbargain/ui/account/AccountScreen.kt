@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -40,6 +41,7 @@ import com.example.swiftbargain.ui.utils.EventHandler
 @Composable
 fun AccountScreen(
     navController: NavController,
+    logOut: () -> Unit,
     viewModel: AccountViewModel = hiltViewModel()
 ) {
     EventHandler(effects = viewModel.event) { event, _ ->
@@ -48,6 +50,7 @@ fun AccountScreen(
             AccountEvents.NavigateToOrders -> navController.navigate(Orders)
             AccountEvents.NavigateToPayment -> navController.navigate(Payments)
             AccountEvents.NavigateToProfile -> navController.navigate(Profile)
+            AccountEvents.LogOut -> logOut()
         }
     }
     AccountContent(interactions = viewModel)
@@ -80,6 +83,13 @@ private fun AccountContent(interactions: AccountInteractions) {
             text = stringResource(R.string.payment),
             onClick = interactions::onClickPayment
         )
+        SectionItem(
+            iconId = R.drawable.ic_logout,
+            text = stringResource(R.string.log_out),
+            iconColor = MaterialTheme.colors.red,
+            onClick = interactions::onClickLogOut
+        )
+
     }
 }
 
@@ -89,6 +99,7 @@ private fun SectionItem(
     modifier: Modifier = Modifier,
     iconId: Int,
     text: String,
+    iconColor: Color = MaterialTheme.colors.primary,
     onClick: () -> Unit
 ) {
     Box(
@@ -107,7 +118,7 @@ private fun SectionItem(
                 modifier = Modifier.padding(start = MaterialTheme.spacing.space16),
                 imageVector = ImageVector.vectorResource(iconId),
                 contentDescription = null,
-                tint = MaterialTheme.colors.primary
+                tint = iconColor
             )
             Text(
                 text = text,

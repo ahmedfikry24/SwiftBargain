@@ -91,21 +91,28 @@ class ProductDetailsViewModel @Inject constructor(
 
     override fun onCLickAddToCart() {
         val value = state.value.product
-        if (validateFullProductInfo()) {
-            viewModelScope.launch {
-                repository.addProductToCart(
-                    CartProductEntity(
-                        id = value.id,
-                        name = value.title,
-                        price = value.priceAfterDiscount,
-                        imageUrl = value.url.first(),
-                        color = state.value.selectedColor.toString(),
-                        size = state.value.selectedSize,
-                        quantity = value.quantity
-                    )
+        if (value.sizes.isNotEmpty() && value.colors.isNotEmpty()) {
+
+            if (validateFullProductInfo()) addToCart()
+
+        } else addToCart()
+    }
+
+    private fun addToCart() {
+        val value = state.value.product
+        viewModelScope.launch {
+            repository.addProductToCart(
+                CartProductEntity(
+                    id = value.id,
+                    name = value.title,
+                    price = value.priceAfterDiscount,
+                    imageUrl = value.url.first(),
+                    color = state.value.selectedColor.toString(),
+                    size = state.value.selectedSize,
+                    quantity = value.quantity
                 )
-                sendEvent(ProductDetailsEvents.AddToCartSuccessfully)
-            }
+            )
+            sendEvent(ProductDetailsEvents.AddToCartSuccessfully)
         }
     }
 

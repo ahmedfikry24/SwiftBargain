@@ -5,5 +5,4 @@ sealed interface HomeEvents {
     data class NavigateToCategory(val id: String, val label: String) : HomeEvents
     data class NavigateToProductDetails(val id: String) : HomeEvents
     data object NavigateToFavorites : HomeEvents
-    data object NavigateToNotifications : HomeEvents
 }

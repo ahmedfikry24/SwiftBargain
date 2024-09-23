@@ -44,7 +44,8 @@ fun UserNavGraph(mainNavController: NavController) {
     val navController = rememberNavController()
     val snackBar = SnackBarManager.init()
     val scope = rememberCoroutineScope()
-    val unAuthorizedLogin = { logOut(mainNavController, snackBar, scope) }
+    val unAuthorizedLogin = { unAuthorizedLogin(mainNavController, snackBar, scope) }
+    val logOut = { logOut(mainNavController) }
     Scaffold(
         snackbarHost = { PrimarySnackBar() },
         bottomBar = { UserBottomNavigation(navController) }
@@ -61,7 +62,7 @@ fun UserNavGraph(mainNavController: NavController) {
                 composable<Cart> { CartScreen(navController) }
                 composable<CartCheckOut> { CartCheckOutScreen(navController, unAuthorizedLogin) }
                 composable<Offer> { OfferScreen(navController) }
-                composable<Account> { AccountScreen(navController) }
+                composable<Account> { AccountScreen(navController, logOut) }
                 composable<Sale> { SaleScreen(navController) }
                 composable<ProductDetails> { ProductDetailsScreen(navController) }
                 composable<ProductReviews> { ReviewsScreen(navController) }
@@ -77,14 +78,21 @@ fun UserNavGraph(mainNavController: NavController) {
     }
 }
 
-private fun logOut(
+
+private fun unAuthorizedLogin(
     navController: NavController,
     snackBar: SnackbarHostState,
     scope: CoroutineScope
 ) {
     scope.launch {
         snackBar.showError(UiConstants.UNAUTHORIZED_TO_ACCESS, this) {
-            navController.navigate(Authentication) { popUpTo(Authentication) { inclusive = false } }
+            logOut(navController)
         }
+    }
+}
+
+private fun logOut(navController: NavController) {
+    navController.navigate(Authentication) {
+        popUpTo(User) { inclusive = true }
     }
 }

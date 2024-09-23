@@ -5,4 +5,5 @@ interface AccountInteractions {
     fun onClickOrder()
     fun onClickAddress()
     fun onClickPayment()
+    fun onClickLogOut()
 }

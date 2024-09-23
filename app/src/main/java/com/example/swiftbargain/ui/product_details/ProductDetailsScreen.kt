@@ -181,7 +181,8 @@ private fun ProductDetailsContent(
             PrimaryTextButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.space16),
+                    .padding(horizontal = MaterialTheme.spacing.space16)
+                    .padding(bottom = MaterialTheme.spacing.space16),
                 text = stringResource(R.string.add_to_cart),
                 onClick = interactions::onCLickAddToCart
             )
