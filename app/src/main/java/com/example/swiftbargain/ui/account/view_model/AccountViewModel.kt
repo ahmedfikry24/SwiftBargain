@@ -29,6 +29,7 @@ class AccountViewModel @Inject constructor(
 
     override fun onClickLogOut() {
         viewModelScope.launch {
+            repository.setUserUid("")
             repository.deleteAllCreditCards()
             repository.deleteAllCartProducts()
             sendEvent(AccountEvents.LogOut)

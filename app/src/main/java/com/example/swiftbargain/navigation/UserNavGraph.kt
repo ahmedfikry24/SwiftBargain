@@ -45,7 +45,7 @@ fun UserNavGraph(mainNavController: NavController) {
     val snackBar = SnackBarManager.init()
     val scope = rememberCoroutineScope()
     val unAuthorizedLogin = { unAuthorizedLogin(mainNavController, snackBar, scope) }
-    val logOut = { logOut(navController) }
+    val logOut = { logOut(mainNavController) }
     Scaffold(
         snackbarHost = { PrimarySnackBar() },
         bottomBar = { UserBottomNavigation(navController) }
@@ -86,11 +86,13 @@ private fun unAuthorizedLogin(
 ) {
     scope.launch {
         snackBar.showError(UiConstants.UNAUTHORIZED_TO_ACCESS, this) {
-            navController.navigate(Authentication) { popUpTo(Authentication) { inclusive = false } }
+            logOut(navController)
         }
     }
 }
 
 private fun logOut(navController: NavController) {
-    navController.navigate(Authentication) { popUpTo(Authentication) { inclusive = false } }
+    navController.navigate(Authentication) {
+        popUpTo(User) { inclusive = true }
+    }
 }
