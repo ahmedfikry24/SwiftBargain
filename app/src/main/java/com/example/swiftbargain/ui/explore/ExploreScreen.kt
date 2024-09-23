@@ -1,9 +1,5 @@
 package com.example.swiftbargain.ui.explore
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -98,8 +94,7 @@ private fun ExploreContent(
                         }
                     )
                 }
-            },
-            goToSettings = { context.getToSettings() }
+            }
         )
         ScrollToFirstItemFab(
             modifier = Modifier.fillMaxSize(),
@@ -183,11 +178,4 @@ private fun ExploreContent(
         isVisible = state.contentStatus == ContentStatus.FAILURE,
         onTryAgain = interactions::getCategories
     )
-}
-
-private fun Context.getToSettings() {
-    Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.fromParts("package", this.packageName, null)
-    ).also(::startActivity)
 }

@@ -1,10 +1,6 @@
 package com.example.swiftbargain.ui.profile.composable
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.composable.PermissionRationaleDialog
+import com.example.swiftbargain.ui.utils.getToSettings
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -71,11 +68,4 @@ fun rememberMediaPermission(onGranted: () -> Unit): PermissionState {
 
 
     return mediaPermissionState
-}
-
-private fun Context.getToSettings() {
-    Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.fromParts("package", this.packageName, null)
-    ).also(::startActivity)
 }

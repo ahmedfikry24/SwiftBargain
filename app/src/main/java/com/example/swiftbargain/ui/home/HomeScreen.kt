@@ -35,6 +35,7 @@ import com.example.swiftbargain.ui.home.compsable.Carousal
 import com.example.swiftbargain.ui.home.compsable.HomeAppbar
 import com.example.swiftbargain.ui.home.compsable.HomeCategories
 import com.example.swiftbargain.ui.home.compsable.HomeSaleSection
+import com.example.swiftbargain.ui.home.compsable.RememberNotificationPermission
 import com.example.swiftbargain.ui.home.view_model.HomeEvents
 import com.example.swiftbargain.ui.home.view_model.HomeInteractions
 import com.example.swiftbargain.ui.home.view_model.HomeUiState
@@ -88,6 +89,7 @@ private fun HomeContent(
 ) {
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
+        RememberNotificationPermission()
         LazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
             columns = GridCells.Fixed(2),

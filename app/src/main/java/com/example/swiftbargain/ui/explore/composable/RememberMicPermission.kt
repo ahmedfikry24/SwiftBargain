@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.composable.PermissionRationaleDialog
+import com.example.swiftbargain.ui.utils.getToSettings
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -17,13 +19,13 @@ import com.google.accompanist.permissions.shouldShowRationale
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun rememberMicPermission(
-    onGranted: () -> Unit,
-    goToSettings: () -> Unit,
-): PermissionState {
+fun rememberMicPermission(onGranted: () -> Unit): PermissionState {
+
+    val context = LocalContext.current
     var isRationaleVisible by remember { mutableStateOf(false) }
     var isGoSettingsVisible by remember { mutableStateOf(false) }
     var isGrantedActionDone by rememberSaveable { mutableStateOf(false) }
+
     val micPermission = rememberPermissionState(android.Manifest.permission.RECORD_AUDIO) {
         isRationaleVisible = true
         isGoSettingsVisible = true
@@ -53,7 +55,7 @@ fun rememberMicPermission(
                     message = stringResource(R.string.this_app_needs_microphone_access_for_voice_search_please_allow_access_in_the_settings),
                     onConfirm = {
                         isGoSettingsVisible = false
-                        goToSettings()
+                        context.getToSettings()
                     },
                     onCancel = { isGoSettingsVisible = false },
                     onDismiss = { isGoSettingsVisible = false }
