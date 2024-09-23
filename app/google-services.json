@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "931177986261",
+    "project_id": "swift-bargain",
+    "storage_bucket": "swift-bargain.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931177986261:android:043d295a6cfc958de70a5c",
+        "android_client_info": {
+          "package_name": "com.example.swiftbargain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931177986261-and0ce4rr6fllckn377bnv7nn0ljogan.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.swiftbargain",
+            "certificate_hash": "77420d4f202783b86823a5484031186f1255f645"
+          }
+        },
+        {
+          "client_id": "931177986261-icudbred62fgn93ouuprf10lu93tg9k0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDarGyvma4GxBYGg-uwpqCSdwurXKanvww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "931177986261-icudbred62fgn93ouuprf10lu93tg9k0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
