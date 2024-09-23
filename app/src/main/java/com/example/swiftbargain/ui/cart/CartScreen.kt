@@ -37,6 +37,7 @@ import com.example.swiftbargain.ui.composable.LifeCycleTracker
 import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.PrimaryTextField
+import com.example.swiftbargain.ui.composable.SecondaryAppBar
 import com.example.swiftbargain.ui.theme.spacing
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.EventHandler
@@ -69,12 +70,17 @@ fun CartContent(
         Column(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(MaterialTheme.spacing.space16),
+                contentPadding = PaddingValues(vertical = MaterialTheme.spacing.space16),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space16)
             ) {
+                item {
+                    SecondaryAppBar(title = stringResource(R.string.your_cart))
+                }
                 itemsIndexed(state.products) { index, product ->
                     CartProduct(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier
+                            .padding(horizontal = MaterialTheme.spacing.space16)
+                            .animateItem(),
                         product = product,
                         onClickRemove = interactions::onRemoveItem,
                         onChangeQuantity = { interactions.onChangeQuantity(index, it) },
@@ -93,6 +99,7 @@ fun CartContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = MaterialTheme.spacing.space16)
+                                .padding(horizontal = MaterialTheme.spacing.space16)
                                 .heightIn(max = 56.dp)
                         ) {
                             PrimaryTextField(
@@ -112,7 +119,10 @@ fun CartContent(
 
                 item {
                     if (state.products.isNotEmpty())
-                        CartDetails(state = state)
+                        CartDetails(
+                            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.space16),
+                            state = state
+                        )
                 }
             }
 
