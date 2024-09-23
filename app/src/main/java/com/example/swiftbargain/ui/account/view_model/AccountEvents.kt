@@ -5,4 +5,5 @@ sealed interface AccountEvents {
     data object NavigateToOrders : AccountEvents
     data object NavigateToAddress : AccountEvents
     data object NavigateToPayment : AccountEvents
+    data object LogOut : AccountEvents
 }
