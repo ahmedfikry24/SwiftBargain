@@ -106,7 +106,7 @@
     <string name="save">Save</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="this_app_requires_media_access_to_update_profile_image_please_grant_the_permission">this app requires media access to update profile image, Please grant the permission.</string>
+    <string name="this_app_requires_media_access_to_update_profile_image_please_grant_the_permission">This app requires media access to update profile image, Please grant the permission.</string>
     <string name="this_app_needs_media_access_for_update_profile_image_please_allow_access_in_the_settings">This app needs media access for update profile image, Please allow access in the settings.</string>
     <string name="save_changes">Save changes</string>
     <string name="order_status">Order Status</string>
@@ -122,4 +122,6 @@
     <string name="payment_details">Payment Details</string>
     <string name="import_charges">Import charges</string>
     <string name="incorrect_number">incorrect number</string>
+    <string name="this_app_require_to_receive_notification_from_market_please_grant_the_permission">This app require to receive notification from market, Please grant the permission.</string>
+    <string name="this_app_require_to_receive_notification_from_market_please_allow_access_in_the_settings">This app require to receive notification from market, Please allow access in the settings.</string>
 </resources>
