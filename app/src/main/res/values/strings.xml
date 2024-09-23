@@ -126,4 +126,5 @@
     <string name="this_app_require_to_receive_notification_from_market_please_allow_access_in_the_settings">This app require to receive notification from market, Please allow access in the settings.</string>
     <string name="your_cart">Your Cart</string>
     <string name="your_offers">Your Offers</string>
+    <string name="log_out">Log Out</string>
 </resources>
