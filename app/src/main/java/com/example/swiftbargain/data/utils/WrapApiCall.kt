@@ -19,13 +19,11 @@ suspend fun <T> wrapApiCall(
     } catch (e: FirebaseAuthInvalidCredentialsException) {
         throw UserNotFound()
     } catch (e: FirebaseAuthUserCollisionException) {
-        throw UserNotFound()
+        throw EmailIsAlreadyUsed()
     } catch (e: UserNotFound) {
         throw UserNotFound()
     } catch (e: EmailIsNoVerified) {
         throw EmailIsNoVerified()
-    } catch (e: EmailIsAlreadyUsed) {
-        throw EmailIsAlreadyUsed()
     } catch (e: NoInternetConnection) {
         throw NoInternetConnection()
     } catch (e: Exception) {
