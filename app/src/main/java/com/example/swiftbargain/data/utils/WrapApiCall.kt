@@ -6,6 +6,7 @@ import com.example.swiftbargain.ui.base.NoInternetConnection
 import com.example.swiftbargain.ui.base.SomethingWentWrong
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 suspend fun <T> wrapApiCall(
     connectivityChecker: InternetConnectivityChecker,
@@ -16,6 +17,8 @@ suspend fun <T> wrapApiCall(
             request()
         } else throw NoInternetConnection()
     } catch (e: FirebaseAuthInvalidCredentialsException) {
+        throw UserNotFound()
+    } catch (e: FirebaseAuthUserCollisionException) {
         throw UserNotFound()
     } catch (e: UserNotFound) {
         throw UserNotFound()

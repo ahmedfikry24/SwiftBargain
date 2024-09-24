@@ -134,8 +134,8 @@ class LoginViewModel @Inject constructor(
     private fun facebookAuthSuccess(id: String) {
         viewModelScope.launch {
             repository.setUserUid(id)
+            sendEvent(LoginEvents.LoginSuccess)
         }
-        sendEvent(LoginEvents.LoginSuccess)
     }
 
     private fun facebookAuthError(error: BaseError) {
