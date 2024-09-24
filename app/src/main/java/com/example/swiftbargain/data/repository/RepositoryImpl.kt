@@ -18,7 +18,6 @@ import com.example.swiftbargain.data.models.UserInfoDto
 import com.example.swiftbargain.data.utils.InternetConnectivityChecker
 import com.example.swiftbargain.data.utils.wrapApiCall
 import com.example.swiftbargain.ui.base.EmailIsNoVerified
-import com.example.swiftbargain.ui.base.RegistrationFailed
 import com.example.swiftbargain.ui.base.UserNotFound
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
@@ -118,7 +117,7 @@ class RepositoryImpl @Inject constructor(
     ) {
         return wrapApiCall(connectivityChecker) {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
-            val user = result.user ?: throw RegistrationFailed()
+            val user = result.user ?: throw UserNotFound()
             val userInfo = UserInfoDto(
                 id = user.uid,
                 name = name,
