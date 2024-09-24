@@ -5,7 +5,6 @@ import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
 import com.example.swiftbargain.ui.base.EmailIsAlreadyUsed
 import com.example.swiftbargain.ui.base.NoInternetConnection
-import com.example.swiftbargain.ui.base.RegistrationFailed
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.validateEmail
 import com.example.swiftbargain.ui.utils.validatePassword
@@ -60,7 +59,6 @@ class RegisterViewModel @Inject constructor(
     private fun registerWithEmailAndPasswordError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
-            is RegistrationFailed -> sendEvent(RegisterEvents.RegistrationFailed)
             is EmailIsAlreadyUsed -> sendEvent(RegisterEvents.EmailIsAlreadyUsed)
             is NoInternetConnection -> sendEvent(RegisterEvents.NoInternetConnection)
             else -> sendEvent(RegisterEvents.SomeThingWentWrong)
