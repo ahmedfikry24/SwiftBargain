@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.ui.base.BaseError
 import com.example.swiftbargain.ui.base.BaseViewModel
+import com.example.swiftbargain.ui.base.EmailIsAlreadyUsed
 import com.example.swiftbargain.ui.base.EmailIsNoVerified
 import com.example.swiftbargain.ui.base.NoInternetConnection
 import com.example.swiftbargain.ui.base.SomethingWentWrong
@@ -141,8 +142,8 @@ class LoginViewModel @Inject constructor(
     private fun facebookAuthError(error: BaseError) {
         _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
         when (error) {
+            is EmailIsAlreadyUsed -> sendEvent(LoginEvents.EmailAlreadyUsed)
             is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
-            is UserNotFound -> sendEvent(LoginEvents.CredentialFailed)
             else -> sendEvent(LoginEvents.SomeThingWentWrong)
         }
     }
