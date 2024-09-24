@@ -111,6 +111,10 @@ fun LoginScreen(
                 }
             }
 
+            LoginEvents.EmailAlreadyUsed -> snackBar.showError(
+                UiConstants.EMAIL_ALREADY_USED,
+                scope
+            )
         }
     }
     LoginContent(
