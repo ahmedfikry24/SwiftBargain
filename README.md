@@ -39,3 +39,30 @@ Dicover [Swift Bargain](https://www.figma.com/design/PI1QtHgiS7jjVts5pDUYPg/Andr
 - [Kotlin Parcelable](https://developer.android.com/reference/android/os/Parcelable)
 - [Coil](https://coil-kt.github.io/coil/compose/#:~:text=To%20add%20support%20for%20Jetpack%20Compose,)
 - [Lottie](https://github.com/airbnb/lottie-android)
+
+## Requirements
+Before you begin, ensure you have met the following requirements:
+- **Android Studio with Jetpack Compose support**:
+    - [Download Android Studio](https://developer.android.com/studio)
+      
+ - **Firebase Project**:
+    - [Create Firebase Project](https://console.firebase.google.com/u/0/)
+
+
+ ## Installation
+1. Clone the repository:
+    ```
+   git clone https://github.com/ahmedfikry24/SwiftBargain.git
+    ```
+3. Add Firebase Json file for app.
+4. Add Google Client Id named as "clientId" to the local.properties file.
+5. Add  Facebook App Id as named "FACEBOOK_APP_ID" to the local.properties file.
+6. Add  Facebook Client Token as named "FACEBOOK_CLIENT_TOKEN" to the local.properties file
+
+## Usage
+- To test the APPs, there is an APKs build  [here](https://github.com/ahmedfikry24/SwiftBargain/tree/master/app/release/app-release.apk)  that you can directly download and install.
+
+## License
+    Copyright (c) 2024 Ahmed Fikry Elshimi
+- This project is licensed under the MIT License - see the [LICENSE](https://github.com/ahmedfikry24/SwiftBargain/blob/master/LICENSE) file for details.
+
