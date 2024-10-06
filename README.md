@@ -18,3 +18,24 @@ it also introduced with a full authentication credintial.
 - Full managed __permiissions__ with handle user rejected with __Rationale Dialogs__.
 - Tracking order shipping status.
 - Explore __Profile__ information with Edit Info and __Pick Image__ from gallery.
+
+## Design
+Dicover [Swift Bargain](https://www.figma.com/design/PI1QtHgiS7jjVts5pDUYPg/Android-training-E-commerce-UI-Kit-(Community)?node-id=0-1&node-type=canvas&t=cmTbc7G3zo4NYlhF-0) design on figma.
+
+## Technologies 🚀
+- [Google Recommended Architecture](https://developer.android.com/topic/architecture#recommended-app-arch)
+- [Jetpack Compose](https://developer.android.com/compose#:~:text=Jetpack%20Compose%20is%20Android%E2%80%99s%20recommended%20modern)
+- [Animations](https://developer.android.com/develop/ui/compose/animation/introduction)
+- [Shared Element Transitions](https://developer.android.com/develop/ui/compose/animation/shared-elements)
+- [Type safety navigation](https://developer.android.com/guide/navigation/design/type-safety)
+- [Hilt dependency injection](https://developer.android.com/training/dependency-injection/hilt-android)
+- [Data Store](https://developer.android.com/jetpack/androidx/releases/datastore)\
+- [Room DB](https://developer.android.com/training/data-storage/room)
+- [Coroutines](https://developer.android.com/kotlin/coroutines)
+- [Firebase](https://firebase.google.com/)
+- [Notifications](https://developer.android.com/develop/ui/views/notifications)
+- [Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
+- [Kotlin serialization](https://developer.android.com/reference/java/io/Serializable)
+- [Kotlin Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+- [Coil](https://coil-kt.github.io/coil/compose/#:~:text=To%20add%20support%20for%20Jetpack%20Compose,)
+- [Lottie](https://github.com/airbnb/lottie-android)
