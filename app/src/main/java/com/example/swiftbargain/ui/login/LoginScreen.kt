@@ -1,13 +1,9 @@
 package com.example.swiftbargain.ui.login
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,11 +28,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.credentials.Credential
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.swiftbargain.BuildConfig
-import com.example.swiftbargain.MainActivity
 import com.example.swiftbargain.R
 import com.example.swiftbargain.navigation.Authentication
 import com.example.swiftbargain.navigation.Register
@@ -64,9 +63,9 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -128,15 +127,11 @@ private fun LoginContent(
     state: LoginUiState,
     interactions: LoginInteractions
 ) {
-    val googleSignInClient = rememberGoogleSignInClient()
-    val signInGoogleLauncher = rememberSignInGoogleLauncher {
-        interactions.getGoogleCredential(
-            it.data ?: return@rememberSignInGoogleLauncher
-        )
-    }
-    val facebookLauncher = rememberSignInFacebookLauncher(interactions::loginWithFaceBook)
     ContentLoading(isVisible = state.contentStatus == ContentStatus.LOADING)
     ContentVisibility(isVisible = state.contentStatus == ContentStatus.VISIBLE) {
+        val context = LocalContext.current
+        val scope = rememberCoroutineScope()
+        val facebookLauncher = rememberSignInFacebookLauncher(interactions::loginWithFaceBook)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(MaterialTheme.spacing.space16),
@@ -233,7 +228,13 @@ private fun LoginContent(
                     modifier = Modifier.padding(top = MaterialTheme.spacing.space8),
                     text = stringResource(R.string.login_with_google),
                     iconId = R.drawable.ic_google,
-                    onClick = { signInGoogleLauncher.launch(googleSignInClient.signInIntent) }
+                    onClick = {
+                        getGoogleCredential(context, scope) {
+                            interactions.loginWithGoogle(
+                                it
+                            )
+                        }
+                    }
                 )
             }
             item {
@@ -300,22 +301,31 @@ private fun LoginContent(
         )
 }
 
-@Composable
-private fun rememberGoogleSignInClient(): GoogleSignInClient {
-    val context = LocalContext.current as MainActivity
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(BuildConfig.clientId)
-        .requestEmail()
-        .build()
-    return GoogleSignIn.getClient(context, gso)
-}
 
-@Composable
-private fun rememberSignInGoogleLauncher(onSuccess: (ActivityResult) -> Unit): ManagedActivityResultLauncher<Intent, ActivityResult> {
-    return rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult())
-    { result ->
-        if (result.resultCode == RESULT_OK) {
-            onSuccess(result)
+private fun getGoogleCredential(
+    context: Context,
+    coroutineScope: CoroutineScope,
+    onCredentialResponse: (Credential) -> Unit
+) {
+    val credentialManager = CredentialManager.create(context)
+    val googleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(false)
+        .setServerClientId(BuildConfig.clientId)
+        .setAutoSelectEnabled(false)
+        .build()
+
+    val request = GetCredentialRequest.Builder()
+        .addCredentialOption(googleIdOption)
+        .build()
+
+    coroutineScope.launch {
+        try {
+            val result = credentialManager.getCredential(
+                request = request,
+                context = context,
+            )
+            onCredentialResponse(result.credential)
+        } catch (_: Throwable) {
         }
     }
 }
