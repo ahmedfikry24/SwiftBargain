@@ -29,7 +29,7 @@ Dicover [Swift Bargain](https://www.figma.com/design/PI1QtHgiS7jjVts5pDUYPg/Andr
 - [Shared Element Transitions](https://developer.android.com/develop/ui/compose/animation/shared-elements)
 - [Type safety navigation](https://developer.android.com/guide/navigation/design/type-safety)
 - [Hilt dependency injection](https://developer.android.com/training/dependency-injection/hilt-android)
-- [Data Store](https://developer.android.com/jetpack/androidx/releases/datastore)\
+- [Data Store](https://developer.android.com/jetpack/androidx/releases/datastore)
 - [Room DB](https://developer.android.com/training/data-storage/room)
 - [Coroutines](https://developer.android.com/kotlin/coroutines)
 - [Firebase](https://firebase.google.com/)
