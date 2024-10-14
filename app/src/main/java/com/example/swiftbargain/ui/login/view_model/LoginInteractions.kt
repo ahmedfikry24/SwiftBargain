@@ -1,13 +1,13 @@
 package com.example.swiftbargain.ui.login.view_model
 
-import android.content.Intent
+import androidx.credentials.Credential
 
 interface LoginInteractions {
     fun onChangeEmail(email: String)
     fun onChangePassword(password: String)
     fun loginWithEmailAndPassword()
     fun controlUnVerifiedEmailDialogVisibility()
-    fun getGoogleCredential(intent: Intent)
+    fun loginWithGoogle(credential: Credential)
     fun loginWithFaceBook(id: String)
     fun onChangeForgetPasswordEmail(email: String)
     fun onSendResetPasswordEmail()

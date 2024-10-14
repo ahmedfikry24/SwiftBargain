@@ -1,6 +1,5 @@
 package com.example.swiftbargain.data.repository
 
-import android.content.Intent
 import android.net.Uri
 import com.example.swiftbargain.data.local.DataStoreManager
 import com.example.swiftbargain.data.local.room.RoomManager
@@ -19,7 +18,6 @@ import com.example.swiftbargain.data.utils.InternetConnectivityChecker
 import com.example.swiftbargain.data.utils.wrapApiCall
 import com.example.swiftbargain.ui.base.EmailIsNoVerified
 import com.example.swiftbargain.ui.base.UserNotFound
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -56,13 +54,6 @@ class RepositoryImpl @Inject constructor(
             if (!user.isEmailVerified)
                 throw EmailIsNoVerified()
             user.uid
-        }
-    }
-
-    override suspend fun signWithGoogleIntent(intent: Intent): String {
-        return wrapApiCall(connectivityChecker) {
-            val account = GoogleSignIn.getSignedInAccountFromIntent(intent).await()
-            account.idToken ?: throw UserNotFound()
         }
     }
 

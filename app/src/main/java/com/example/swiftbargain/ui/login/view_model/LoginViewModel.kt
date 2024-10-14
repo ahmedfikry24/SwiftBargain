@@ -1,6 +1,7 @@
 package com.example.swiftbargain.ui.login.view_model
 
-import android.content.Intent
+import androidx.credentials.Credential
+import androidx.credentials.CustomCredential
 import androidx.lifecycle.viewModelScope
 import com.example.swiftbargain.data.repository.Repository
 import com.example.swiftbargain.ui.base.BaseError
@@ -13,6 +14,7 @@ import com.example.swiftbargain.ui.base.UserNotFound
 import com.example.swiftbargain.ui.utils.ContentStatus
 import com.example.swiftbargain.ui.utils.validateEmail
 import com.example.swiftbargain.ui.utils.validatePassword
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -76,42 +78,23 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(unVerifiedEmailDialog = !it.unVerifiedEmailDialog) }
     }
 
-    override fun getGoogleCredential(intent: Intent) {
-        _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
-        tryExecute(
-            { repository.signWithGoogleIntent(intent) },
-            ::googleCredentialSuccess,
-            ::googleCredentialError
-        )
-    }
-
-    private fun googleCredentialSuccess(token: String) {
-        loginWithGoogleId(token)
-    }
-
-    private fun googleCredentialError(error: BaseError) {
-        _state.update { it.copy(contentStatus = ContentStatus.VISIBLE) }
-        when (error) {
-            is NoInternetConnection -> sendEvent(LoginEvents.NoInternetConnection)
-            is UserNotFound -> sendEvent(LoginEvents.CredentialFailed)
-            else -> sendEvent(LoginEvents.SomeThingWentWrong)
+    override fun loginWithGoogle(credential: Credential) {
+        if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            val tokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            _state.update { it.copy(contentStatus = ContentStatus.LOADING) }
+            tryExecute(
+                { repository.loginWithGoogle(tokenCredential.idToken) },
+                ::googleAuthSuccess,
+                ::googleAuthError
+            )
         }
-    }
-
-    private fun loginWithGoogleId(id: String) {
-        tryExecute(
-            { repository.loginWithGoogle(id) },
-            ::googleAuthSuccess,
-            ::googleAuthError
-        )
-
     }
 
     private fun googleAuthSuccess(id: String) {
         viewModelScope.launch {
             repository.setUserUid(id)
+            sendEvent(LoginEvents.LoginSuccess)
         }
-        sendEvent(LoginEvents.LoginSuccess)
     }
 
     private fun googleAuthError(error: BaseError) {
