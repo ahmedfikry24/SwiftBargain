@@ -1,6 +1,5 @@
 package com.example.swiftbargain.data.repository
 
-import android.content.Intent
 import android.net.Uri
 import com.example.swiftbargain.data.local.room.entity.CartProductEntity
 import com.example.swiftbargain.data.local.room.entity.CreditEntity
@@ -23,7 +22,6 @@ interface Repository {
 
     // region auth
     suspend fun loginWithEmailAndPassword(email: String, password: String): String
-    suspend fun signWithGoogleIntent(intent: Intent): String
     suspend fun loginWithGoogle(id: String): String
     suspend fun loginWithFacebook(id: String): String
     suspend fun resetPassword(email: String)
