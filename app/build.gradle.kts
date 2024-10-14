@@ -108,6 +108,10 @@ dependencies {
     implementation(libs.firebase.firestorage)
     implementation(libs.firebase.colud.messaging)
 
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
 
     //facebook sdk
     implementation(libs.facebook.login)
