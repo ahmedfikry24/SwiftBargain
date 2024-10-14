@@ -31,8 +31,6 @@ abstract class BaseViewModel<U, E>(uiState: U) : ViewModel() {
                 onError(UserNotFound())
             } catch (e: EmailIsNoVerified) {
                 onError(EmailIsNoVerified())
-            } catch (e: RegistrationFailed) {
-                onError(RegistrationFailed())
             } catch (e: EmailIsAlreadyUsed) {
                 onError(EmailIsAlreadyUsed())
             } catch (e: NoInternetConnection) {
