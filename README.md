@@ -2,10 +2,7 @@
 
 ## Description
 
-an Ecommerce application designed for customers with a user-frindly interface and smooth user-interaction.
-it offesrs exploring different categories of products, search for specific product, voice search feature ect, user can add a review for a product,
-also a full controlled cart add itemns or removed it and also apply cupon code if founded, choose a diffrent payment methods like credit card or cash on delivery
-it also introduced with a full authentication credintial.
+an Ecommerce application designed for customers with a user-friendly interface and smooth user-interaction. it offers exploring different categories of products, search for specific product, voice search feature etc. user can add a review for a product, also a full controlled cart adds items or removed it and also apply coupon code if founded, choose a different payment methods like credit card or cash on delivery it also introduced with a full authentication credential.
 
 ## Features
 - Authentication sign with (__Google__ & __Facebook__).
