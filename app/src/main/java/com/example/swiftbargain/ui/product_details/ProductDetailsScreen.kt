@@ -173,7 +173,8 @@ private fun ProductDetailsContent(
                                     .fillMaxWidth()
                                     .height(100.dp)
                                     .align(Alignment.CenterHorizontally),
-                                isVisible = true
+                                isVisible = true,
+                                isButtonVisible = false
                             )
                         }
                 }

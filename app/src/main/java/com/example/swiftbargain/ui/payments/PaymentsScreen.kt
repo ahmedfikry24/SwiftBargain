@@ -20,6 +20,7 @@ import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.CreditCardItem
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.payments.composable.PaymentAddCredit
 import com.example.swiftbargain.ui.payments.view_model.PaymentsEvents
@@ -70,6 +71,13 @@ private fun PaymentsContent(
                     PrimaryAppbar(
                         title = stringResource(R.string.payment),
                         onClickBack = interactions::onClickBack
+                    )
+                }
+                item {
+                    NoItemFound(
+                        isVisible = state.allCredits.isEmpty(),
+                        buttonText = stringResource(R.string.go_back),
+                        onClickAdd = interactions::onClickBack
                     )
                 }
                 items(state.allCredits) { credit ->
