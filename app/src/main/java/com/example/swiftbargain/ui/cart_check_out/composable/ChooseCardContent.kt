@@ -21,6 +21,7 @@ import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
 import com.example.swiftbargain.ui.composable.CreditCardItem
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.ScrollToFirstItemFab
 import com.example.swiftbargain.ui.theme.colors
@@ -59,6 +60,13 @@ fun ChooseCardContent(
                         )
                     }
 
+                    item {
+                        NoItemFound(
+                            isVisible = state.allCreditCards.isEmpty(),
+                            buttonText = stringResource(R.string.add_credit),
+                            onClickAdd = interactions::controlAddCreditVisibility
+                        )
+                    }
                     items(state.allCreditCards) { credit ->
                         val isSelected = state.selectedCreditCard == credit
                         CreditCardItem(

@@ -89,8 +89,8 @@ fun CartContent(
                 }
                 item {
                     NoItemFound(
-                        modifier = Modifier.fillMaxSize(),
-                        isVisible = state.products.isEmpty()
+                        isVisible = state.products.isEmpty(),
+                        isButtonVisible = false
                     )
                 }
                 item {

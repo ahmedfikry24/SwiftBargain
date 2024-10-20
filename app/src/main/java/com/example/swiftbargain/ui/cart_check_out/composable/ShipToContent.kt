@@ -18,6 +18,7 @@ import com.example.swiftbargain.R
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutInteractions
 import com.example.swiftbargain.ui.cart_check_out.view_model.CartCheckOutUiState
 import com.example.swiftbargain.ui.composable.AddressItem
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryDeleteItemDialog
 import com.example.swiftbargain.ui.composable.PrimaryTextButton
 import com.example.swiftbargain.ui.composable.ScrollToFirstItemFab
@@ -49,6 +50,13 @@ fun ShipToContent(
                     AddItemAppbar(
                         title = stringResource(R.string.ship_to),
                         onClickBack = interactions::onClickBack,
+                        onClickAdd = interactions::controlAddAddressVisibility
+                    )
+                }
+                item {
+                    NoItemFound(
+                        isVisible = state.allAddresses.isEmpty(),
+                        buttonText = stringResource(R.string.add_address),
                         onClickAdd = interactions::controlAddAddressVisibility
                     )
                 }

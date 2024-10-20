@@ -26,6 +26,7 @@ import com.example.swiftbargain.ui.composable.AddressItem
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.composable.PrimaryDeleteItemDialog
 import com.example.swiftbargain.ui.theme.spacing
@@ -74,6 +75,13 @@ private fun AddressesContent(
                     PrimaryAppbar(
                         title = stringResource(R.string.address),
                         onClickBack = interactions::onCLickBack
+                    )
+                }
+                item {
+                    NoItemFound(
+                        isVisible = state.allAddresses.isEmpty(),
+                        buttonText = stringResource(R.string.add_address),
+                        onClickAdd = interactions::controlAddAddressVisibility
                     )
                 }
                 items(state.allAddresses) { address ->

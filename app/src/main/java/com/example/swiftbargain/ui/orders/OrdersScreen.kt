@@ -20,6 +20,7 @@ import com.example.swiftbargain.navigation.OrderDetails
 import com.example.swiftbargain.ui.composable.ContentError
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.composable.ScrollToFirstItemFab
 import com.example.swiftbargain.ui.orders.composable.OrderItem
@@ -72,6 +73,13 @@ private fun OrdersContent(
                     PrimaryAppbar(
                         title = stringResource(R.string.orders),
                         onClickBack = interactions::onClickBack
+                    )
+                }
+                item {
+                    NoItemFound(
+                        isVisible = state.orders.isEmpty(),
+                        buttonText = stringResource(R.string.go_back),
+                        onClickAdd = interactions::onClickBack
                     )
                 }
                 items(state.orders) { order ->

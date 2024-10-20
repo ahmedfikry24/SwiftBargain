@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import com.example.swiftbargain.R
 import com.example.swiftbargain.navigation.ProductDetails
 import com.example.swiftbargain.ui.composable.ContentLoading
 import com.example.swiftbargain.ui.composable.ContentVisibility
+import com.example.swiftbargain.ui.composable.NoItemFound
 import com.example.swiftbargain.ui.composable.PrimaryAppbar
 import com.example.swiftbargain.ui.composable.ProductItem
 import com.example.swiftbargain.ui.favorites.view_model.FavoritesEvents
@@ -69,6 +71,13 @@ private fun FavoritesContent(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.space12),
                 contentPadding = PaddingValues(MaterialTheme.spacing.space16)
             ) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    NoItemFound(
+                        isVisible = state.favorites.isEmpty(),
+                        buttonText = stringResource(R.string.back_to_home),
+                        onClickAdd = interactions::onClickBack
+                    )
+                }
                 items(state.favorites) { item ->
                     ProductItem(
                         item = item,
