@@ -120,6 +120,7 @@ fun ReviewsMainContent(
                     NoItemFound(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         isVisible = state.filteredReviews.isEmpty(),
+                        isButtonVisible = false,
                         enterTransition = slideInHorizontally(tween(500)) + fadeIn(tween(500)),
                         exitTransition = slideOutHorizontally(tween(500)) + fadeOut(tween(500))
                     )
