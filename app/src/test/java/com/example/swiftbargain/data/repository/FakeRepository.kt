@@ -17,17 +17,17 @@ import kotlinx.coroutines.flow.flow
 class FakeRepository : Repository {
 
     private var userUid = "ahmed123"
-    private val products = mutableListOf<ProductDto>()
-    private val categories = mutableListOf<CategoryDto>()
-    private val saleAds = mutableListOf<SaleAdDto>()
-    private val reviews = mutableListOf<ReviewDto>()
-    private val favoriteProduct = mutableSetOf<FavoriteProductEntity>()
-    private val cartProduct = mutableListOf<CartProductEntity>()
-    private val coupons = mutableListOf<CouponCodeDto>()
-    private val addresses = mutableListOf<AddressDto>()
-    private val creditCards = mutableListOf<CreditEntity>()
-    private val orders = mutableListOf<OrderDto>()
-    private var userInfo = UserInfoDto(
+    var products = mutableListOf<ProductDto>()
+    var categories = mutableListOf<CategoryDto>()
+    var saleAds = mutableListOf<SaleAdDto>()
+    var reviews = mutableListOf<ReviewDto>()
+    var favoriteProduct = mutableSetOf<FavoriteProductEntity>()
+    var cartProduct = mutableListOf<CartProductEntity>()
+    var coupons = mutableListOf<CouponCodeDto>()
+    var addresses = mutableListOf<AddressDto>()
+    var creditCards = mutableListOf<CreditEntity>()
+    var orders = mutableListOf<OrderDto>()
+    var userInfo = UserInfoDto(
         id = userUid,
         name = "ahmed",
         email = "ahmed@gmail.com",
